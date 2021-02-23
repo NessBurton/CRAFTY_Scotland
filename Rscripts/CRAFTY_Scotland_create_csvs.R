@@ -14,51 +14,86 @@ wd <- "~/eclipse-workspace/CRAFTY_Scotland/"
 dirData <- paste0(wd,"data_raw")
 dirOut <- paste0(wd,"data_Scotland")
 
+### production files -----------------------------------------------------------
+
+# order = Service, capitals, Production
+
+agentFiles <- list.files(paste0(dirData,"/templateBasic_csv/"), pattern = "AT", full.names = T)
+
+for (i in agentFiles){
+  
+  #i <- agentFiles[1]
+  name <- strsplit(i, "[_]")[[1]][5]
+  name <- strsplit(name, "[.]")[[1]][1]
+  AFT <- read.csv(paste0(dirData,"/templateBasic_csv/AT1_prodnnconifer.csv"))
+  AFT <- AFT[,c(1,3:26,2)]
+  colnames(AFT)[1] <- "Service"
+  write.csv(AFT, paste0(dirOut,"/production/Baseline/",name,".csv"), row.names=F)
+  
+}
+
 ### behavioural parameters -----------------------------------------------------
 
+# V1
+# woodland agents, marginal, water&urban, estates stubborn/don't give in once established
 aftParamId <- 0
-givingInDistributionMean <- 0
+givingInDistributionMean <- 1 # woodland agents don't give in once established
 givingInDistributionSD <- 0
 givingUpDistributionMean <- 0
 givingUpDistributionSD <- 0
 serviceLevelNoiseMin <- 1
 serviceLevelNoiseMax <- 1
 givingUpProb <- 0
-productionCsvFile <- ".//production/%s/no_mgmt.csv"
-params0 <- tibble(aftParamId,givingInDistributionMean,givingInDistributionSD,givingUpDistributionMean,givingUpDistributionSD,
-                  serviceLevelNoiseMin,serviceLevelNoiseMax,givingUpProb,productionCsvFile)
-write.csv(params0, paste0(agentBehavFilepath,"AftParams_no_mgmt.csv"), row.names=F)
 
-### production files -----------------------------------------------------------
+stubbornAgents <- c("prodnnconifer","prodnconifer","prodnnbroad","prodnbroad",
+                    "multinnc","multinc","multinnb","multinb","multimixed",
+                    "consvnative", 
+                    "waterurban","marginal",
+                    "estateconsv","estatemulti","estatesport")
 
-# no management
-Service <- c("biodiversity","recreation")
-Production <- c(1,1) # if no OPM, assume maximum amount of Services can be produced
-#OPMpresence <- c(0,0) # not relianct on presence
-OPMinverted <- c(0.9,0.9) # but if OPM present and unable to manage, bio and recreation provision compromised maximum amount
-riskPerc <- c(0,0) # no reliance on risk perception
-budget <- c(0,0) # no reliance on budget
-knowledge <- c(0,0) # no reliance on knowledge
-nature <- c(1,0) # Production of biodiversity fully reliant on nature capital level, 1:1
-access <- c(0,1) # Production of recreation fully reliant on access capital level, 1:1
+for (i in stubbornAgents){
+  
+  productionCsvFile <- paste0(".//production/%s/",i,".csv")
+  params <- tibble(aftParamId,givingInDistributionMean,givingInDistributionSD,givingUpDistributionMean,givingUpDistributionSD,
+                   serviceLevelNoiseMin,serviceLevelNoiseMax,givingUpProb,productionCsvFile)
+  write.csv(params, paste0(dirOut,"/agents/V1/AftParams_",i,".csv"), row.names=F)
+  
+}
 
-no.mgmt <- tibble(Service,OPMinverted,riskPerc,budget,knowledge,nature,access,Production)
-view(no.mgmt)
-write.csv(no.mgmt, paste0(agentProdFilepath,"no_mgmt.csv"), row.names=F)
+# agroforestry semi-stubborn
+givingInDistributionMean <- 0.5 
+productionCsvFile <- paste0(".//production/%s/agroforestry.csv")
+params <- tibble(aftParamId,givingInDistributionMean,givingInDistributionSD,givingUpDistributionMean,givingUpDistributionSD,
+                 serviceLevelNoiseMin,serviceLevelNoiseMax,givingUpProb,productionCsvFile)
+write.csv(params, paste0(dirOut,"/agents/V1/AftParams_agroforestry.csv"), row.names=F)
+
+# rest, no thresholds in V1
+givingInDistributionMean <- 0
+otherAgents <- c("intarable","extarable","intpastoral","extpastoral")
+for (i in otherAgents){
+  
+  productionCsvFile <- paste0(".//production/%s/",i,".csv")
+  params <- tibble(aftParamId,givingInDistributionMean,givingInDistributionSD,givingUpDistributionMean,givingUpDistributionSD,
+                   serviceLevelNoiseMin,serviceLevelNoiseMax,givingUpProb,productionCsvFile)
+  write.csv(params, paste0(dirOut,"/agents/V1/AftParams_",i,".csv"), row.names=F)
+  
+}
+
+# V2 - take away giving-in threshold from estates
 
 ### capital & service index files ----------------------------------------------
 
 # Capitals
-Name <- c("OPMinverted","riskPerc","budget","knowledge","nature","access")
-Index <- c(0,1,2,3,4,5)
-Capitals <- tibble(Name,Index)
-write.csv(Capitals, paste0(wd,"csv/Capitals.csv"), row.names=F)
+capitals <- read.csv(paste0(dirData,"/templateBasic_csv/Capitals.csv"))
+capitals # ok as is
+write.csv(capitals, paste0(dirOut,"/csv/Capitals.csv"), row.names = F)
+
 
 # Services
-Name <- c("biodiversity","recreation")
-Index <- c(0,1)
-Services <- tibble(Name,Index)
-write.csv(Services, paste0(wd,"csv/Services.csv"), row.names=F)
+services <- read.csv(paste0(dirData,"/templateBasic_csv/Services.csv"))
+services # ok as is
+write.csv(services, paste0(dirOut,"/csv/Services.csv"), row.names = F)
+
 
 ### demand ---------------------------------------------------------------------
 
