@@ -32,6 +32,20 @@ baseline$FR <- str_replace_all(baseline$FR, "[[.]]", "")
 
 write.csv(baseline, paste0(dirOut,"/worlds/Scotland/Baseline/Baseline_capitals.csv"), row.names = F)
 
+# baseline updater files
+baseline <- read.csv(paste0(dirOut,"/worlds/Scotland/Baseline/Baseline_capitals.csv"))
+head(baseline)
+
+updater <- baseline[,-c(27:28)]
+
+yrList <- seq(2021,2100,by=1)
+
+for (yr in yrList){
+  
+  write.csv(updater,paste0(dirOut,"/worlds/Scotland/Baseline/Baseline_",yr,".csv"),row.names = F)
+  
+}
+
 ### multiple benefits ----------------------------------------------------------
 
 MB <- baseline
