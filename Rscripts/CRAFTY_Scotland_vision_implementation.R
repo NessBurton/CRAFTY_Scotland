@@ -48,14 +48,39 @@ for (yr in yrList){
 
 ### multiple benefits ----------------------------------------------------------
 
+baseline <- read.csv(paste0(dirOut,"/worlds/Scotland/Baseline/Baseline_capitals.csv"))
+
 MB <- baseline
 summary(MB$mixed.yc)
 
 ggplot(MB)+
-  geom_tile(aes(X,Y,fill=agro.yc))
+  geom_tile(aes(x,y,fill=agro.yc))
 ggplot(MB)+
-  geom_tile(aes(X,Y,fill=financial))
+  geom_tile(aes(x,y,fill=financial))
 
+# V1 (reproduce thesis results)
+# increase actual natural capitals
+MB$mixed.yc <- MB$mixed.yc + MB$mixed.yc # doubled
+MB$mixed.yc[which(MB$mixed.yc>1)]<-1
+# increase agroforestry capital
+MB$agro.yc <- MB$agro.yc + MB$agro.yc # doubled
+MB$agro.yc[which(MB$agro.yc>1)]<-1
+
+head(MB)
+# for cell updater specs
+MB$FR<-NULL
+MB$BT<-NULL
+
+yrList <- seq(2021,2100,by=1)
+
+for (yr in yrList){
+  
+  write.csv(MB, paste0(dirOut,"/worlds/Scotland/Multiple_Benefits/Multiple_Benefits_",yr,".csv"), row.names = F)
+  
+}
+
+
+# V2
 # increase financial capital where mixed yc capital >0.5
 MB$financial[which(MB$mixed.yc>0.5)] <- MB$financial[which(MB$mixed.yc>0.5)]+0.2
 # increase financial capital where agroforestry capital >0.5
@@ -64,10 +89,15 @@ MB$financial[which(MB$financial>1)] <- 1
 
 head(MB)
 # for cell updater specs
-MB$id<-NULL
-MB$Agent<-NULL
-colnames(MB)[1]<-'x'
-colnames(MB)[2]<-'y'
-MB<-MB[,-c(27:35)] # remove services
+MB$FR<-NULL
+MB$BT<-NULL
 
-write.csv(MB, paste0(dirOut,"/worlds/Scotland/Multiple_Benefits/2021.csv"), row.names = F)
+yrList <- seq(2021,2100,by=1)
+
+for (yr in yrList){
+  
+  write.csv(MB, paste0(dirOut,"/worlds/Scotland/Multiple_Benefits/Multiple_Benefits_",yr,".csv"), row.names = F)
+  
+}
+
+
