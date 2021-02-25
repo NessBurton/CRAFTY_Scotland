@@ -97,15 +97,29 @@ write.csv(services, paste0(dirOut,"/csv/Services.csv"), row.names = F)
 
 ### demand ---------------------------------------------------------------------
 
-Year <- c(1,2,3,4,5,6,7,8,9,10)
-bio <- 10490.667 #12000 # inital supply V4 = 11,412
-biodiversity <- seq(11000, 11900, 100)
-rec <- 6304 #8000 # inital supply V4 = 7,224
-recreation <- seq(7000, 7900, 100)
-# increase initial demand to see if it drives change
-#management <- 12000 # set so that it is higher than bio, taking priority
-Demand <- tibble(Year,biodiversity,recreation)
-write.csv(Demand, paste0(wd,"worlds/baseline/Demand.csv"), row.names=F)
+demandInitial <- read.csv(paste0(dirData,"/templateBasic_csv/Demand_initial.csv"))
+Year<-c(2020:2100)
+softwood.timber<-rep(demandInitial$softwood.timber,length(Year)) 
+hardwood.timber<-rep(demandInitial$hardwood.timber,length(Year)) 
+biodiversity<-rep(demandInitial$biodiversity,length(Year)) 
+carbon<-rep(demandInitial$carbon,length(Year)) 
+flood.regulation<-rep(demandInitial$flood.regulation,length(Year)) 
+recreation<-rep(demandInitial$recreation,length(Year)) 
+livestock<-rep(demandInitial$livestock,length(Year)) 
+crop.service<-rep(demandInitial$crop.service,length(Year)) 
+employment<-rep(demandInitial$employment,length(Year)) 
+bdemand<-data.frame(Year,softwood.timber,hardwood.timber,biodiversity,carbon,flood.regulation,recreation,livestock,crop.service,employment)
+write.csv(bdemand, paste0(dirOut,"/worlds/Scotland/Baseline/Demand_Baseline.csv"),row.names = F)
 
-bio/10000
-rec/10000
+demandGG <- read.csv(paste0(dirData,"/templateBasic_csv/Demand_GG.csv"))
+demandMB <- read.csv(paste0(dirData,"/templateBasic_csv/Demand_MB.csv"))
+demandNN <- read.csv(paste0(dirData,"/templateBasic_csv/Demand_NN.csv"))
+demandWC <- read.csv(paste0(dirData,"/templateBasic_csv/Demand_WC.csv"))
+demandWW <- read.csv(paste0(dirData,"/templateBasic_csv/Demand_WW.csv"))
+
+write.csv(demandGG, paste0(dirOut,"/worlds/Scotland/Green_Gold/Demand_Green_Gold.csv"),row.names = F)
+write.csv(demandMB, paste0(dirOut,"/worlds/Scotland/Multiple_Benefits/Demand_Multiple_Benefits.csv"),row.names = F)
+write.csv(demandNN, paste0(dirOut,"/worlds/Scotland/Native_Networks/Demand_Native_Networks.csv"),row.names = F)
+write.csv(demandWC, paste0(dirOut,"/worlds/Scotland/Woodland_Culture/Demand_Woodland_Culture.csv"),row.names = F)
+write.csv(demandWW, paste0(dirOut,"/worlds/Scotland/Wild_Woodlands/Demand_Wild_Woodlands.csv"),row.names = F)
+
