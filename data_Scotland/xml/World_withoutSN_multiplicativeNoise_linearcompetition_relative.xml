@@ -15,7 +15,7 @@
 	<regionalLaraModelFile>lara/RegionalLaraModel.xml</regionalLaraModelFile>
 
 	<initialiserFile>xml/Initialiser.xml</initialiserFile>
-	<!-- <updaterFile>xml/CsvCapitalUpdater_%s.xml</updaterFile>     -->
+	<updaterFile>xml/CsvCapitalUpdater_%s.xml</updaterFile> 
 
    <!-- Regional institutions -->
    <!--	<updaterFile>xml/CsvLandUseUpdater_%s.xml</updaterFile>    -->
