@@ -95,7 +95,7 @@ crops$agri.filter[which(crops$agri.capital<6)]<-1 # marker for classes unsuitabl
 capitalsRaw$crop.productivity <- crops$agri.capital
 capitalsRaw$agri.filter <- crops$agri.filter
 
-write.csv(capitalsRaw, paste0(dirData,"/output/capitals_raw_Feb21.csv"))
+write.csv(capitalsRaw, paste0(dirData,"/output/capitals_raw_Feb21.csv"),row.names = F)
 
 ### normalise ------------------------------------------------------------------
 
@@ -130,4 +130,4 @@ ggplot(capitalsNRM_long)+
   scale_fill_viridis()+
   theme_bw()
 
-write.csv(capitalsNRM, paste0(dirData,"/output/capitals_normalised_Feb21.csv"))
+write.csv(capitalsNRM, paste0(dirData,"/output/capitals_normalised_Feb21.csv"),row.names = F)

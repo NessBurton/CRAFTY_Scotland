@@ -67,7 +67,7 @@ summary(wood.carbon)
 
 servicesRaw$wood.carbon <- wood.carbon$carbon2
 
-write.csv(servicesRaw, paste0(dirData,"/output/services_raw_Feb21.csv"))
+write.csv(servicesRaw, paste0(dirData,"/output/services_raw_Feb21.csv"), row.names = F)
 
 
 ### check livestock ------------------------------------------------------------
@@ -108,4 +108,4 @@ ggplot(servicesNRM_long)+
   scale_fill_viridis()+
   theme_bw()
 
-write.csv(servicesNRM, paste0(dirData,"/output/services_normalised_Feb21.csv"))
+write.csv(servicesNRM[,-c(11:12)], paste0(dirData,"/output/services_normalised_Feb21.csv"),row.names = F)
