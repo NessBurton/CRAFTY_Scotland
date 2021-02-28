@@ -7,6 +7,7 @@
 
 library(tidyverse)
 library(ggplot2)
+library(viridis)
 
 ### directories ----------------------------------------------------------------
 
@@ -17,6 +18,7 @@ dirOut <- paste0(wd,"data_Scotland")
 # input data -------------------------------------------------------------------
 
 capitalsRaw <- read.csv(paste0(dirData,"/output/capitals_data.csv"))
+summary(capitalsRaw)
 
 afts<-read.csv(paste0(dirData,"/output/landcover_afts.csv"))
 afts$X.2<-NULL
@@ -93,28 +95,39 @@ crops$agri.filter[which(crops$agri.capital<6)]<-1 # marker for classes unsuitabl
 capitalsRaw$crop.productivity <- crops$agri.capital
 capitalsRaw$agri.filter <- crops$agri.filter
 
-library(effectsize)
+write.csv(capitalsRaw, paste0(dirData,"/output/capitals_raw_Feb21.csv"))
 
-capitalsST <- capitalsRaw
-summary(capitalsST)
-capitalsST[,c(6:14,26)] <- standardize(capitalsST[,c(6:14,26)])
-capitalsST[,c(6:14,26)] <- normalize(capitalsST[,c(6:14,26)])
-summary(capitalsST)
-capitalsST[is.na(capitalsST)] <- 0
-capitalsST$crop.productivity[which(capitalsST$agri.filter==1)]<-0 # remove cap where not suitable for crops
+### normalise ------------------------------------------------------------------
+
+normalise <- function(x) {
+  return ((x - min(x, na.rm = T)) / (max(x, na.rm = T) - min(x, na.rm = T)))
+}
+
+capitalsNRM <- capitalsRaw
+summary(capitalsNRM)
+
+#capitalsNRM[,c(6:28)] <- normalise(capitalsNRM[,c(6:28)])
+capitalsNRM <- data.frame(capitalsNRM[,c(1:5,29)], lapply(capitalsNRM[6:28], normalise))
+summary(capitalsNRM)
+capitalsNRM[is.na(capitalsNRM)] <- 0
+capitalsNRM$crop.productivity[which(capitalsNRM$agri.filter==1)]<-0 # remove cap where not suitable for crops
+#remove filter column
+capitalsNRM$agri.filter <- NULL
 
 # invert deer density
-invert <- capitalsST$deer.density - 1
+invert <- capitalsNRM$deer.density - 1
 z <- abs(invert)
-capitalsST$deer.density <- z
+capitalsNRM$deer.density <- z
 
-summary(capitalsST)
-capitalsST_long <- pivot_longer(capitalsST,
+summary(capitalsNRM)
+capitalsNRM_long <- pivot_longer(capitalsNRM,
                                 cols = nn.conifer.yc:wild.land,
                                 names_to = "capital",
                                 values_to = "value")
-ggplot(capitalsST_long)+
+ggplot(capitalsNRM_long)+
   geom_tile(aes(x,y,fill=value))+
-  facet_wrap(~capital)
+  facet_wrap(~capital)+
+  scale_fill_viridis()+
+  theme_bw()
 
-write.csv(capitalsST, paste0(dirData,"/output/capitals_stNorm_Feb21.csv"))
+write.csv(capitalsNRM, paste0(dirData,"/output/capitals_normalised_Feb21.csv"))
