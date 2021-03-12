@@ -27,6 +27,24 @@ servicesRaw$X <- NULL
 # crops & livestock from IAP
 # employment from look-up ("/inputs/employment_lookup.csv")
 
+# check livestock data ---------------------------------------------------------
+
+#crops_livestock<-read.csv(paste0(dirData,'/output/crops_livestock_data.csv'))
+#summary(crops_livestock)
+# looks odd
+jhi <- read.csv(paste0(dirData,'/output/jhi_es.csv'))
+head(jhi[,3:4])
+summary(jhi[,3:4])
+
+# calculate total of cattle and sheep density - for meat service
+jhi$livestock.total<-0
+for (i in c(1:length(jhi$livestock.total))){
+  jhi$livestock.total[i]<-sum(c(jhi[i,3],
+                                jhi[i,4]),na.rm = TRUE)
+}
+
+summary(jhi$livestock.total)
+
 # woodland carbon --------------------------------------------------------------
 
 # use average carbon for NFE (FR data) to calculate average C value for woodland agents
@@ -66,14 +84,10 @@ wood.carbon$carbon2[which(wood.carbon$AFT=='estate.multi')] <- 2000
 summary(wood.carbon)
 
 servicesRaw$wood.carbon <- wood.carbon$carbon2
+servicesRaw$livestock <- jhi$livestock.total
 
 write.csv(servicesRaw, paste0(dirData,"/output/services_raw_Feb21.csv"), row.names = F)
 
-
-### check livestock ------------------------------------------------------------
-
-crops_livestock <- read.csv(paste0(dirData, '/output/crops_livestock_data.csv'))
-summary(crops_livestock)
 
 ### normalise ------------------------------------------------------------------
 
@@ -84,14 +98,26 @@ normalise <- function(x) {
 
 servicesNRM <- servicesRaw
 summary(servicesNRM)
+servicesNRM[is.na(servicesNRM)] <- 0
 
-servicesNRM <- data.frame(servicesNRM[,c(1,4,5,7)], lapply(servicesNRM[c(2,3,6,8:11)], normalise))
+servicesNRM <- data.frame(servicesNRM[,c("id","biodiversity","carbon","recreation")], 
+                          lapply(servicesNRM[c("softwood.timber",
+                                               "hardwood.timber",
+                                               "flood.regulation",
+                                               "livestock",
+                                               "crop.service",
+                                               "employment",
+                                               "wood.carbon")], normalise))
 summary(servicesNRM)
 
 # add woodland carbon to soil carbon & re-normalise
-servicesNRM$carbon <- normalise(servicesNRM$carbon + servicesNRM$wood.carbon)
+summary(servicesNRM$carbon)
+for (i in c(1:length(servicesNRM$carbon))){
+  servicesNRM$carbon[i]<-sum(c(servicesNRM[i,"carbon"],
+                                servicesNRM[i,"wood.carbon"]),na.rm = TRUE)
+}
+servicesNRM$carbon <- normalise(servicesNRM$carbon)
 servicesNRM$wood.carbon <- NULL
-servicesNRM[is.na(servicesNRM)] <- 0
 
 summary(servicesNRM)
 
@@ -108,4 +134,6 @@ ggplot(servicesNRM_long)+
   scale_fill_viridis()+
   theme_bw()
 
-write.csv(servicesNRM[,-c(11:12)], paste0(dirData,"/output/services_normalised_Feb21.csv"),row.names = F)
+servicesNRM <- servicesNRM[,-c(11:12)]
+
+write.csv(servicesNRM, paste0(dirData,"/output/services_normalised_Mar21.csv"),row.names = F)
