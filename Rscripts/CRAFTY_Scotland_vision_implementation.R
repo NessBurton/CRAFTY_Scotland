@@ -16,16 +16,19 @@ dirOut <- paste0(wd,"data_Scotland")
 
 ### baseline capitals ----------------------------------------------------------
 
-baseline <- read.csv(paste0(dirData,"/templateBasic_csv/TestRegion_edit.csv"))
+#baseline <- read.csv(paste0(dirData,"/templateBasic_csv/TestRegion_edit.csv"))
+baseline <- read.csv((paste0(dirData,"/output/capitals_normalised_Feb21.csv")))
 head(baseline)
 summary(baseline)
+
+baseline[is.na(baseline)] <- 0
 
 baseline$id <- NULL
 baseline$FR <- baseline$Agent
 baseline$BT <- 0
 baseline$Agent <- NULL
 colnames(baseline)[1:2] <- c("x","y")
-baseline <- baseline[,-c(27:35)]
+#baseline <- baseline[,-c(27:35)]
 
 baseline$FR
 baseline$FR <- str_replace_all(baseline$FR, "[[.]]", "")
@@ -48,9 +51,13 @@ for (yr in yrList){
 
 ### multiple benefits ----------------------------------------------------------
 
-baseline <- read.csv(paste0(dirOut,"/worlds/Scotland/Baseline/Baseline_capitals.csv"))
+capitalsRAW <- read.csv(paste0(dirData,"/output/capitals_raw_Feb21.csv"))
 
-MB <- baseline
+normalise <- function(x) {
+  return ((x - min(x, na.rm = T)) / (max(x, na.rm = T) - min(x, na.rm = T)))
+}
+
+MB <- capitalsRAW
 summary(MB$mixed.yc)
 
 ggplot(MB)+
@@ -58,13 +65,11 @@ ggplot(MB)+
 ggplot(MB)+
   geom_tile(aes(x,y,fill=financial))
 
-# V1 (reproduce thesis results)
+# V1 (thesis method)
 # increase actual natural capitals
 MB$mixed.yc <- MB$mixed.yc + MB$mixed.yc # doubled
-MB$mixed.yc[which(MB$mixed.yc>1)]<-1
 # increase agroforestry capital
 MB$agro.yc <- MB$agro.yc + MB$agro.yc # doubled
-MB$agro.yc[which(MB$agro.yc>1)]<-1
 
 head(MB)
 # for cell updater specs
@@ -96,7 +101,7 @@ yrList <- seq(2021,2100,by=1)
 
 for (yr in yrList){
   
-  write.csv(MB, paste0(dirOut,"/worlds/Scotland/Multiple_Benefits/Multiple_Benefits_",yr,".csv"), row.names = F)
+  write.csv(MB, paste0(dirOut,"/worlds/Scotland/Multiple_Benefits_V2/Multiple_Benefits_",yr,".csv"), row.names = F)
   
 }
 
