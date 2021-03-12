@@ -49,6 +49,7 @@ bdemand<-data.frame(Year,softwood.timber,hardwood.timber,biodiversity,carbon,flo
 write.csv(bdemand, paste0(dirOut,"worlds/Scotland/Baseline/Demand_Baseline.csv"))
 
 # NEXT BITS NEED EDITING IN TERMS OF FILEPATH
+
 # Green Gold demand
 Year<-c(2020:2100)
 softwood.timber<-seq(st,(st+st*5),length.out = 81) # no1. priority (increase 500%)
@@ -62,6 +63,7 @@ crop.service<-rep(cr,length(Year))
 employment<-seq(e,(e+e),length.out = 81) # joint no.5 priority (increase 100%)
 ggdemand<-data.frame(Year,softwood.timber,hardwood.timber,biodiversity,carbon,flood.regulation,recreation,livestock,crop.service,employment)
 write.csv(ggdemand, '~/Documents/workspace/CRAFTY_Scotland/data/csv/Demand_GG.csv')
+
 # Multiple Benefits demand
 Year<-c(2020:2100)
 softwood.timber<-rep(st,length(Year)) 
@@ -75,6 +77,7 @@ crop.service<-seq(cr,(cr+cr*2),length.out = 81) # joint4
 employment<-seq(e,(e+e*5),length.out = 81) #no1
 mbdemand<-data.frame(Year,softwood.timber,hardwood.timber,biodiversity,carbon,flood.regulation,recreation,livestock,crop.service,employment)
 write.csv(mbdemand, '~/Documents/workspace/CRAFTY_Scotland/data/csv/Demand_MB.csv')
+
 # Native Networks demand
 Year<-c(2020:2100)
 softwood.timber<-rep(st,length(Year)) 
@@ -88,6 +91,7 @@ crop.service<-seq(cr,(cr+cr*3),length.out = 81) #joint no3
 employment<-rep(e,length(Year)) 
 nndemand<-data.frame(Year,softwood.timber,hardwood.timber,biodiversity,carbon,flood.regulation,recreation,livestock,crop.service,employment)
 write.csv(nndemand, '~/Documents/workspace/CRAFTY_Scotland/data/csv/Demand_NN.csv')
+
 # Woodland Culture demand
 Year<-c(2020:2100)
 softwood.timber<-seq(st,(st+st*5),length.out = 81) #no1
@@ -101,6 +105,7 @@ crop.service<-seq(cr,(cr+cr*4),length.out = 81)
 employment<-seq(e,(e+e*5),length.out = 81) #no1
 wcdemand<-data.frame(Year,softwood.timber,hardwood.timber,biodiversity,carbon,flood.regulation,recreation,livestock,crop.service,employment)
 write.csv(wcdemand, '~/Documents/workspace/CRAFTY_Scotland/data/csv/Demand_WC.csv')
+
 # Wild Woodlands demand
 Year<-c(2020:2100)
 softwood.timber<-rep(st,length(Year)) 
