@@ -25,7 +25,7 @@ for (i in agentFiles){
   #i <- agentFiles[1]
   name <- strsplit(i, "[_]")[[1]][5]
   name <- strsplit(name, "[.]")[[1]][1]
-  AFT <- read.csv(paste0(dirData,"/templateBasic_csv/AT1_prodnnconifer.csv"))
+  AFT <- read.csv(i)
   AFT <- AFT[,c(1,3:26,2)]
   colnames(AFT)[1] <- "Service"
   write.csv(AFT, paste0(dirOut,"/production/Baseline/",name,".csv"), row.names=F)
