@@ -48,7 +48,6 @@ employment<-rep(e,length(Year))
 bdemand<-data.frame(Year,softwood.timber,hardwood.timber,biodiversity,carbon,flood.regulation,recreation,livestock,crop.service,employment)
 write.csv(bdemand, paste0(dirOut,"worlds/Scotland/Baseline/Demand_Baseline.csv"))
 
-# NEXT BITS NEED EDITING IN TERMS OF FILEPATH
 
 # Green Gold demand
 Year<-c(2020:2100)
@@ -62,7 +61,7 @@ livestock<-seq(l,(l/2),length.out = 81) # reduce by half to represent loss of su
 crop.service<-rep(cr,length(Year))
 employment<-seq(e,(e+e),length.out = 81) # joint no.5 priority (increase 100%)
 ggdemand<-data.frame(Year,softwood.timber,hardwood.timber,biodiversity,carbon,flood.regulation,recreation,livestock,crop.service,employment)
-write.csv(ggdemand, '~/Documents/workspace/CRAFTY_Scotland/data/csv/Demand_GG.csv')
+write.csv(ggdemand, paste0(dirOut,"/worlds/Scotland/Green_Gold/Demand_Green_Gold.csv"))
 
 # Multiple Benefits demand
 Year<-c(2020:2100)
@@ -76,7 +75,7 @@ livestock<-seq(l,(l+l*2),length.out = 81) #joint 4
 crop.service<-seq(cr,(cr+cr*2),length.out = 81) # joint4
 employment<-seq(e,(e+e*5),length.out = 81) #no1
 mbdemand<-data.frame(Year,softwood.timber,hardwood.timber,biodiversity,carbon,flood.regulation,recreation,livestock,crop.service,employment)
-write.csv(mbdemand, '~/Documents/workspace/CRAFTY_Scotland/data/csv/Demand_MB.csv')
+write.csv(mbdemand, paste0(dirOut,"/worlds/Scotland/Multiple_Benefits/Demand_Multiple_Benefits.csv"))
 
 # Native Networks demand
 Year<-c(2020:2100)
@@ -90,7 +89,7 @@ livestock<-seq(l,(l+l*3),length.out = 81) # joint no3
 crop.service<-seq(cr,(cr+cr*3),length.out = 81) #joint no3
 employment<-rep(e,length(Year)) 
 nndemand<-data.frame(Year,softwood.timber,hardwood.timber,biodiversity,carbon,flood.regulation,recreation,livestock,crop.service,employment)
-write.csv(nndemand, '~/Documents/workspace/CRAFTY_Scotland/data/csv/Demand_NN.csv')
+write.csv(nndemand, paste0(dirOut,"/worlds/Scotland/Native_Networks/Demand_Native_Networks.csv"))
 
 # Woodland Culture demand
 Year<-c(2020:2100)
@@ -104,7 +103,7 @@ livestock<-seq(l,(l+l*4),length.out = 81)
 crop.service<-seq(cr,(cr+cr*4),length.out = 81)
 employment<-seq(e,(e+e*5),length.out = 81) #no1
 wcdemand<-data.frame(Year,softwood.timber,hardwood.timber,biodiversity,carbon,flood.regulation,recreation,livestock,crop.service,employment)
-write.csv(wcdemand, '~/Documents/workspace/CRAFTY_Scotland/data/csv/Demand_WC.csv')
+write.csv(wcdemand, paste0(dirOut,"/worlds/Scotland/Woodland_Culture/Demand_Woodland_Culture.csv"))
 
 # Wild Woodlands demand
 Year<-c(2020:2100)
@@ -118,4 +117,4 @@ livestock<-seq(l,(l/2),length.out = 81) # reduce by half to represent loss of su
 crop.service<-rep(cr,length(Year))
 employment<-seq(e,(e+e),length.out = 81) # joint no.5 priority (increase 100%)
 wwdemand<-data.frame(Year,softwood.timber,hardwood.timber,biodiversity,carbon,flood.regulation,recreation,livestock,crop.service,employment)
-write.csv(wwdemand, '~/Documents/workspace/CRAFTY_Scotland/data/csv/Demand_WW.csv')
+write.csv(wwdemand, paste0(dirOut,"/worlds/Scotland/Wild_Woodlands/Demand_Wild_Woodlands.csv"))
