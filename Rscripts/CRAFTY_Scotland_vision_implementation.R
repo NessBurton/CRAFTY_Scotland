@@ -1,5 +1,5 @@
 
-# date: 24/02/21
+# date: 15/03/21
 # author: VB
 # descriptions: edit baseline capitals to represent desired changes in each vision
 
@@ -64,6 +64,61 @@ normalise <- function(x) {
 }
 
 
+### datasets to be used for vision changes -------------------------------------
+
+# WEAG phase 3 areas
+weag <- read.csv(paste0(dirData,'/input/weag3.csv')) 
+head(weag)
+weag$RASTERVALU[which(weag$RASTERVALU == -9999)] <- 0
+weag$Id <- NULL
+weag$ORIG_FID <- NULL
+colnames(weag) <- c('id', 'x', 'y', 'phase3')
+ggplot(weag)+
+  geom_raster(mapping = aes(x=x, y=y, fill = phase3))
+weag<-weag[,c(1,4)]
+
+# LFA areas
+lfa <- read.csv(paste0(dirData,'/input/LFA.csv'))
+head(lfa)
+lfa$Id<-NULL
+lfa$X<-NULL
+lfa$Y<-NULL
+lfa$RASTERVALU<-NULL
+lfa$FID <- NULL
+colnames(lfa)<-c('id','status')
+
+# National Forest Habitat Network
+connect <- read.csv(paste0(dirData,'/input/connectivity2.csv'))
+head(connect)
+connect$connectivity <- NA
+connect$connectivity[which(connect$ZONE == 'Core Native Woodland')] <- 1
+connect$connectivity[which(connect$ZONE == 'Primary Zone')] <- 0.75
+connect$connectivity[which(connect$ZONE == 'Secondary Zone')] <- 0.5
+
+# check
+ggplot(connect)+
+  geom_raster(mapping = aes(x=X, y=Y, fill = connectivity))
+
+connect<-connect[,c(1,8)]
+colnames(connect)<-c('id','connect')
+connect[is.na(connect)]<-0
+
+# Simulated land reform (attitude capitals broken into smaller sizes over 3 timesteps)
+landreform <- read.csv(paste0(dirData,'/output/TestRegion_LR1.csv'))
+head(landreform)
+landreform$X.1<-NULL
+landreform<-landreform[,c(1,19:24)]
+
+landreform2 <- read.csv(paste0(dirData,'/output/TestRegion_LR2.csv'))
+head(landreform2)
+landreform2$X.1 <- NULL
+landreform2<-landreform2[,c(1,19:24)]
+
+landreform3 <- read.csv(paste0(dirData,'/output/TestRegion_LR3.csv'))
+head(landreform3)
+landreform3$X.1 <- NULL
+landreform3<-landreform3[,c(1,19:24)]
+
 ### multiple benefits ----------------------------------------------------------
 
 MB <- capitalsRAW
@@ -112,7 +167,6 @@ for (yr in yrList){
 
 
 # V2
-
 MB <- capitalsRAW
 ggplot(MB)+
   geom_tile(aes(x,y,fill=financial))
@@ -163,17 +217,7 @@ ggplot(WW)+
 ggplot(WW)+
   geom_tile(aes(x,y,fill=n.conifer.yc))
 
-# read in WEAG data
-# add WEAG to productive woodland capitals
-weag <- read.csv(paste0(dirData,'/input/weag3.csv')) 
-head(weag)
-weag$RASTERVALU[which(weag$RASTERVALU == -9999)] <- 0
-weag$Id <- NULL
-weag$ORIG_FID <- NULL
-colnames(weag) <- c('id', 'x', 'y', 'phase3')
-ggplot(weag)+
-  geom_raster(mapping = aes(x=x, y=y, fill = phase3))
-weag<-weag[,c(1,4)]
+# use WEAG to  target productive woodland capitals
 WW<-merge(WW,weag,by='id')
 ggplot(WW)+
   geom_tile(aes(x,y,fill=phase3))
@@ -210,19 +254,12 @@ WW1$deer.density <- z
 
 WW1 <- WW1[-c(1,4)]
 
-yrList <- seq(2021,2100,by=10)
-
 write.csv(WW1, paste0(dirOut,"/worlds/Scotland/Wild_Woodlands/Wild_Woodlands_2021.csv"), row.names = F)
 
 # 2031
 # introduce first stage of land reform and reduce grassland capital by a 1/4
 WW2 <- WW
 summary(WW2)
-
-landreform <- read.csv(paste0(dirData,'/output/TestRegion_LR1.csv'))
-head(landreform)
-landreform$X.1<-NULL
-landreform<-landreform[,c(1,19:24)]
 
 ggplot(WW2)+
   geom_tile(aes(x,y,fill=moreNW))
@@ -235,14 +272,6 @@ WW2$moreNAT <- landreform$moreNAT
 WW2$lessNAT <- landreform$lessNAT
 
 # reduce grassland capital in LFA areas
-lfa <- read.csv(paste0(dirData,'/input/LFA.csv'))
-head(lfa)
-lfa$Id<-NULL
-lfa$X<-NULL
-lfa$Y<-NULL
-lfa$RASTERVALU<-NULL
-lfa$FID <- NULL
-colnames(lfa)<-c('id','status')
 WW2 <- merge(WW2, lfa, by = 'id', all.x = TRUE)
 
 ggplot(WW2)+
@@ -260,13 +289,6 @@ for (i in c(1:nrows)) {
     WW2$grassland[i]<-WW2$grassland[i] - (WW2$grassland[i]/4)
   }
 }
-
-# increase n.broad.consv in WEAG phase 3 areas by 50%
-WW2$n.broad.consv[which(WW2$n.broad.consv > 0 & WW2$phase3 > 0)] <- WW2$n.broad.consv[which(WW2$n.broad.consv > 0 & WW2$phase3 > 0)] * 1.5
-# increase mixed.yc in WEAG phase 3 areas by 50%
-WW2$mixed.yc[which(WW2$mixed.yc > 0 & WW2$phase3 > 0)] <- WW2$mixed.yc[which(WW2$mixed.yc > 0 & WW2$phase3 > 0)] * 1.5
-# increase n.conifer.yc in WEAG phase 3 areas by 50%
-WW2$n.conifer.yc[which(WW2$n.conifer.yc > 0 & WW2$phase3 > 0)] <- WW2$n.conifer.yc[which(WW2$n.conifer.yc > 0 & WW2$phase3 > 0)] * 1.5
 
 # normalise and write updaters
 head(WW2)
@@ -317,11 +339,6 @@ write.csv(WW3, paste0(dirOut,"/worlds/Scotland/Wild_Woodlands/Wild_Woodlands_204
 # introduce second stage of land reform and reduce grassland capital by half
 WW4 <- WW
 
-landreform2 <- read.csv(paste0(dirData,'/output/TestRegion_LR2.csv'))
-head(landreform2)
-landreform2$X.1 <- NULL
-landreform2<-landreform2[,c(1,19:24)]
-
 ggplot(WW4)+
   geom_tile(aes(x,y,fill=moreNW))
 
@@ -351,12 +368,6 @@ for (i in c(1:nrows)) {
   }
 }
 
-# increase n.broad.consv in WEAG phase 3 areas by 50%
-WW4$n.broad.consv[which(WW4$n.broad.consv > 0 & WW4$phase3 > 0)] <- WW4$n.broad.consv[which(WW4$n.broad.consv > 0 & WW4$phase3 > 0)] * 1.5
-# increase mixed.yc in WEAG phase 3 areas by 50%
-WW4$mixed.yc[which(WW4$mixed.yc > 0 & WW4$phase3 > 0)] <- WW4$mixed.yc[which(WW4$mixed.yc > 0 & WW4$phase3 > 0)] * 1.5
-# increase n.conifer.yc in WEAG phase 3 areas by 50%
-WW4$n.conifer.yc[which(WW4$n.conifer.yc > 0 & WW4$phase3 > 0)] <- WW4$n.conifer.yc[which(WW4$n.conifer.yc > 0 & WW4$phase3 > 0)] * 1.5
 
 # deer density
 WW4$deer.density <- WW4$deer.density - (WW4$deer.density/100*20)
@@ -410,11 +421,6 @@ write.csv(WW5, paste0(dirOut,"/worlds/Scotland/Wild_Woodlands/Wild_Woodlands_206
 # introduce land reform 3, reduce deer density by 50%
 WW6 <- WW
 
-landreform3 <- read.csv(paste0(dirData,'/output/TestRegion_LR3.csv'))
-head(landreform3)
-landreform3$X.1 <- NULL
-landreform3<-landreform3[,c(1,19:24)]
-
 ggplot(WW6)+
   geom_tile(aes(x,y,fill=moreNW))
 
@@ -444,12 +450,6 @@ for (i in c(1:nrows)) {
   }
 }
 
-# increase n.broad.consv in WEAG phase 3 areas by 50%
-WW6$n.broad.consv[which(WW6$n.broad.consv > 0 & WW6$phase3 > 0)] <- WW6$n.broad.consv[which(WW6$n.broad.consv > 0 & WW6$phase3 > 0)] * 1.5
-# increase mixed.yc in WEAG phase 3 areas by 50%
-WW6$mixed.yc[which(WW6$mixed.yc > 0 & WW6$phase3 > 0)] <- WW6$mixed.yc[which(WW6$mixed.yc > 0 & WW6$phase3 > 0)] * 1.5
-# increase n.conifer.yc in WEAG phase 3 areas by 50%
-WW6$n.conifer.yc[which(WW6$n.conifer.yc > 0 & WW6$phase3 > 0)] <- WW6$n.conifer.yc[which(WW6$n.conifer.yc > 0 & WW6$phase3 > 0)] * 1.5
 
 # deer density
 WW6$deer.density <- WW6$deer.density - (WW6$deer.density/100*50)
@@ -505,21 +505,6 @@ write.csv(WW7, paste0(dirOut,"/worlds/Scotland/Wild_Woodlands/Wild_Woodlands_209
 
 NN <- capitalsRAW
 
-connect <- read.csv(paste0(dirData,'/input/connectivity2.csv'))
-head(connect)
-connect$connectivity <- NA
-connect$connectivity[which(connect$ZONE == 'Core Native Woodland')] <- 1
-connect$connectivity[which(connect$ZONE == 'Primary Zone')] <- 0.75
-connect$connectivity[which(connect$ZONE == 'Secondary Zone')] <- 0.5
-
-# check
-ggplot(connect)+
-  geom_raster(mapping = aes(x=X, y=Y, fill = connectivity))
-
-connect<-connect[,c(1,8)]
-colnames(connect)<-c('id','connect')
-connect[is.na(connect)]<-0
-
 NN<-merge(NN,connect,by='id')
 ggplot(NN)+
   geom_raster(mapping = aes(x=x, y=y, fill = connect))
@@ -565,7 +550,7 @@ for (yr in yrList){
 }
 
 
-### Green Gold -----------------------------------------------------------------
+### green gold -----------------------------------------------------------------
 
 GG <- capitalsRAW
 
@@ -627,5 +612,297 @@ for (yr in yrList){
   
 }
 
-### Woodland Culture -----------------------------------------------------------
+### woodland culture -----------------------------------------------------------
+
+WC <- capitalsRAW
+
+# 2021
+# increase human capital - initial growth in knowledge and motivation
+summary(WC$human) # take mean (if less than this)
+nrows <- length(WC[,1])
+for (i in c(1:nrows)) {
+  if (WC$human[i] <= 0.63) {
+    WC$human[i]<-WC$human[i] * 1.5
+  }
+}
+# increase social capital - new networks and relationships for communities
+summary(WC$social)
+for (i in c(1:nrows)) {
+  if (WC$social[i] <= 0.60) {
+    WC$social[i]<-WC$social[i] * 1.5
+  }
+}
+# even out finacial capital - productive power
+summary(WC$financial)
+for (i in c(1:nrows)) {
+  if (WC$financial[i] <= 0.67) {
+    WC$financial[i]<-WC$financial[i] * 1.5
+  }}
+
+# reduce grassland capital in LFA by 1/4
+WC <- merge(WC, lfa, by = 'id', all.x = TRUE)
+
+ggplot(WC)+
+  geom_raster(mapping=aes(x=x,y=y,fill=status))
+ggplot(WC)+
+  geom_raster(mapping=aes(x=x,y=y,fill=grassland))
+
+WC1 <- WC
+
+nrows <- length(WC1[,1])
+
+for (i in c(1:nrows)) {
+  if (WC1$status[i] == "Severely Disadvantaged") {
+    WC1$grassland[i]<-WC1$grassland[i] - (WC1$grassland[i]/4)
+  }
+  if (WC1$status[i] == "Disadvantaged") {
+    WC1$grassland[i]<-WC1$grassland[i] - (WC1$grassland[i]/4)
+  }
+}
+
+head(WC1)
+# for cell updater specs
+WC1$FR<-NULL
+WC1$BT<-NULL
+WC1$X <- NULL
+
+summary(WC1)
+WC1 <- data.frame(WC1[,c(1:5,29)], lapply(WC1[6:28], normalise))
+summary(WC1)
+WC1[is.na(WC1)] <- 0
+WC1$crop.productivity[which(WC1$agri.filter==1)]<-0 # remove cap where not suitable for crops
+#remove filter column
+WC1$agri.filter <- NULL
+
+# invert deer density
+invert <- WC1$deer.density - 1
+z <- abs(invert)
+WC1$deer.density <- z
+
+WC1 <- WC1[-c(1,4)]
+
+write.csv(WC1, paste0(dirOut,"/worlds/Scotland/Woodland_Culture/Woodland_Culture_2021.csv"), row.names = F)
+
+# 2031 
+# first stage land reform
+
+WC2 <- WC
+
+ggplot(WC2)+
+  geom_tile(aes(x,y,fill=moreNW))
+
+WC2$moreNW <- landreform$moreNW
+WC2$lessNW <- landreform$lessNW
+WC2$moreF <- landreform$moreF
+WC2$lessF <- landreform$lessF
+WC2$moreNAT <- landreform$moreNAT
+WC2$lessNAT <- landreform$lessNAT
+
+for (i in c(1:nrows)) {
+  if (WC2$status[i] == "Severely Disadvantaged") {
+    WC2$grassland[i]<-WC2$grassland[i] - (WC2$grassland[i]/4)
+  }
+  if (WC2$status[i] == "Disadvantaged") {
+    WC2$grassland[i]<-WC2$grassland[i] - (WC2$grassland[i]/4)
+  }
+}
+
+head(WC2)
+# for cell updater specs
+WC2$FR<-NULL
+WC2$BT<-NULL
+WC2$X <- NULL
+
+summary(WC2)
+WC2 <- data.frame(WC2[,c(1:5,29)], lapply(WC2[6:28], normalise))
+summary(WC2)
+WC2[is.na(WC2)] <- 0
+WC2$crop.productivity[which(WC2$agri.filter==1)]<-0 # remove cap where not suitable for crops
+#remove filter column
+WC2$agri.filter <- NULL
+
+# invert deer density
+invert <- WC2$deer.density - 1
+z <- abs(invert)
+WC2$deer.density <- z
+
+WC2 <- WC2[-c(1,4)]
+
+write.csv(WC2, paste0(dirOut,"/worlds/Scotland/Woodland_Culture/Woodland_Culture_2031.csv"), row.names = F)
+
+# 2041
+# reduce grassland capital by 1/2
+WC3 <- WC
+
+for (i in c(1:nrows)) {
+  if (WC3$status[i] == "Severely Disadvantaged") {
+    WC3$grassland[i]<-WC3$grassland[i] - (WC3$grassland[i]/2)
+  }
+  if (WC3$status[i] == "Disadvantaged") {
+    WC3$grassland[i]<-WC3$grassland[i] - (WC3$grassland[i]/2)
+  }
+}
+
+WC3$moreNW <- landreform$moreNW
+WC3$lessNW <- landreform$lessNW
+WC3$moreF <- landreform$moreF
+WC3$lessF <- landreform$lessF
+WC3$moreNAT <- landreform$moreNAT
+WC3$lessNAT <- landreform$lessNAT
+
+head(WC3)
+# for cell updater specs
+WC3$FR<-NULL
+WC3$BT<-NULL
+WC3$X <- NULL
+
+WC3 <- data.frame(WC3[,c(1:5,29)], lapply(WC3[6:28], normalise))
+summary(WC3)
+WC3[is.na(WC3)] <- 0
+WC3$crop.productivity[which(WC3$agri.filter==1)]<-0 # remove cap where not suitable for crops
+#remove filter column
+WC3$agri.filter <- NULL
+
+# invert deer density
+invert <- WC3$deer.density - 1
+z <- abs(invert)
+WC3$deer.density <- z
+
+WC3 <- WC3[-c(1,4)]
+
+write.csv(WC3, paste0(dirOut,"/worlds/Scotland/Woodland_Culture/Woodland_Culture_2041.csv"), row.names = F)
+
+# 2051
+# second stage land reform
+
+WC4 <- WC
+
+WC4$moreNW <- landreform2$moreNW
+WC4$lessNW <- landreform2$lessNW
+WC4$moreF <- landreform2$moreF
+WC4$lessF <- landreform2$lessF
+WC4$moreNAT <- landreform2$moreNAT
+WC4$lessNAT <- landreform2$lessNAT
+
+for (i in c(1:nrows)) {
+  if (WC4$status[i] == "Severely Disadvantaged") {
+    WC4$grassland[i]<-WC4$grassland[i] - (WC4$grassland[i]/2)
+  }
+  if (WC4$status[i] == "Disadvantaged") {
+    WC4$grassland[i]<-WC4$grassland[i] - (WC4$grassland[i]/2)
+  }
+}
+
+head(WC4)
+# for cell updater specs
+WC4$FR<-NULL
+WC4$BT<-NULL
+WC4$X <- NULL
+
+summary(WC4)
+WC4 <- data.frame(WC4[,c(1:5,29)], lapply(WC4[6:28], normalise))
+summary(WC4)
+WC4[is.na(WC4)] <- 0
+WC4$crop.productivity[which(WC4$agri.filter==1)]<-0 # remove cap where not suitable for crops
+#remove filter column
+WC4$agri.filter <- NULL
+
+# invert deer density
+invert <- WC4$deer.density - 1
+z <- abs(invert)
+WC4$deer.density <- z
+
+WC4 <- WC4[-c(1,4)]
+
+write.csv(WC4, paste0(dirOut,"/worlds/Scotland/Woodland_Culture/Woodland_Culture_2051.csv"), row.names = F)
+
+# 2061
+# reduce grassland capital by 3/4
+
+WC5 <- WC
+
+WC5$moreNW <- landreform2$moreNW
+WC5$lessNW <- landreform2$lessNW
+WC5$moreF <- landreform2$moreF
+WC5$lessF <- landreform2$lessF
+WC5$moreNAT <- landreform2$moreNAT
+WC5$lessNAT <- landreform2$lessNAT
+
+for (i in c(1:nrows)) {
+  if (WC5$status[i] == "Severely Disadvantaged") {
+    WC5$grassland[i]<-WC5$grassland[i] - (WC5$grassland[i]/100*75)
+  }
+  if (WC5$status[i] == "Disadvantaged") {
+    WC5$grassland[i]<-WC5$grassland[i] - (WC5$grassland[i]/100*75)
+  }
+}
+
+head(WC5)
+# for cell updater specs
+WC5$FR<-NULL
+WC5$BT<-NULL
+WC5$X <- NULL
+
+summary(WC5)
+WC5 <- data.frame(WC5[,c(1:5,29)], lapply(WC5[6:28], normalise))
+summary(WC5)
+WC5[is.na(WC5)] <- 0
+WC5$crop.productivity[which(WC5$agri.filter==1)]<-0 # remove cap where not suitable for crops
+#remove filter column
+WC5$agri.filter <- NULL
+
+# invert deer density
+invert <- WC5$deer.density - 1
+z <- abs(invert)
+WC5$deer.density <- z
+
+WC5 <- WC5[-c(1,4)]
+
+write.csv(WC5, paste0(dirOut,"/worlds/Scotland/Woodland_Culture/Woodland_Culture_2061.csv"), row.names = F)
+
+# 2071 
+# third stage land reform
+
+WC6 <- WC
+
+WC6$moreNW <- landreform3$moreNW
+WC6$lessNW <- landreform3$lessNW
+WC6$moreF <- landreform3$moreF
+WC6$lessF <- landreform3$lessF
+WC6$moreNAT <- landreform3$moreNAT
+WC6$lessNAT <- landreform3$lessNAT
+
+for (i in c(1:nrows)) {
+  if (WC6$status[i] == "Severely Disadvantaged") {
+    WC6$grassland[i]<-WC6$grassland[i] - (WC6$grassland[i]/100*75)
+  }
+  if (WC6$status[i] == "Disadvantaged") {
+    WC6$grassland[i]<-WC6$grassland[i] - (WC6$grassland[i]/100*75)
+  }
+}
+
+head(WC6)
+# for cell updater specs
+WC6$FR<-NULL
+WC6$BT<-NULL
+WC6$X <- NULL
+
+summary(WC6)
+WC6 <- data.frame(WC6[,c(1:5,29)], lapply(WC6[6:28], normalise))
+summary(WC6)
+WC6[is.na(WC6)] <- 0
+WC6$crop.productivity[which(WC6$agri.filter==1)]<-0 # remove cap where not suitable for crops
+#remove filter column
+WC6$agri.filter <- NULL
+
+# invert deer density
+invert <- WC6$deer.density - 1
+z <- abs(invert)
+WC6$deer.density <- z
+
+WC6 <- WC6[-c(1,4)]
+
+write.csv(WC6, paste0(dirOut,"/worlds/Scotland/Woodland_Culture/Woodland_Culture_2071.csv"), row.names = F)
+write.csv(WC6, paste0(dirOut,"/worlds/Scotland/Woodland_Culture/Woodland_Culture_2081.csv"), row.names = F)
+write.csv(WC6, paste0(dirOut,"/worlds/Scotland/Woodland_Culture/Woodland_Culture_2091.csv"), row.names = F)
 
