@@ -34,6 +34,12 @@ baseline$FR
 baseline$FR <- str_replace_all(baseline$FR, "[[.]]", "")
 
 write.csv(baseline, paste0(dirOut,"/worlds/Scotland/Baseline/Baseline_capitals.csv"), row.names = F)
+write.csv(baseline, paste0(dirOut,"/worlds/Scotland/Multiple_Benefits/Multiple_Benefits_capitals.csv"), row.names = F)
+write.csv(baseline, paste0(dirOut,"/worlds/Scotland/Green_Gold/Green_Gold_capitals.csv"), row.names = F)
+write.csv(baseline, paste0(dirOut,"/worlds/Scotland/Native_Networks/Native_Networks_capitals.csv"), row.names = F)
+write.csv(baseline, paste0(dirOut,"/worlds/Scotland/Wild_Woodlands/Wild_Woodlands_capitals.csv"), row.names = F)
+write.csv(baseline, paste0(dirOut,"/worlds/Scotland/Woodland_Culture/Woodland_Culture_capitals.csv"), row.names = F)
+
 
 # baseline updater files
 baseline <- read.csv(paste0(dirOut,"/worlds/Scotland/Baseline/Baseline_capitals.csv"))
@@ -61,9 +67,10 @@ MB <- capitalsRAW
 summary(MB$mixed.yc)
 
 ggplot(MB)+
-  geom_tile(aes(x,y,fill=agro.yc))
+  geom_tile(aes(x,y,fill=mixed.yc))
 ggplot(MB)+
-  geom_tile(aes(x,y,fill=financial))
+  geom_tile(aes(x,y,fill=agro.yc))
+
 
 # V1 (thesis method)
 # increase actual natural capitals
@@ -75,8 +82,24 @@ head(MB)
 # for cell updater specs
 MB$FR<-NULL
 MB$BT<-NULL
+MB$X <- NULL
 
-yrList <- seq(2021,2100,by=1)
+summary(MB)
+MB <- data.frame(MB[,c(1:5)], lapply(MB[6:28], normalise))
+summary(MB)
+MB[is.na(MB)] <- 0
+MB$crop.productivity[which(MB$agri.filter==1)]<-0 # remove cap where not suitable for crops
+#remove filter column
+MB$agri.filter <- NULL
+
+# invert deer density
+invert <- MB$deer.density - 1
+z <- abs(invert)
+MB$deer.density <- z
+
+MB <- MB[-c(1,4)]
+
+yrList <- seq(2021,2100,by=10)
 
 for (yr in yrList){
   
@@ -86,18 +109,38 @@ for (yr in yrList){
 
 
 # V2
+
+MB <- capitalsRAW
+ggplot(MB)+
+  geom_tile(aes(x,y,fill=financial))
+
 # increase financial capital where mixed yc capital >0.5
 MB$financial[which(MB$mixed.yc>0.5)] <- MB$financial[which(MB$mixed.yc>0.5)]+0.2
 # increase financial capital where agroforestry capital >0.5
 MB$financial[which(MB$agro.yc>0.5)] <- MB$financial[which(MB$agro.yc>0.5)]+0.2
-MB$financial[which(MB$financial>1)] <- 1
 
 head(MB)
 # for cell updater specs
 MB$FR<-NULL
 MB$BT<-NULL
+MB$X <- NULL
 
-yrList <- seq(2021,2100,by=1)
+summary(MB)
+MB <- data.frame(MB[,c(1:5)], lapply(MB[6:28], normalise))
+summary(MB)
+MB[is.na(MB)] <- 0
+MB$crop.productivity[which(MB$agri.filter==1)]<-0 # remove cap where not suitable for crops
+#remove filter column
+MB$agri.filter <- NULL
+
+# invert deer density
+invert <- MB$deer.density - 1
+z <- abs(invert)
+MB$deer.density <- z
+
+MB <- MB[-c(1,4)]
+
+yrList <- seq(2021,2100,by=10)
 
 for (yr in yrList){
   
