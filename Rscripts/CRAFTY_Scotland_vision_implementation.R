@@ -87,7 +87,7 @@ lfa$RASTERVALU<-NULL
 lfa$FID <- NULL
 colnames(lfa)<-c('id','status')
 
-# National Forest Habitat Network
+# Scottish Forest Habitat Network
 connect <- read.csv(paste0(dirData,'/input/connectivity2.csv'))
 head(connect)
 connect$connectivity <- NA
