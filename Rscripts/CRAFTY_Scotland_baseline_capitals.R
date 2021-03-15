@@ -105,6 +105,7 @@ normalise <- function(x) {
 
 capitalsNRM <- capitalsRaw
 summary(capitalsNRM)
+capitalsNRM$X <- NULL
 
 #capitalsNRM[,c(6:28)] <- normalise(capitalsNRM[,c(6:28)])
 capitalsNRM <- data.frame(capitalsNRM[,c(1:5,29)], lapply(capitalsNRM[6:28], normalise))
