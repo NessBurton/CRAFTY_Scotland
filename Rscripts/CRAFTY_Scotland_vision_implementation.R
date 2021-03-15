@@ -499,3 +499,133 @@ WW7$deer.density <- z
 
 write.csv(WW7, paste0(dirOut,"/worlds/Scotland/Wild_Woodlands/Wild_Woodlands_2081.csv"), row.names = F)
 write.csv(WW7, paste0(dirOut,"/worlds/Scotland/Wild_Woodlands/Wild_Woodlands_2091.csv"), row.names = F)
+
+
+### native networks  -----------------------------------------------------------
+
+NN <- capitalsRAW
+
+connect <- read.csv(paste0(dirData,'/input/connectivity2.csv'))
+head(connect)
+connect$connectivity <- NA
+connect$connectivity[which(connect$ZONE == 'Core Native Woodland')] <- 1
+connect$connectivity[which(connect$ZONE == 'Primary Zone')] <- 0.75
+connect$connectivity[which(connect$ZONE == 'Secondary Zone')] <- 0.5
+
+# check
+ggplot(connect)+
+  geom_raster(mapping = aes(x=X, y=Y, fill = connectivity))
+
+connect<-connect[,c(1,8)]
+colnames(connect)<-c('id','connect')
+connect[is.na(connect)]<-0
+
+NN<-merge(NN,connect,by='id')
+ggplot(NN)+
+  geom_raster(mapping = aes(x=x, y=y, fill = connect))
+ggplot(NN)+
+  geom_raster(mapping = aes(x=x, y=y, fill = n.conifer.yc))
+
+# increase native woodland capitals in connectivity areas
+NN$n.conifer.yc[which(NN$n.conifer.yc > 0 & NN$connect >=0.5 )] <- NN$n.conifer.yc[which(NN$n.conifer.yc > 0 & NN$connect >= 0.5 )] * 1.5
+
+NN$n.broad.yc[which(NN$n.broad.yc > 0 & NN$connect >= 0.5)] <- NN$n.broad.yc[which(NN$n.broad.yc > 0 & NN$connect >= 0.5)] * 1.5
+
+NN$n.broad.consv[which(NN$n.broad.consv > 0 & NN$connect >= 0.5)] <- NN$n.broad.consv[which(NN$n.broad.consv > 0 & NN$connect >= 0.5)] * 1.5
+
+NN$mixed.yc[which(NN$mixed.yc > 0 & NN$connect >= 0.5)] <- NN$mixed.yc[which(NN$mixed.yc > 0 & NN$connect >= 0.5)] * 1.5
+
+head(NN)
+# for cell updater specs
+NN$FR<-NULL
+NN$BT<-NULL
+NN$X <- NULL
+
+summary(NN)
+NN <- data.frame(NN[,c(1:5,29)], lapply(NN[6:28], normalise))
+summary(NN)
+NN[is.na(NN)] <- 0
+NN$crop.productivity[which(NN$agri.filter==1)]<-0 # remove cap where not suitable for crops
+#remove filter column
+NN$agri.filter <- NULL
+
+# invert deer density
+invert <- NN$deer.density - 1
+z <- abs(invert)
+NN$deer.density <- z
+
+NN <- NN[-c(1,4)]
+
+yrList <- seq(2021,2100,by=10)
+
+for (yr in yrList){
+  
+  write.csv(NN, paste0(dirOut,"/worlds/Scotland/Native_Networks/Native_Networks_",yr,".csv"), row.names = F)
+  
+}
+
+
+### Green Gold -----------------------------------------------------------------
+
+GG <- capitalsRAW
+
+# increase productive woodland capitals in WEAG areas
+GG<-merge(GG,weag,by='id')
+ggplot(GG)+
+  geom_tile(aes(x,y,fill=phase3))
+
+GG$n.conifer.yc[which(GG$n.conifer.yc > 0 & GG$phase3 > 0)] <- GG$n.conifer.yc[which(GG$n.conifer.yc > 0 & GG$phase3 > 0)] * 1.5
+GG$nn.conifer.yc[which(GG$nn.conifer.yc > 0 & GG$phase3 > 0)] <- GG$nn.conifer.yc[which(GG$nn.conifer.yc > 0 & GG$phase3 > 0)] * 1.5
+GG$n.broad.yc[which(GG$n.broad.yc > 0 & GG$phase3 > 0)] <- GG$n.broad.yc[which(GG$n.broad.yc > 0 & GG$phase3 > 0)] * 1.5
+GG$nn.broad.yc[which(GG$nn.broad.yc > 0 & GG$phase3 > 0)] <- GG$nn.broad.yc[which(GG$nn.broad.yc > 0 & GG$phase3 > 0)] * 1.5
+
+# reduce grassland capital in LFA by half
+GG <- merge(GG, lfa, by = 'id', all.x = TRUE)
+
+ggplot(GG)+
+  geom_raster(mapping=aes(x=x,y=y,fill=status))
+ggplot(GG)+
+  geom_raster(mapping=aes(x=x,y=y,fill=grassland))
+
+nrows <- length(GG[,1])
+
+for (i in c(1:nrows)) {
+  if (GG$status[i] == "Severely Disadvantaged") {
+    GG$grassland[i]<-GG$grassland[i] - (GG$grassland[i]/2)
+  }
+  if (GG$status[i] == "Disadvantaged") {
+    GG$grassland[i]<-GG$grassland[i] - (GG$grassland[i]/2)
+  }
+}
+
+head(GG)
+# for cell updater specs
+GG$FR<-NULL
+GG$BT<-NULL
+GG$X <- NULL
+
+summary(GG)
+GG <- data.frame(GG[,c(1:5,29)], lapply(GG[6:28], normalise))
+summary(GG)
+GG[is.na(GG)] <- 0
+GG$crop.productivity[which(GG$agri.filter==1)]<-0 # remove cap where not suitable for crops
+#remove filter column
+GG$agri.filter <- NULL
+
+# invert deer density
+invert <- GG$deer.density - 1
+z <- abs(invert)
+GG$deer.density <- z
+
+GG <- GG[-c(1,4)]
+
+yrList <- seq(2021,2100,by=10)
+
+for (yr in yrList){
+  
+  write.csv(GG, paste0(dirOut,"/worlds/Scotland/Green_Gold/Green_Gold_",yr,".csv"), row.names = F)
+  
+}
+
+### Woodland Culture -----------------------------------------------------------
+
