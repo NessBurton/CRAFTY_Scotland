@@ -1,9 +1,8 @@
+
 library(parallel)
 #library(doMC)
 library(raster)
 library(sp)
-
-
 
 # Get java home using rJava
 
