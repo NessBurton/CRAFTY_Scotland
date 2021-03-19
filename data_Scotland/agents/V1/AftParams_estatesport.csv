@@ -1,2 +1,2 @@
 "aftParamId","givingInDistributionMean","givingInDistributionSD","givingUpDistributionMean","givingUpDistributionSD","serviceLevelNoiseMin","serviceLevelNoiseMax","givingUpProb","productionCsvFile"
-0,1,0,0,0,1,1,0,".//production/%s/estatesport.csv"
+0,1,0,0,0,1,1,0,".//production/%v/%s/estatesport.csv"

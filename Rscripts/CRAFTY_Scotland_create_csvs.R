@@ -18,19 +18,19 @@ dirOut <- paste0(wd,"data_Scotland")
 
 # order = Service, capitals, Production
 
-agentFiles <- list.files(paste0(dirData,"/templateBasic_csv/"), pattern = "AT", full.names = T)
+#agentFiles <- list.files(paste0(dirData,"/templateBasic_csv/"), pattern = "AT", full.names = T)
 
-for (i in agentFiles){
+#for (i in agentFiles){
   
   #i <- agentFiles[1]
-  name <- strsplit(i, "[_]")[[1]][5]
-  name <- strsplit(name, "[.]")[[1]][1]
-  AFT <- read.csv(i)
-  AFT <- AFT[,c(1,3:26,2)]
-  colnames(AFT)[1] <- "Service"
-  write.csv(AFT, paste0(dirOut,"/production/Baseline/",name,".csv"), row.names=F)
+  #name <- strsplit(i, "[_]")[[1]][5]
+  #name <- strsplit(name, "[.]")[[1]][1]
+  #AFT <- read.csv(i)
+  #AFT <- AFT[,c(1,3:26,2)]
+  #colnames(AFT)[1] <- "Service"
+  #write.csv(AFT, paste0(dirOut,"/production/Baseline/",name,".csv"), row.names=F)
   
-}
+#}
 
 ### behavioural parameters -----------------------------------------------------
 
@@ -53,7 +53,7 @@ stubbornAgents <- c("prodnnconifer","prodnconifer","prodnnbroad","prodnbroad",
 
 for (i in stubbornAgents){
   
-  productionCsvFile <- paste0(".//production/%s/",i,".csv")
+  productionCsvFile <- paste0(".//production/%v/%s/",i,".csv")
   params <- tibble(aftParamId,givingInDistributionMean,givingInDistributionSD,givingUpDistributionMean,givingUpDistributionSD,
                    serviceLevelNoiseMin,serviceLevelNoiseMax,givingUpProb,productionCsvFile)
   write.csv(params, paste0(dirOut,"/agents/V1/AftParams_",i,".csv"), row.names=F)
@@ -62,7 +62,7 @@ for (i in stubbornAgents){
 
 # agroforestry semi-stubborn
 givingInDistributionMean <- 0.5 
-productionCsvFile <- paste0(".//production/%s/agroforestry.csv")
+productionCsvFile <- paste0(".//production/%v/%s/agroforestry.csv")
 params <- tibble(aftParamId,givingInDistributionMean,givingInDistributionSD,givingUpDistributionMean,givingUpDistributionSD,
                  serviceLevelNoiseMin,serviceLevelNoiseMax,givingUpProb,productionCsvFile)
 write.csv(params, paste0(dirOut,"/agents/V1/AftParams_agroforestry.csv"), row.names=F)
@@ -72,7 +72,7 @@ givingInDistributionMean <- 0
 otherAgents <- c("intarable","extarable","intpastoral","extpastoral")
 for (i in otherAgents){
   
-  productionCsvFile <- paste0(".//production/%s/",i,".csv")
+  productionCsvFile <- paste0(".//production/%v/%s/",i,".csv")
   params <- tibble(aftParamId,givingInDistributionMean,givingInDistributionSD,givingUpDistributionMean,givingUpDistributionSD,
                    serviceLevelNoiseMin,serviceLevelNoiseMax,givingUpProb,productionCsvFile)
   write.csv(params, paste0(dirOut,"/agents/V1/AftParams_",i,".csv"), row.names=F)
@@ -80,6 +80,49 @@ for (i in otherAgents){
 }
 
 # V2 - take away giving-in threshold from estates
+
+aftParamId <- 0
+givingInDistributionMean <- 1 # woodland agents don't give in once established
+givingInDistributionSD <- 0
+givingUpDistributionMean <- 0
+givingUpDistributionSD <- 0
+serviceLevelNoiseMin <- 1
+serviceLevelNoiseMax <- 1
+givingUpProb <- 0
+
+stubbornAgents <- c("prodnnconifer","prodnconifer","prodnnbroad","prodnbroad",
+                    "multinnc","multinc","multinnb","multinb","multimixed",
+                    "consvnative", 
+                    "waterurban","marginal")
+
+for (i in stubbornAgents){
+  
+  productionCsvFile <- paste0(".//production/%v/%s/",i,".csv")
+  params <- tibble(aftParamId,givingInDistributionMean,givingInDistributionSD,givingUpDistributionMean,givingUpDistributionSD,
+                   serviceLevelNoiseMin,serviceLevelNoiseMax,givingUpProb,productionCsvFile)
+  write.csv(params, paste0(dirOut,"/agents/V2/AftParams_",i,".csv"), row.names=F)
+  
+}
+
+# agroforestry semi-stubborn
+givingInDistributionMean <- 0.5 
+productionCsvFile <- paste0(".//production/%v/%s/agroforestry.csv")
+params <- tibble(aftParamId,givingInDistributionMean,givingInDistributionSD,givingUpDistributionMean,givingUpDistributionSD,
+                 serviceLevelNoiseMin,serviceLevelNoiseMax,givingUpProb,productionCsvFile)
+write.csv(params, paste0(dirOut,"/agents/V2/AftParams_agroforestry.csv"), row.names=F)
+
+# rest, no thresholds in V1
+givingInDistributionMean <- 0
+otherAgents <- c("intarable","extarable","intpastoral","extpastoral",
+                 "estateconsv","estatemulti","estatesport")
+for (i in otherAgents){
+  
+  productionCsvFile <- paste0(".//production/%v/%s/",i,".csv")
+  params <- tibble(aftParamId,givingInDistributionMean,givingInDistributionSD,givingUpDistributionMean,givingUpDistributionSD,
+                   serviceLevelNoiseMin,serviceLevelNoiseMax,givingUpProb,productionCsvFile)
+  write.csv(params, paste0(dirOut,"/agents/V2/AftParams_",i,".csv"), row.names=F)
+  
+}
 
 ### capital & service index files ----------------------------------------------
 
