@@ -5,6 +5,7 @@
 
 ### libraries ------------------------------------------------------------------
 
+library(vroom)
 library(tidyverse)
 library(ggplot2)
 library(reshape2)
@@ -14,11 +15,9 @@ library(wesanderson)
 
 ### directories ----------------------------------------------------------------
 
-wd <- "~/eclipse-workspace/CRAFTY_Scotland/"
-dirData <- paste0(wd,"data_raw")
-dirOut <- paste0(wd,"data_Scotland")
-dirResults <- paste0(wd,"output/V1/")
-dirMetrics <- paste0(wd,"vision_metrics")
+wd <- "D:/"
+dirResults <- paste0(wd,"CRAFTY_Scotland/V1/")
+dirMetrics <- paste0(wd,"CRAFTY_Scotland/vision_metrics")
 
 ### palettes -------------------------------------------------------------------
 
@@ -53,58 +52,14 @@ lu.colours<-c("mixed.estate" = "#C2A5CF",
               "non.native.woodland" = "#005A32",
               "marginal" ="lightgrey")
 
-### baseline -------------------------------------------------------------------
-
-dfBaseline <-
-  list.files(path = paste0(dirResults,"Baseline/"),
-             pattern = "*.csv", 
-             full.names = T) %>% 
-  grep("-Cell-", value=TRUE, .) %>% 
-  #map_df(~read_csv(., col_types = cols(.default = "c")))
-  map_df(~read.csv(.))
-
-head(dfBaseline)
-summary(dfBaseline)
-dfBaseline$Tick <- factor(dfBaseline$Tick)
-dfBaseline$Agent <- factor(dfBaseline$Agent)
-
-dfBaselineAFTcomp <- read.csv(paste0(dirResults,"Baseline/Baseline-0-99-Scotland-AggregateAFTCompetitiveness.csv"))
-head(dfBaselineAFTcomp)
-
-dfBaselineAFTs <- read.csv(paste0(dirResults,"Baseline/Baseline-0-99-Scotland-AggregateAFTComposition.csv"))
-
-dfBaselineService <- read.csv(paste0(dirResults,"Baseline/Baseline-0-99-Scotland-AggregateServiceDemand.csv"))
-
-dfBaselineActions <- read.csv(paste0(dirResults,"Baseline/Baseline-0-99-Scotland-Actions.csv"))
-
-dfBaselineGI <- read.csv(paste0(dirResults,"Baseline/Baseline-0-99-Scotland-GivingInStatistics.csv"))
-
-dfBaselineTO <- read.csv(paste0(dirResults,"Baseline/Baseline-0-99-Scotland-TakeOvers.csv"))
-
-# baseline woodland cover
-reference <- filter(dfBaseline, Tick == 2020)
-wood.cover<- length(reference$Agent[reference$Agent == "consv.native"|
-                                      reference$Agent == "multi.nb"|
-                                      reference$Agent == "multi.mixed"|
-                                      reference$Agent == "prod.n.conifer"|
-                                      reference$Agent == "prod.n.broad"|
-                                      reference$Agent =="prod.nn.conifer"|
-                                      reference$Agent == "prod.nn.broad"|
-                                      reference$Agent == "multi.nc"|
-                                      reference$Agent == "multi.nnb"|
-                                      reference$Agent == "multi.nnc"])/length(reference$Agent)*100
-estmW<-length(reference$Agent[which(reference$Agent=='estate.multi'&reference$Service.softwood.timber>0)])/length(reference$Agent)*100
-agroW<-length(reference$Agent[which(reference$Agent=='agroforestry'&reference$Service.softwood.timber>0|reference$Service.hardwood.timber>0)])/length(reference$Agent)*100
-estsW<-length(reference$Agent[which(reference$Agent=='estate.sport'&reference$Service.softwood.timber>0|reference$Service.hardwood.timber>0)])/length(reference$Agent)*100 
-estcW<-length(reference$Agent[which(reference$Agent=='estate.consv'&reference$Service.softwood.timber>0|reference$Service.hardwood.timber>0)])/length(reference$Agent)*100
-referenceWC<-wood.cover+agroW+estsW+estcW+estmW
-
 
 ### Visions --------------------------------------------------------------------
 
-lstVisions <- c("Multiple_Benefits","Wild_Woodlands")
+lstVisions <- c("Baseline","Green_Gold","Multiple_Benefits","Native_Networks","Wild_Woodlands","Woodland_Culture")
 
 for (vision in lstVisions){
+  
+  vision <- lstVisions[6]
   
   dfVision <-
     list.files(path = paste0(dirResults,vision,"/"),
@@ -114,10 +69,19 @@ for (vision in lstVisions){
     #map_df(~read_csv(., col_types = cols(.default = "c")))
     map_df(~read.csv(.))
   
-  dfVision$Tick <- factor(dfVision$Tick)
-  dfVision$Agent <- factor(dfVision$Agent)
+  #lstFiles <- list.files(path = paste0(dirResults,vision,"/"),
+                         #pattern = "*.csv",
+                         #full.names = T) %>% grep("-Cell-", value=TRUE, .)
+  #dfVision <- vroom(lstFiles, id="path")
   
-  # regions
+  names(dfVision)
+  
+  #dfVision$Tick <- factor(dfVision$Tick)
+  #dfVision$Agent <- factor(dfVision$Agent)
+  
+  print(paste0("Results read in for vision: ", vision))
+  
+  # region
   dfVision$Capital.region[which(dfVision$Capital.region==0)]<-NA
   dfVision$Capital.region[which(dfVision$Capital.region==1)]<-"South Scotland"
   dfVision$Capital.region[which(dfVision$Capital.region==2)]<-"Central"
@@ -163,6 +127,8 @@ for (vision in lstVisions){
                                            dfVision$Agent=="multinnb"|
                                            dfVision$Agent=="multimixed")] <- "all.woodland"
   
+  print(paste0("Simplified categories assigned for vision: ", vision))
+  
   ### woodland % cover per yr
   year_list<-c(2020:2100)
   wood.cover<-rep(0,length(year_list))
@@ -194,6 +160,8 @@ for (vision in lstVisions){
   
   wood_cover<-wood.cover+estcW+estmW+estsW+agroW
   #wood_cover<-wood_cover # adjust?
+  
+  print(paste0("Woodland cover calculated for vision: ", vision))
   
   ### total.ES.diversity
   
@@ -232,6 +200,8 @@ for (vision in lstVisions){
                    +((S.carbon[i]/tot[i])^2)+((S.flood[i]/tot[i])^2)+((S.rec[i]/tot[i])^2)
                    +((S.lstock[i]/tot[i])^2)+((S.crop[i]/tot[i])^2)+((S.emp[i]/tot[i])^2))
   }
+  
+  print(paste0("Total ES diversity calculated for vision: ", vision))
   
   ### total.LU.diversity
   
@@ -299,6 +269,8 @@ for (vision in lstVisions){
     
   }
   
+  print(paste0("Total land use diversity calculated for vision: ", vision))
+  
   ### agent extents
 
   native.wood.ext<-c()
@@ -322,6 +294,8 @@ for (vision in lstVisions){
     ext.agri.ext[i]<-length(timestep$Agent[timestep$Agent=="extpastoral"|timestep$Agent=="extarable"])
   }
   
+  print(paste0("Agent extents calculated for vision: ", vision))
+  
   metrics <- cbind(year_id,
                    wood_cover,
                    tES.div,
@@ -336,6 +310,8 @@ for (vision in lstVisions){
   
   write.csv(dfMetrics, paste0(dirMetrics,"/",vision,"_metrics_March21.csv"))
   
+  print(paste0("Metrics file written for vision: ", vision))
+  
   rm(dfVision)
   
 }
@@ -343,13 +319,18 @@ for (vision in lstVisions){
 
 ### plots ----------------------------------------------------------------------
 
-dfMB <- read.csv(paste0(dirMetrics,"/Multiple_Benefits_metrics_March21.csv"))
-dfWW <- read.csv(paste0(dirMetrics,"/Wild_Woodlands_metrics_March21.csv"))
+lstMetrics <- list.files(dirMetrics, full.names = T)
 
-dfMB$vision <- "Multiple Benefits"
-dfWW$vision <- "Wild Woodlands"
+dfAll <- vroom(lstMetrics, id="path")
 
-dfAll <- rbind(dfMB,dfWW)
+names(dfAll)
+
+dfAll$vision <- ifelse(grepl("Baseline", dfAll$path), 'Baseline',
+                            ifelse(grepl("Green_Gold", dfAll$path), 'Green Gold',
+                                   ifelse(grepl("Native_Networks", dfAll$path), 'Native Networks',
+                                          ifelse(grepl("Multiple_Benefits", dfAll$path), 'Multiple Benefits',
+                                                 ifelse(grepl("Wild_Woodlands", dfAll$path), 'Wild Woodlands',
+                                                        ifelse(grepl("Woodland_Culture", dfAll$path), "Woodland Culture", NA))))))
 
 # convert extents to percentages
 # 80053 is number of agents per timestep with NA removed
