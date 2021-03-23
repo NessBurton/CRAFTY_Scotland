@@ -1,4 +1,4 @@
-<updater class="org.volante.abm.update.CSVCapitalUpdater" X_COL="x" Y_COL="y" yearInFilename="true" reapplyPreviousFile="false">
+<updater class="org.volante.abm.update.CSVCapitalUpdater" X_COL="x" Y_COL="y" yearInFilename="true" reapplyPreviousFile="true">
 		<csvFile year="2020">worlds/Scotland/Multiple_Benefits/Multiple_Benefits_capitals.csv</csvFile> 
   		<csvFile year="2021">worlds/Scotland/Multiple_Benefits/Multiple_Benefits_2021.csv</csvFile>   		
    		<csvFile year="2041">worlds/Scotland/Multiple_Benefits/Multiple_Benefits_2041.csv</csvFile>
