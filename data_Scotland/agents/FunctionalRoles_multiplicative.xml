@@ -408,7 +408,7 @@
 	</fRole>
 	
 	
-	<fRole class="org.volante.abm.comi.fr.ComiVariantProductionFR" label="prodnnbroad" serialID="16"
+	<fRole class="org.volante.abm.comi.fr.ComiVariantProductionFR" label="prodnnbroad" serialID="17"
 		givingUpMean="${@(agents/%v/AftParams_prodnnbroad.csv, givingUpDistributionMean)}"
 		givingInMean="${@(agents/%v/AftParams_prodnnbroad.csv, givingInDistributionMean)}"
 		givingUpProbability = "${@(agents/%v/AftParams_prodnnbroad.csv, givingUpProb)}">
@@ -432,7 +432,7 @@
 	</fRole>
 	
 
-  <fRole class="org.volante.abm.comi.fr.ComiVariantProductionFR" label="prodnnconifer" serialID="16"
+  <fRole class="org.volante.abm.comi.fr.ComiVariantProductionFR" label="prodnnconifer" serialID="18"
 		givingUpMean="${@(agents/%v/AftParams_prodnnconifer.csv, givingUpDistributionMean)}"
 		givingInMean="${@(agents/%v/AftParams_prodnnconifer.csv, givingInDistributionMean)}"
 		givingUpProbability = "${@(agents/%v/AftParams_prodnnconifer.csv, givingUpProb)}">
@@ -456,7 +456,7 @@
 	</fRole>
 	
 	
-	<fRole class="org.volante.abm.comi.fr.ComiVariantProductionFR" label="waterurban" serialID="16"
+	<fRole class="org.volante.abm.comi.fr.ComiVariantProductionFR" label="waterurban" serialID="19"
 		givingUpMean="${@(agents/%v/AftParams_waterurban.csv, givingUpDistributionMean)}"
 		givingInMean="${@(agents/%v/AftParams_waterurban.csv, givingInDistributionMean)}"
 		givingUpProbability = "${@(agents/%v/AftParams_waterurban.csv, givingUpProb)}">
