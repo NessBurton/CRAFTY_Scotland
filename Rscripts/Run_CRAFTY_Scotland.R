@@ -22,7 +22,7 @@ dirFigs <- path.expand(paste0(dirWorking, "/figures"))
 
 setwd(dirWorking)
 
-source("RScripts/Functions_CRAFTY_rJava.R")
+source("Rscripts/Functions_CRAFTY_rJava.R")
 
 ### CRAFTY set-up --------------------------------------------------------------
 
@@ -98,18 +98,22 @@ scenario.filenames <- c("Scenario_Baseline_noGUI.xml",
 
 version <- "V1"
 
+# set up CRAFTY job
+
+
+if (!exists(x = "CRAFTY_jobj")) {   # not to create CRAFTY_jobj multiple times
+  # Create a new instance (to call non-static methods)
+  CRAFTY_jobj <- new(J(CRAFTY_main_name)) 
+}
+
 for (scenario in scenario.filenames){
   
-  scenario <- scenario.filenames[1]
   scenario.filename <- scenario
   scenario.split <- strsplit(scenario, "[_]")[[1]][2]
   
   # scenario file
   CRAFTY_sargs <- c("-d", dirCRAFTYInput, "-f", scenario.filename, "-o", random_seed_crafty, "-r", "1",  "-n", "1", "-sr", "0", "-e", "2100") 
- 
-  # set up CRAFTY job
-  # Create a new instance (to call non-static methods)
-  CRAFTY_jobj <- new(J(CRAFTY_main_name)) 
+  
   
   # prepares a run and returns run information 
   CRAFTY_RunInfo_jobj <- CRAFTY_jobj$EXTprepareRrun(CRAFTY_sargs)
@@ -120,7 +124,7 @@ for (scenario in scenario.filenames){
   timesteps <- start_year_idx:end_year_idx
   
   ### pre-process CRAFTY Java object
-  region <- CRAFTY_loader_jobj$getRegions()$getAllRegions()$iterator()$'next'()
+  # region <- CRAFTY_loader_jobj$getRegions()$getAllRegions()$iterator()$'next'()
   
   # change wd to a scenario folder to store output files
   dirCRAFTYscenario <- paste0(dirCRAFTYOutput,"/",version,"/",scenario.split)
@@ -143,10 +147,15 @@ for (scenario in scenario.filenames){
     
     if (CRAFTY_nextTick <= end_year_idx) {
       (paste0("============CRAFTY JAVA-R API: NextTick=", CRAFTY_nextTick))
-      } else {
-        print(paste0("============CRAFTY JAVA-R API: Simulation done (tick=", CRAFTY_tick, ")"))
-      }
+    } else {
+      print(paste0("============CRAFTY JAVA-R API: Simulation done (tick=", CRAFTY_tick, ")"))
     }
+  }
+  
+  CRAFTY_jobj$EXTcloseRrun()
   
 }
+
+# delete java objects
+rm( CRAFTY_jobj, CRAFTY_RunInfo_jobj, CRAFTY_loader_jobj)
 
