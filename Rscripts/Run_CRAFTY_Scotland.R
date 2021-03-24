@@ -3,6 +3,9 @@ library(tidyverse)
 library(sf)
 library(viridis)
 library(ggplot2)
+# set java home
+Sys.setenv(JAVA_HOME="C:/Program Files/Java/jre1.8.0_271/") 
+library(rJava)
 library(rJava)
 library(jdx)
 library(xml2)
@@ -46,7 +49,7 @@ aft_names_fromzero <- c("agroforestry",
                         "waterurban")
 
 # location of the CRAFTY Jar file
-path_crafty_jar <- path.expand(paste0(dirWorking, "/lib/CRAFTY_KIT_engineOct2020.jar"))
+path_crafty_jar <- path.expand(paste0(dirWorking, "/lib/CRAFTY_KIT_engine_2021.jar"))
 
 # location of the CRAFTY lib files
 path_crafty_libs <- path.expand(paste0(dirWorking, "/lib/"))
