@@ -13,10 +13,11 @@ library(ggplot2)
 wd <- "~/eclipse-workspace/CRAFTY_Scotland/"
 dirData <- paste0(wd,"data_raw")
 dirOut <- paste0(wd,"data_Scotland/")
+dataDisk <- "D:/CRAFTY_Scotland/V1/"
 
 ### inital demand (supply after 1 yr, baseline run)
 
-demandInitial <- read.csv(paste0(wd,"output/V1/Baseline/Baseline-0-99-Scotland-AggregateServiceDemand.csv"))
+demandInitial <- read.csv(paste0(dataDisk,"Baseline/Baseline-0-99-Scotland-AggregateServiceDemand.csv"))
 
 ### calc service curves (inital supply over 1000?)
 
@@ -48,18 +49,23 @@ employment<-rep(e,length(Year))
 bdemand<-data.frame(Year,softwood.timber,hardwood.timber,biodiversity,carbon,flood.regulation,recreation,livestock,crop.service,employment)
 write.csv(bdemand, paste0(dirOut,"worlds/Scotland/Baseline/Demand_Baseline.csv"))
 
+#1 increase 100%
+#2 increase 90%
+#3 increase 80%
+#4 increase 70%
+#5 increase 60%
 
 # Green Gold demand
 Year<-c(2020:2100)
-softwood.timber<-seq(st,(st+st*5),length.out = 81) # no1. priority (increase 500%)
-hardwood.timber<-seq(ht,(ht+ht*4),length.out = 81) # no2. priority (increase 400%)
-biodiversity<-seq(b,(b+b*2),length.out = 81) # no4. priority (increase 200%)
-carbon<-seq(c,(c+c*3),length.out = 81) #no3. priority (increase 300%)
-flood.regulation<-seq(f,(f+f),length.out = 81) # joint no.5 priority (increase 100%)
+softwood.timber<-seq(st,(st*2),length.out = 81) # no1. priority (increase 100%)
+hardwood.timber<-seq(ht,(ht*1.9),length.out = 81) # no2. priority (increase 90%)
+biodiversity<-seq(b,(b*1.7),length.out = 81) # no4. priority (increase 70%)
+carbon<-seq(c,(c*1.8),length.out = 81) #no3. priority (increase 80%)
+flood.regulation<-seq(f,(f*1.6),length.out = 81) # joint no.5 priority (increase 60%)
 recreation<-rep(r,length(Year))
 livestock<-seq(l,(l/2),length.out = 81) # reduce by half to represent loss of support for marginal ag
 crop.service<-rep(cr,length(Year))
-employment<-seq(e,(e+e),length.out = 81) # joint no.5 priority (increase 100%)
+employment<-seq(e,(e*1.6),length.out = 81) # joint no.5 priority (increase 60%)
 ggdemand<-data.frame(Year,softwood.timber,hardwood.timber,biodiversity,carbon,flood.regulation,recreation,livestock,crop.service,employment)
 write.csv(ggdemand, paste0(dirOut,"/worlds/Scotland/Green_Gold/Demand_Green_Gold.csv"))
 
@@ -67,13 +73,13 @@ write.csv(ggdemand, paste0(dirOut,"/worlds/Scotland/Green_Gold/Demand_Green_Gold
 Year<-c(2020:2100)
 softwood.timber<-rep(st,length(Year)) 
 hardwood.timber<-rep(ht,length(Year)) 
-biodiversity<-seq(b,(b+b*3),length.out = 81) #no3
+biodiversity<-seq(b,(b*1.8),length.out = 81) #no3
 carbon<-rep(c,length(Year)) 
-flood.regulation<-seq(f,(f+f*4),length.out = 81) #no2
-recreation<-seq(r,(r+r),length.out = 81) # no5
-livestock<-seq(l,(l+l*2),length.out = 81) #joint 4
-crop.service<-seq(cr,(cr+cr*2),length.out = 81) # joint4
-employment<-seq(e,(e+e*5),length.out = 81) #no1
+flood.regulation<-seq(f,(f*1.9),length.out = 81) #no2
+recreation<-seq(r,(r*1.6),length.out = 81) # no5
+livestock<-seq(l,(l*1.7),length.out = 81) #joint 4
+crop.service<-seq(cr,(cr*1.7),length.out = 81) # joint4
+employment<-seq(e,(e*2),length.out = 81) #no1
 mbdemand<-data.frame(Year,softwood.timber,hardwood.timber,biodiversity,carbon,flood.regulation,recreation,livestock,crop.service,employment)
 write.csv(mbdemand, paste0(dirOut,"/worlds/Scotland/Multiple_Benefits/Demand_Multiple_Benefits.csv"))
 
@@ -81,27 +87,27 @@ write.csv(mbdemand, paste0(dirOut,"/worlds/Scotland/Multiple_Benefits/Demand_Mul
 Year<-c(2020:2100)
 softwood.timber<-rep(st,length(Year)) 
 hardwood.timber<-rep(ht,length(Year)) 
-biodiversity<-seq(b,(b+b*5),length.out = 81) #no1
-carbon<-seq(c,(c+c*4),length.out = 81) #joint no2 (climate resilience)
-flood.regulation<-seq(f,(f+f*4),length.out = 81) #joint no2 (climate resilience)
-recreation<-seq(r,(r+r*2),length.out = 81) # no4
-livestock<-seq(l,(l+l*3),length.out = 81) # joint no3
-crop.service<-seq(cr,(cr+cr*3),length.out = 81) #joint no3
+biodiversity<-seq(b,(b*2),length.out = 81) #no1
+carbon<-seq(c,(c*1.9),length.out = 81) #joint no2 (climate resilience)
+flood.regulation<-seq(f,(f*1.9),length.out = 81) #joint no2 (climate resilience)
+recreation<-seq(r,(r*1.7),length.out = 81) # no4
+livestock<-seq(l,(l*1.8),length.out = 81) # joint no3
+crop.service<-seq(cr,(cr*1.8),length.out = 81) #joint no3
 employment<-rep(e,length(Year)) 
 nndemand<-data.frame(Year,softwood.timber,hardwood.timber,biodiversity,carbon,flood.regulation,recreation,livestock,crop.service,employment)
 write.csv(nndemand, paste0(dirOut,"/worlds/Scotland/Native_Networks/Demand_Native_Networks.csv"))
 
 # Woodland Culture demand
 Year<-c(2020:2100)
-softwood.timber<-seq(st,(st+st*5),length.out = 81) #no1
-hardwood.timber<-seq(ht,(ht+ht*5),length.out = 81) #no1
-biodiversity<-seq(b,(b+b*4),length.out = 81)
-carbon<-seq(c,(c+c*4),length.out = 81)
-flood.regulation<-seq(f,(f+f*4),length.out = 81) 
-recreation<-seq(r,(r+r*4),length.out = 81)
-livestock<-seq(l,(l+l*4),length.out = 81)
-crop.service<-seq(cr,(cr+cr*4),length.out = 81)
-employment<-seq(e,(e+e*5),length.out = 81) #no1
+softwood.timber<-seq(st,(st*2),length.out = 81) #no1
+hardwood.timber<-seq(ht,(st*2),length.out = 81) #no1 - increase to same as softwood
+biodiversity<-seq(b,(b*1.5),length.out = 81) # all other services increase 50%
+carbon<-seq(c,(c*1.5),length.out = 81)
+flood.regulation<-seq(f,(c*1.5),length.out = 81) 
+recreation<-seq(r,(r*1.5),length.out = 81)
+livestock<-seq(l,(l*1.5),length.out = 81)
+crop.service<-seq(cr,(cr*1.5),length.out = 81)
+employment<-seq(e,(e*2),length.out = 81) #no1
 wcdemand<-data.frame(Year,softwood.timber,hardwood.timber,biodiversity,carbon,flood.regulation,recreation,livestock,crop.service,employment)
 write.csv(wcdemand, paste0(dirOut,"/worlds/Scotland/Woodland_Culture/Demand_Woodland_Culture.csv"))
 
@@ -109,12 +115,12 @@ write.csv(wcdemand, paste0(dirOut,"/worlds/Scotland/Woodland_Culture/Demand_Wood
 Year<-c(2020:2100)
 softwood.timber<-rep(st,length(Year)) 
 hardwood.timber<-rep(ht,length(Year)) 
-biodiversity<-seq(b,(b+b*5),length.out = 81) #no1
-carbon<-seq(c,(c+c*3),length.out = 81) #no3. priority (increase 300%)
-flood.regulation<-seq(f,(f+f*4),length.out = 81) #no2
-recreation<-seq(r,(r+r*2),length.out = 81) # no4
+biodiversity<-seq(b,(b*2),length.out = 81) #no1
+carbon<-seq(c,(c*1.8),length.out = 81) #no3. priority 
+flood.regulation<-seq(f,(f*1.9),length.out = 81) #no2
+recreation<-seq(r,(r*1.7),length.out = 81) # no4
 livestock<-seq(l,(l/2),length.out = 81) # reduce by half to represent loss of support for marginal ag
 crop.service<-rep(cr,length(Year))
-employment<-seq(e,(e+e),length.out = 81) # joint no.5 priority (increase 100%)
+employment<-seq(e,(e*1.6),length.out = 81) # joint no.5 priority 
 wwdemand<-data.frame(Year,softwood.timber,hardwood.timber,biodiversity,carbon,flood.regulation,recreation,livestock,crop.service,employment)
 write.csv(wwdemand, paste0(dirOut,"/worlds/Scotland/Wild_Woodlands/Demand_Wild_Woodlands.csv"))
