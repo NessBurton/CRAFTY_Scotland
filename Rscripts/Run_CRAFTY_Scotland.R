@@ -14,9 +14,12 @@ library(tictoc)
 ### directories/ file paths ----------------------------------------------------
 
 dirWorking<- "~/eclipse-workspace/CRAFTY_Scotland"
+dataDisk <- "D:/CRAFTY_Scotland"
 
 dirCRAFTYInput <- path.expand(paste0(dirWorking, "/data_Scotland/"))
-dirCRAFTYOutput <- path.expand(paste0(dirWorking, "/output"))
+#dirCRAFTYOutput <- path.expand(paste0(dirWorking, "/output"))
+dirCRAFTYOutput <- path.expand(paste0(dataDisk, "/output"))
+
 dirFigs <- path.expand(paste0(dirWorking, "/figures"))
 
 setwd(dirWorking)
@@ -98,17 +101,19 @@ scenario.filenames <- c("Scenario_Baseline_noGUI.xml",
 version <- "V1"
 
 # set up CRAFTY job
-
-
 if (!exists(x = "CRAFTY_jobj")) {   # not to create CRAFTY_jobj multiple times
   # Create a new instance (to call non-static methods)
   CRAFTY_jobj <- new(J(CRAFTY_main_name)) 
 }
 
+# Loop through all scenarios
+
 for (scenario in scenario.filenames){
   
   scenario.filename <- scenario
   scenario.split <- strsplit(scenario, "[_]")[[1]][2]
+  
+  print(paste0("============CRAFTY JAVA-R API: Running for scenario = ", scenario.split))
   
   # scenario file
   CRAFTY_sargs <- c("-d", dirCRAFTYInput, "-f", scenario.filename, "-o", random_seed_crafty, "-r", "1",  "-n", "1", "-sr", "0", "-e", "2100") 
@@ -152,6 +157,7 @@ for (scenario in scenario.filenames){
   }
   
   CRAFTY_jobj$EXTcloseRrun()
+  print(paste0("============CRAFTY JAVA-R API: Finished for scenario = ", scenario.split))
   
 }
 
