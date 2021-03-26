@@ -142,17 +142,17 @@ foreach(s.idx = 1:n.scenario, .errorhandling = "stop",.packages = c("doSNOW"), .
     scenario.l <- xml2::as_list(scenario.xml)
     
     # Replace scenario name 
-    #attr(scenario.l$scenario, "scenario") <- scenario
+    attr(scenario.l$scenario, "scenario") <- scenario
     # Replace version info 
     #attr(scenario.l$scenario, "version") <- paramset
     
     # Write the modified competition file
-    #scenario.xml.modified <- xml2::as_xml_document(scenario.l)
+    scenario.xml.modified <- xml2::as_xml_document(scenario.l)
     
-    #xml2::write_xml(scenario.xml.modified, paste0(dirCRAFTYInput, scenario.filename), options = "no_empty_tags")
+    xml2::write_xml(scenario.xml.modified, paste0(dirCRAFTYInput, scenario.filename), options = "no_empty_tags")
     
     # Model configuration
-        #CRAFTY_sargs <- c("-d", dirCRAFTYInput, "-f", scenario.filename, "-o", "99", "-r", "1",  "-n", "1", "-sr", "0") # change the argument as you wish 
+    #CRAFTY_sargs <- c("-d", dirCRAFTYInput, "-f", scenario.filename, "-o", "99", "-r", "1",  "-n", "1", "-sr", "0") # change the argument as you wish 
     CRAFTY_sargs <- c("-d", dirCRAFTYInput, "-f", scenario.filename, "-o", random_seed_crafty, "-r", "1",  "-n", "1", "-sr", "0", "-e", "2100")
     
     ### Model running ----------------------------------------------------------
