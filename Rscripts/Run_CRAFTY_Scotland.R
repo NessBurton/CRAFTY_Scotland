@@ -9,6 +9,7 @@ library(rJava)
 library(jdx)
 library(xml2)
 library(foreach)
+library(doSNOW)
 library(tictoc)
 
 ### directories/ file paths ----------------------------------------------------
@@ -17,8 +18,8 @@ dirWorking<- "~/eclipse-workspace/CRAFTY_Scotland"
 dataDisk <- "D:/CRAFTY_Scotland"
 
 dirCRAFTYInput <- path.expand(paste0(dirWorking, "/data_Scotland/"))
-#dirCRAFTYOutput <- path.expand(paste0(dirWorking, "/output"))
-dirCRAFTYOutput <- path.expand(paste0(dataDisk, "/output"))
+dirCRAFTYOutput <- path.expand(paste0(dirWorking, "/output"))
+#dirCRAFTYOutput <- path.expand(paste0(dataDisk, "/output"))
 
 dirFigs <- path.expand(paste0(dirWorking, "/figures"))
 
@@ -71,7 +72,127 @@ random_seed_crafty <- 99
 start_year_idx <- 2020 
 end_year_idx <- 2100 
 
-parallelize <- FALSE 
+
+### Run in parallel ------------------------------------------------------------
+
+path_crafty_batch_run <- "D:/tmp/"#path.expand(paste0("~/tmp/"))
+
+setwd(path_crafty_batch_run)
+
+scenarios <- c( "Baseline", "Green_Gold", "Multiple_Benefits", "Native_Networks", "Wild_Woodlands", "Woodland_Culture")
+n.scenario <- length(scenarios)
+scenario.filenames <- paste0("Scenario_", scenarios, "_noGUI")
+
+n.paramset = 1
+
+parallelize <- TRUE 
+if (parallelize) { 
+  
+  n_thread <- 4 # detectCores()
+  cl <- makeCluster(n_thread)
+  registerDoSNOW(cl)
+  
+}
+
+
+#s.idx <- p.idx <- 2 
+
+foreach(s.idx = 1:n.scenario, .errorhandling = "stop",.packages = c("doSNOW"), .verbose = T) %dopar% {
+  
+  #s.idx <- 1
+  scenario <- scenarios[s.idx]
+  
+  # must change to the output folder for getting the output files correctly
+  setwd(path_crafty_batch_run) 
+  
+  # initialise jvm in forked processes / not before parallelism is initiated
+  # https://stackoverflow.com/questions/24337383/unloading-rjava-and-or-restarting-jvm
+  # "There is a way to run expressions using rJava in parallel based on running the parallel processes to get and assemble all results BEFORE you load the rJava library in the main process. As the main R process has not initiated jvm then java is started in each single subprocess and this particular instance will die together with subprocess as well."
+  
+  library(rJava)
+  
+  .jinit(parameters="-Dlog4j.configuration=log4j2020_normal.properties")
+  .jinit(parameters = "-Dfile.encoding=UTF-8", silent = FALSE, force.init = FALSE)
+  .jinit( parameters=paste0("-Xms", java.ms, " -Xmx", java.mx)) 
+  # The .jinit returns 0 if the JVM got initialized and a negative integer if it did not. A positive integer is returned if the JVM got initialized partially. Before initializing the JVM, the rJava library must be loaded.
+  
+  # add java classpath
+  .jclassPath() # print out the current class path settings.
+  for (i in 1:length(crafty_jclasspath)) { 
+    .jaddClassPath(crafty_jclasspath[i])
+  }
+  
+  .jcall( 'java/lang/System', 'S', 'setProperty', 'user.dir', path_crafty_batch_run)
+  
+  print(  .jcall( 'java/lang/System', 'S', 'getProperty', 'user.dir' ))
+  
+  # Only one parameter set for the moment
+  #foreach(p.idx = 1:n.paramset, .errorhandling = "stop", .verbose = T) %do% { 
+    
+    #paramset =  paste0("Paramset", p.idx)
+    #scenario.filename <- paste0(scenario.filenames[s.idx], "_", paramset, ".xml") 
+  
+    scenario.filename <- paste0(scenario.filenames[s.idx], ".xml") 
+    
+    #}
+
+    # Read the scenario file
+    scenario.xml <- xml2::read_xml(paste0(dirCRAFTYInput, scenario.filename))
+    # str(scenario.xml)
+    scenario.l <- xml2::as_list(scenario.xml)
+    
+    # Replace scenario name 
+    #attr(scenario.l$scenario, "scenario") <- scenario
+    # Replace version info 
+    #attr(scenario.l$scenario, "version") <- paramset
+    
+    # Write the modified competition file
+    #scenario.xml.modified <- xml2::as_xml_document(scenario.l)
+    
+    #xml2::write_xml(scenario.xml.modified, paste0(dirCRAFTYInput, scenario.filename), options = "no_empty_tags")
+    
+    # Model configuration
+        #CRAFTY_sargs <- c("-d", dirCRAFTYInput, "-f", scenario.filename, "-o", "99", "-r", "1",  "-n", "1", "-sr", "0") # change the argument as you wish 
+    CRAFTY_sargs <- c("-d", dirCRAFTYInput, "-f", scenario.filename, "-o", random_seed_crafty, "-r", "1",  "-n", "1", "-sr", "0", "-e", "2100")
+    
+    ### Model running ----------------------------------------------------------
+    
+    print(paste0("============CRAFTY JAVA-R API: Create the instance"))
+    
+    CRAFTY_jobj <- new(J(CRAFTY_main_name)) # Create a new instance (to call non-static methods)
+    
+    # prepares a run and returns run information 
+    CRAFTY_RunInfo_jobj <- CRAFTY_jobj$EXTprepareRrun(CRAFTY_sargs)
+    print(paste0("============CRAFTY JAVA-R API: Run preparation done"))
+    
+    # running from the first timestep to the fifth
+    CRAFTY_loader_jobj <- CRAFTY_jobj$EXTsetSchedule(as.integer(start_year_idx), as.integer(end_year_idx))
+    
+    for (tick in start_year_idx:end_year_idx) {
+      
+      nextTick <- CRAFTY_jobj$EXTtick()
+      
+      stopifnot(nextTick == (tick + 1 ))
+      
+      if (nextTick <= end_year_idx) {
+        print(paste0("============CRAFTY JAVA-R API: NextTick=", nextTick))
+      } else {
+        print(paste0("============CRAFTY JAVA-R API: Simulation done (tick=", tick, ")"))
+        
+      }
+    
+    }  
+    
+    CRAFTY_jobj$EXTcloseRrun()
+    print(paste0("============CRAFTY JAVA-R API: Finished for scenario = ", scenario.split))
+    
+}
+stopCluster(cl)   
+ 
+
+
+
+### Run CRAFTY (not parallel) --------------------------------------------------
 
 # if getting random Java errors, restart Rstudio
 # initialise Java only once
