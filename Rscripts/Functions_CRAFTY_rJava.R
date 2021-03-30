@@ -19,7 +19,7 @@ getJdkPath = function(x) {
 }
 
 java.mx <- "12g" # 25 GB max in LRZ
-java.ms <- "1g -d64"  
+java.ms <- "1g -d64" # the current Scotish vesion occupies 5 GB 
 
 # .jinit( parameters="-Dfile.encoding=UTF-8 -Dlog4j.configuration=log4j_cluster.properties")
 # .jinit(parameters = "-Dfile.encoding=UTF-8", silent = FALSE, force.init = FALSE)
