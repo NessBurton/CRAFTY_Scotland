@@ -88,7 +88,7 @@ n.paramset = 1
 parallelize <- TRUE 
 if (parallelize) { 
   
-  n_thread <- 4 # detectCores()
+  n_thread <- 4 # detectCores() # the current version uses 5 GB per process, therefore max 5-6 threads if 32 GB memory, 3 if 16 GB memory, and no parallelisation recommended if 8 GB. 
   cl <- makeCluster(n_thread)
   registerDoSNOW(cl)
   

@@ -1,6 +1,7 @@
 <updater class="org.volante.abm.update.CSVCapitalUpdater" X_COL="x" Y_COL="y" yearInFilename="true" reapplyPreviousFile="false">
 		<csvFile year="2020">worlds/Scotland/Green_Gold/Green_Gold_capitals.csv</csvFile> 
   		<csvFile year="2021">worlds/Scotland/Green_Gold/Green_Gold_2021.csv</csvFile>   		
+  		<csvFile year="2031">worlds/Scotland/Green_Gold/Green_Gold_2031.csv</csvFile>   		
    		<csvFile year="2041">worlds/Scotland/Green_Gold/Green_Gold_2041.csv</csvFile>
    		<csvFile year="2051">worlds/Scotland/Green_Gold/Green_Gold_2051.csv</csvFile>
    		<csvFile year="2061">worlds/Scotland/Green_Gold/Green_Gold_2061.csv</csvFile>
