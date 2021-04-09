@@ -1,0 +1,22 @@
+Name		,Color
+agroforestry		,#00FF00FF
+consvnative	,#0000B2B2
+estateconsv			,#00B28C00
+estatemulti			,#00FB9A99
+estatesport	,#00FF0000
+extarable		,#000000B2
+extpastoral		,#00595959
+intarable			,#0033A02C		
+intpastoral			,#001F78B4
+marginal			,#00FF7F00	
+multimixed			,#0000B200	
+multinb		,#00B27A7A
+multinc			,#00B2DF8A
+multinnc		,#0000FFFF
+multinnb			,#0000FF00
+prodnbroad		,#00FFFF00
+prodnconifer		,#00111111
+prodnnbroad, #00FF69B4
+prodnnconifer, #00BDB76B
+waterurban, #00663399
+Lazy FR, #00FFFFFF
