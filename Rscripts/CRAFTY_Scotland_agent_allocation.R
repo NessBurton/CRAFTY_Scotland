@@ -17,6 +17,7 @@ dirOut <- paste0(wd,"data_Scotland")
 
 library(tidyverse)
 library(ggplot2)
+library(viridis)
 
 ### read in landcover & woodland data -----------------------------------
 
@@ -28,11 +29,55 @@ landcover <- read.csv(paste0(dirData,'/output/landcover_landownership4.csv'))
 head(landcover)
 summary(landcover)
 
+
+### plot ----------------------------------------------------------------
+
+(p1 <- landcover %>% 
+  pivot_longer(cols = broadleaf:marginal,
+               names_to = "type",
+               values_to = "proportion") %>% 
+  ggplot()+
+  geom_tile(aes(x=X,y=Y,fill=proportion))+
+  scale_fill_viridis()+
+  facet_wrap(~type)+
+  theme_bw())
+
+(p2 <- landcover %>% 
+  pivot_longer(cols = nfi.broadleaf:nfi.marginal,
+               names_to = "type",
+               values_to = "proportion") %>% 
+  ggplot()+
+  geom_tile(aes(x=X,y=Y,fill=proportion))+
+  scale_fill_viridis()+
+  facet_wrap(~type)+
+  theme_bw())
+
+(p3 <- landcover %>% 
+    pivot_longer(cols = nwss.upland.birch:nwss.marginal,
+                 names_to = "type",
+                 values_to = "proportion") %>% 
+    ggplot()+
+    geom_tile(aes(x=X,y=Y,fill=proportion))+
+    scale_fill_viridis()+
+    facet_wrap(~type)+
+    theme_bw())
+
+(p4 <- landcover %>% 
+    pivot_longer(cols = arable.int:wild.land,
+                 names_to = "type",
+                 values_to = "proportion") %>% 
+    ggplot()+
+    geom_tile(aes(x=X,y=Y,fill=proportion))+
+    scale_fill_viridis()+
+    facet_wrap(~type)+
+    theme_bw())
+
+
 ### allocate AFT type ---------------------------------------------------
 
 landcover[is.na(landcover)] <- 0
-nrows<-length(landcover[,1])
-AFT<-rep("N_A",nrows)
+nrows <- length(landcover[,1])
+AFT <- rep("N_A",nrows)
 
 
 for (i in c(1:nrows)) { # Every condition subject to the one before it
@@ -46,30 +91,30 @@ for (i in c(1:nrows)) { # Every condition subject to the one before it
   } 
   
   # woodland
-  if (landcover$broadleaf[i]+landcover$conifer[i]>=0.6){
+  if (landcover$broadleaf[i]+landcover$conifer[i]>=0.5){ # if half or more classified woodland in lcm
     AFT[i]<-'multi.mixed'
-    if (landcover$broadleaf[i]>0.7){
+    if (landcover$broadleaf[i]>=0.5){
       AFT[i]<-'multi.nb'
     }
-    if (landcover$conifer[i]>0.7){
+    if (landcover$conifer[i]>=0.5){
       AFT[i]<-'prod.nn.conifer'
     }
-    if(landcover$nfi.conifer[i]>=0.7){
-      if(landcover$nwss.non.native[i]>=0.7){
+    if(landcover$nfi.conifer[i]>=0.5){
+      if(landcover$nwss.non.native[i]>=0.5){
         AFT[i]<-'prod.nn.conifer'
       }
-      if(landcover$nwss.native.pine[i]>=0.7){
+      if(landcover$nwss.native.pine[i]>=0.5){
         AFT[i]<-'prod.n.conifer'
       }
     }
-    if(landcover$nfi.broadleaf[i]|landcover$nfi.coppice[i]>=0.7){
-      if(landcover$nwss.non.native[i]>=0.7){
+    if(landcover$nfi.broadleaf[i]|landcover$nfi.coppice[i]>=0.5){
+      if(landcover$nwss.non.native[i]>=0.5){
         AFT[i]<-'prod.nn.broad'
       }
       if(landcover$nwss.lowland.deciduous[i]
          +landcover$nwss.upland.ash[i]
          +landcover$nwss.upland.birch[i]
-         +landcover$nwss.upland.oak[i]>=0.7){
+         +landcover$nwss.upland.oak[i]>=0.5){
         AFT[i]<-'prod.n.broad'
       }
     }
@@ -80,7 +125,7 @@ for (i in c(1:nrows)) { # Every condition subject to the one before it
        +landcover$nwss.upland.ash[i]
        +landcover$nwss.upland.birch[i]
        +landcover$nwss.upland.oak[i]
-       +landcover$nwss.wet.woodland[i]>=0.7
+       +landcover$nwss.wet.woodland[i]>=0.5
        &landcover$sssi[i]
        |landcover$spa[i]
        |landcover$sac[i]
@@ -88,7 +133,7 @@ for (i in c(1:nrows)) { # Every condition subject to the one before it
        |landcover$ramsar[i]>=0.5){
       AFT[i]<-'consv.native'
     }
-    if(landcover$nfi.mixed.broadleaf[i]+landcover$nfi.mixed.conifer[i]>=0.7){
+    if(landcover$nfi.mixed.broadleaf[i]+landcover$nfi.mixed.conifer[i]>=0.5){
       if(landcover$nwss.lowland.deciduous[i]<0.5
          &landcover$nwss.native.pine[i]<0.5
          &landcover$nwss.native.regen[i]<0.5
@@ -101,7 +146,7 @@ for (i in c(1:nrows)) { # Every condition subject to the one before it
         AFT[i]<-'multi.mixed'
       }
     }
-    if(landcover$nfi.mixed.conifer[i]>0.7){
+    if(landcover$nfi.mixed.conifer[i]>0.5){
       if(landcover$nwss.non.native[i]>0.5){
         AFT[i]<-'multi.nnc'
       }
@@ -109,7 +154,7 @@ for (i in c(1:nrows)) { # Every condition subject to the one before it
         AFT[i]<-'multi.nc'
       }
     }
-    if(landcover$nfi.mixed.broadleaf[i]>0.7){
+    if(landcover$nfi.mixed.broadleaf[i]>0.5){
       if(landcover$nwss.lowland.deciduous[i]
          +landcover$nwss.native.regen[i]
          +landcover$nwss.scrub[i]
@@ -144,7 +189,7 @@ for (i in c(1:nrows)) { # Every condition subject to the one before it
   
   # extensive pastoral
   if (AFT[i]=="N_A"){
-    if (landcover$extensive.grassland[i]>=0.6){
+    if (landcover$extensive.grassland[i]>=0.7){
       AFT[i]<-"ext.pastoral"
     }
   }
@@ -187,10 +232,10 @@ for (i in c(1:nrows)) { # Every condition subject to the one before it
   
   # agroforestry
   if(AFT[i]=="N_A"){
-    if ((landcover$broadleaf[i]+landcover$conifer[i])>0.45
-        &(landcover$broadleaf[i]+landcover$conifer[i])<0.55
-        &(landcover$arable[i]+landcover$intensive.grassland[i]+landcover$extensive.grassland[i])>0.45
-        &(landcover$arable[i]+landcover$intensive.grassland[i]+landcover$extensive.grassland[i])<0.55){
+    if ((landcover$broadleaf[i]+landcover$conifer[i])>=0.45
+        &(landcover$broadleaf[i]+landcover$conifer[i])<=0.55
+        &(landcover$arable[i]+landcover$intensive.grassland[i]+landcover$extensive.grassland[i])>=0.45
+        &(landcover$arable[i]+landcover$intensive.grassland[i]+landcover$extensive.grassland[i])<=0.55){
       AFT[i]<-"agroforestry"
     }
   }
@@ -198,23 +243,23 @@ for (i in c(1:nrows)) { # Every condition subject to the one before it
   # check for missing forest areas
   # i.e. if there are nfi and nwss areas which are outside of lcm broadleaf or conifer
   if (AFT[i]=="N_A"){
-    if (landcover$broadleaf[i]+landcover$conifer[i]>=0.2){
-      if(landcover$nfi.conifer[i]>=0.7){
-        if(landcover$nwss.non.native[i]>=0.7){
+    #if (landcover$broadleaf[i]+landcover$conifer[i]>=0.2){
+      if(landcover$nfi.conifer[i]>=0.5){
+        if(landcover$nwss.non.native[i]>=0.5){
           AFT[i]<-'prod.nn.conifer'
         }
-        if(landcover$nwss.native.pine[i]>=0.7){
+        if(landcover$nwss.native.pine[i]>=0.5){
           AFT[i]<-'prod.n.conifer'
         }
       }
-      if(landcover$nfi.broadleaf[i]+landcover$nfi.coppice[i]>=0.7){
-        if(landcover$nwss.non.native[i]>=0.7){
+      if(landcover$nfi.broadleaf[i]+landcover$nfi.coppice[i]>=0.5){
+        if(landcover$nwss.non.native[i]>=0.5){
           AFT[i]<-'prod.nn.broad'
         }
         if(landcover$nwss.lowland.deciduous[i]
            +landcover$nwss.upland.ash[i]
            +landcover$nwss.upland.birch[i]
-           +landcover$nwss.upland.oak[i]>=0.7){
+           +landcover$nwss.upland.oak[i]>=0.5){
           AFT[i]<-'prod.n.broad'
         }
       }
@@ -225,7 +270,7 @@ for (i in c(1:nrows)) { # Every condition subject to the one before it
          +landcover$nwss.upland.ash[i]
          +landcover$nwss.upland.birch[i]
          +landcover$nwss.upland.oak[i]
-         +landcover$nwss.wet.woodland[i]>=0.7
+         +landcover$nwss.wet.woodland[i]>=0.5
          &landcover$sssi[i]
          |landcover$spa[i]
          |landcover$sac[i]
@@ -233,7 +278,7 @@ for (i in c(1:nrows)) { # Every condition subject to the one before it
          |landcover$ramsar[i]>=0.5){
         AFT[i]<-'consv.native'
       }
-      if(landcover$nfi.mixed.broadleaf[i]+landcover$nfi.mixed.conifer[i]>=0.7){
+      if(landcover$nfi.mixed.broadleaf[i]+landcover$nfi.mixed.conifer[i]>=0.5){
         if(landcover$nwss.lowland.deciduous[i]<0.5
            &landcover$nwss.native.pine[i]<0.5
            &landcover$nwss.native.regen[i]<0.5
@@ -246,7 +291,7 @@ for (i in c(1:nrows)) { # Every condition subject to the one before it
           AFT[i]<-'multi.mixed'
         }
       }
-      if(landcover$nfi.mixed.conifer[i]>0.7){
+      if(landcover$nfi.mixed.conifer[i]>0.5){
         if(landcover$nwss.non.native[i]>0.5){
           AFT[i]<-'multi.nnc'
         }
@@ -254,7 +299,7 @@ for (i in c(1:nrows)) { # Every condition subject to the one before it
           AFT[i]<-'multi.nc'
         }
       }
-      if(landcover$nfi.mixed.broadleaf[i]>0.7){
+      if(landcover$nfi.mixed.broadleaf[i]>0.5){
         if(landcover$nwss.lowland.deciduous[i]
            +landcover$nwss.native.regen[i]
            +landcover$nwss.scrub[i]
@@ -269,7 +314,7 @@ for (i in c(1:nrows)) { # Every condition subject to the one before it
         }
       }      
     }
-  }  
+  #}  
   
   # Check for substantial farming areas missed so far
   # This is important to note in the methodology
@@ -308,6 +353,7 @@ AFT_summary <- landcover %>%
   group_by(AFT) %>% 
   summarise(count = n(),
             percentage = count/nrows*100)
+AFT_summary
 
 # woodland cover
 sum(AFT_summary$percentage[which(AFT_summary$AFT == "multi.mixed" |
@@ -319,3 +365,39 @@ sum(AFT_summary$percentage[which(AFT_summary$AFT == "multi.mixed" |
                                    AFT_summary$AFT == "prod.nn.conifer" |
                                    AFT_summary$AFT == "prod.n.broad" |
                                    AFT_summary$AFT == "consv.native")])
+
+# 17.9% - pretty bang on for data used (2015 LCM - Forestry Stats estimate 18% cover)
+
+head(landcover)
+write.csv(landcover, paste0(dirData,"/output/AFT_allocation_Apr2021.csv"))
+
+### plot -----------------------------------------------------------
+
+aftColours <- c("prod.nn.conifer" = "#005A32",
+                "prod.n.conifer" = "#005A32",
+                "multi.nc" = "#005A32",
+                "multi.nnc"= "#005A32",
+                "multi.mixed" = "#238B45",
+                "prod.nn.broad" = "#41AB5D", 
+                "prod.n.broad" = "#41AB5D",
+                "multi.nb" = "#41AB5D",
+                "multi.nnb" = "#41AB5D",
+                "consv.native" = "#1B9E77",
+                "agroforestry" = "#D8B70A",
+                "int.arable" = "darkkhaki",#9C964A", 
+                "ext.arable" = "khaki4", #C3B091", 
+                "int.pastoral" = "#A2A475", 
+                "ext.pastoral" = "#A6DBA0", #"grey65", 
+                "estate.multi" = "#C2A5CF", 
+                "estate.sport" = "#9970AB",
+                "estate.consv" = "#762A83", 
+                "marginal" = "lightgrey",
+                "water.urban" = "white")
+
+
+landcover %>% 
+  ggplot()+
+  geom_tile(aes(x=X,y=Y,fill=AFT))+
+  scale_fill_manual(values = aftColours)+
+  theme_bw()
+
