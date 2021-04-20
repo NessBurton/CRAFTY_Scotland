@@ -52,7 +52,7 @@ aft_names_fromzero <- c("agroforestry",
                         "waterurban")
 
 # location of the CRAFTY Jar file
-path_crafty_jar <- path.expand(paste0(dirWorking, "/lib/CRAFTY_KIT_engine_2021.jar"))
+path_crafty_jar <- path.expand(paste0(dirWorking, "/lib/CRAFTY_KIT_engine_2021_JDK15.jar"))
 
 # location of the CRAFTY lib files
 path_crafty_libs <- path.expand(paste0(dirWorking, "/lib/"))
@@ -75,7 +75,7 @@ end_year_idx <- 2100
 
 ### Run in parallel ------------------------------------------------------------
 
-path_crafty_batch_run <- "D:/tmp/"#path.expand(paste0("~/tmp/"))
+path_crafty_batch_run <- "D:/CRAFTY_Scotland"
 
 setwd(path_crafty_batch_run)
 
@@ -85,10 +85,10 @@ scenario.filenames <- paste0("Scenario_", scenarios, "_noGUI")
 
 n.paramset = 1
 
-parallelize <- TRUE 
+parallelize <- TRUE # VM says 8GB but dynamic so should be able to access 16GB
 if (parallelize) { 
   
-  n_thread <- 4 # detectCores() # the current version uses 5 GB per process, therefore max 5-6 threads if 32 GB memory, 3 if 16 GB memory, and no parallelisation recommended if 8 GB. 
+  n_thread <- 3 # detectCores() # the current version uses 5 GB per process, therefore max 5-6 threads if 32 GB memory, 3 if 16 GB memory, and no parallelisation recommended if 8 GB. 
   cl <- makeCluster(n_thread)
   registerDoSNOW(cl)
   
