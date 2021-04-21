@@ -14,15 +14,5 @@
  
    </outputs>
   
- 
-   <displays  class="org.volante.abm.visualisation.DefaultModelDisplays">
-    <display class="org.volante.abm.visualisation.CapitalDisplay" initial="nn.conifer.yc" title="Capitals"/>
-    <display class="org.volante.abm.visualisation.ProductionDisplay" initial="softwood.timber" title="Production"/>
-    <display class="org.volante.abm.comi.visualisation.TestAgents" title="AgentTypes"/>
-    <display class="org.volante.abm.visualisation.CompetitivenessDisplay" initial="ext.pastoral" title="Competitiveness"/>
-    <display class="org.volante.abm.visualisation.SubmodelDisplays" title="Submodels"/>
-</displays>
-
-   
    <worldLoaderFile>xml/World_withoutSN_multiplicativeNoise_linearcompetition_relative.xml</worldLoaderFile>
   </scenario>

@@ -12,6 +12,8 @@ library(foreach)
 library(doSNOW)
 library(tictoc)
 
+
+
 ### directories/ file paths ----------------------------------------------------
 
 dirWorking<- "~/eclipse-workspace/CRAFTY_Scotland"
@@ -26,6 +28,8 @@ dirFigs <- path.expand(paste0(dirWorking, "/figures"))
 setwd(dirWorking)
 
 source("Rscripts/Functions_CRAFTY_rJava.R")
+
+
 
 ### CRAFTY set-up --------------------------------------------------------------
 
@@ -73,6 +77,7 @@ start_year_idx <- 2020
 end_year_idx <- 2100 
 
 
+
 ### Run in parallel ------------------------------------------------------------
 
 path_crafty_batch_run <- "D:/CRAFTY_Scotland"
@@ -83,12 +88,12 @@ scenarios <- c( "Baseline", "Green_Gold", "Multiple_Benefits", "Native_Networks"
 n.scenario <- length(scenarios)
 scenario.filenames <- paste0("Scenario_", scenarios, "_noGUI")
 
-n.paramset = 1
+n.paramset <- 1
 
-parallelize <- TRUE # VM says 8GB but dynamic so should be able to access 16GB
+parallelize <- TRUE # VM has 8 cores and 32GB dynamic RAM
 if (parallelize) { 
-  
-  n_thread <- 3 # detectCores() # the current version uses 5 GB per process, therefore max 5-6 threads if 32 GB memory, 3 if 16 GB memory, and no parallelisation recommended if 8 GB. 
+  # 6 cores - 1 per scenario
+  n_thread <- 6 # detectCores() # the current version uses 5 GB per process, therefore max 5-6 threads if 32 GB memory, 3 if 16 GB memory, and no parallelisation recommended if 8 GB. 
   cl <- makeCluster(n_thread)
   registerDoSNOW(cl)
   
@@ -191,7 +196,6 @@ stopCluster(cl)
  
 
 
-
 ### Run CRAFTY (not parallel) --------------------------------------------------
 
 # if getting random Java errors, restart Rstudio
@@ -210,8 +214,7 @@ for (i in 1:length(crafty_jclasspath)) {
   .jaddClassPath(crafty_jclasspath[i])
 }
 
-### Run for each scenario ------------------------------------------------------
-
+# run for each scenario 
 scenario.filenames <- c("Scenario_Baseline_noGUI.xml",
                         "Scenario_Green_Gold_noGUI.xml",
                         "Scenario_Multiple_Benefits_noGUI.xml",
@@ -227,7 +230,7 @@ if (!exists(x = "CRAFTY_jobj")) {   # not to create CRAFTY_jobj multiple times
   CRAFTY_jobj <- new(J(CRAFTY_main_name)) 
 }
 
-# Loop through all scenarios
+# loop through all scenarios
 
 for (scenario in scenario.filenames){
   

@@ -16,7 +16,7 @@ library(wesanderson)
 ### directories ----------------------------------------------------------------
 
 wd <- "D:/"
-dirResults <- paste0(wd,"CRAFTY_Scotland/V1/")
+dirResults <- paste0(wd,"CRAFTY_Scotland/output/V1/")
 dirMetrics <- paste0(wd,"CRAFTY_Scotland/vision_metrics")
 
 ### palettes -------------------------------------------------------------------
@@ -59,7 +59,7 @@ lstVisions <- c("Baseline","Green_Gold","Multiple_Benefits","Native_Networks","W
 
 for (vision in lstVisions){
   
-  vision <- lstVisions[6]
+  #vision <- lstVisions[6]
   
   dfVision <-
     list.files(path = paste0(dirResults,vision,"/"),
