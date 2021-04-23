@@ -73,7 +73,7 @@ crafty_jclasspath <- c(path_crafty_jar, paste0(path_crafty_libs, crafty_libs))
 random_seed_crafty <- 99 
 
 # CRAFTY timesteps
-start_year_idx <- 2020 
+start_year_idx <- 2015 
 end_year_idx <- 2100 
 
 
@@ -86,7 +86,8 @@ setwd(path_crafty_batch_run)
 
 scenarios <- c( "Baseline", "Green_Gold", "Multiple_Benefits", "Native_Networks", "Wild_Woodlands", "Woodland_Culture")
 n.scenario <- length(scenarios)
-scenario.filenames <- paste0("Scenario_", scenarios, "_noGUI")
+#scenario.filenames <- paste0("Scenario_", scenarios, "_noGUI")
+scenario.filenames <- paste0("Scenario_", scenarios, "_everyyear_relative_GUI")
 
 n.paramset <- 1
 

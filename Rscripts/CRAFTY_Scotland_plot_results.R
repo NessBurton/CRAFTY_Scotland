@@ -130,7 +130,7 @@ for (vision in lstVisions){
   print(paste0("Simplified categories assigned for vision: ", vision))
   
   ### woodland % cover per yr
-  year_list<-c(2020:2100)
+  year_list<-c(2015:2100)
   wood.cover<-rep(0,length(year_list))
   estmW<-rep(0,length(year_list))
   estsW<-rep(0,length(year_list))
@@ -138,7 +138,7 @@ for (vision in lstVisions){
   agroW<-rep(0,length(year_list))
   
   # loop to count length of woodland agents
-  for (i in c(1:81)) {
+  for (i in c(1:86)) {
     
     timestep<-filter(dfVision, Tick==year_list[i])
     wood.cover[i]<- length(timestep$Agent[timestep$Agent == "consvnative"|
@@ -308,7 +308,7 @@ for (vision in lstVisions){
                    ext.agri.ext)
   dfMetrics <- as.data.frame(metrics)
   
-  write.csv(dfMetrics, paste0(dirMetrics,"/",vision,"_metrics_March21.csv"))
+  write.csv(dfMetrics, paste0(dirMetrics,"/",vision,"_metrics_Apr21.csv"))
   
   print(paste0("Metrics file written for vision: ", vision))
   
@@ -320,6 +320,7 @@ for (vision in lstVisions){
 ### plots ----------------------------------------------------------------------
 
 lstMetrics <- list.files(dirMetrics, full.names = T)
+lstMetrics <- grep("Apr21", lstMetrics, value = TRUE)
 
 dfAll <- vroom(lstMetrics, id="path")
 
@@ -333,7 +334,7 @@ dfAll$vision <- ifelse(grepl("Baseline", dfAll$path), 'Baseline',
                                                         ifelse(grepl("Woodland_Culture", dfAll$path), "Woodland Culture", NA))))))
 
 # convert extents to percentages
-# 80053 is number of agents per timestep with NA removed
+# 80053 is number of agents per timestep with region == NA removed
 dfAll$native.wood.ext<-dfAll$native.wood.ext/82135*100
 dfAll$consv.ext<-dfAll$consv.ext/82135*100
 dfAll$int.agri.ext<-dfAll$int.agri.ext/82135*100
@@ -342,18 +343,38 @@ dfAll$estates.ext<-dfAll$estates.ext/82135*100
 dfAll$ext.agri.ext<-dfAll$ext.agri.ext/82135*100
 
 ggplot(dfAll, aes(year_id,wood_cover, colour=vision))+
-  geom_smooth()+
+  geom_line()+
   theme_bw()
+
+dfAll %>% 
+  pivot_longer(cols = native.wood.ext:ext.agri.ext, names_to = "land.type", values_to = "percentage") %>% 
+  ggplot()+
+  geom_line(aes(year_id,percentage,col=vision))+
+  facet_wrap(~land.type)+
+  theme_bw()
+
+dfAll %>% 
+  pivot_longer(cols = tES.div:tLU.div, names_to = "metric", values_to = "proportion") %>% 
+  ggplot()+
+  geom_line(aes(year_id,proportion,col=vision))+
+  facet_wrap(~metric)+
+  ylim(c(0,1))+
+  theme_bw()
+
+
 
 ### ----------------------------------------------------------------------------
 
-dfMultiple_Benefits %>% 
+head(dfAll)
+
+dfAll %>% 
   filter(reclass!='urban.&.waterbodies') %>% 
-  group_by(Tick, reclass) %>% 
+  group_by(vision, Tick, reclass) %>% 
   summarise(count = n()) %>% 
   ggplot()+
   geom_point(mapping = aes(x=Tick, y=count, col=reclass))+
   theme_bw()+
+  facet_wrap(~vision)+
   scale_fill_manual(name = "Land Management Type", values=lu.colours,
                     labels = c("mixed.estate" = "Mixed estate",
                                "traditional.sporting.management" = "Sporting estate",
