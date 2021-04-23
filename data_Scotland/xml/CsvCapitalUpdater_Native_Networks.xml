@@ -1,11 +1,12 @@
 <updater class="org.volante.abm.update.CSVCapitalUpdater" X_COL="x" Y_COL="y" yearInFilename="true" reapplyPreviousFile="true">
-		<csvFile year="2020">worlds/Scotland/Native_Networks/Native_Networks_capitals.csv</csvFile> 
-  		<csvFile year="2021">worlds/Scotland/Native_Networks/Native_Networks_2021.csv</csvFile>   
-		  <csvFile year="2031">worlds/Scotland/Native_Networks/Native_Networks_2031.csv</csvFile>   				
-   		<csvFile year="2041">worlds/Scotland/Native_Networks/Native_Networks_2041.csv</csvFile>
-   		<csvFile year="2051">worlds/Scotland/Native_Networks/Native_Networks_2051.csv</csvFile>
-   		<csvFile year="2061">worlds/Scotland/Native_Networks/Native_Networks_2061.csv</csvFile>
-   		<csvFile year="2071">worlds/Scotland/Native_Networks/Native_Networks_2071.csv</csvFile>
-   		<csvFile year="2081">worlds/Scotland/Native_Networks/Native_Networks_2081.csv</csvFile>
-   		<csvFile year="2091">worlds/Scotland/Native_Networks/Native_Networks_2091.csv</csvFile>   		
+		<csvFile year="2015">worlds/Scotland/Native_Networks/Native_Networks_capitals.csv</csvFile>
+  		<csvFile year="2016">worlds/Scotland/Native_Networks/Native_Networks_2016.csv</csvFile>
+  		<csvFile year="2026">worlds/Scotland/Native_Networks/Native_Networks_2026.csv</csvFile>
+   		<csvFile year="2036">worlds/Scotland/Native_Networks/Native_Networks_2036.csv</csvFile>
+   		<csvFile year="2046">worlds/Scotland/Native_Networks/Native_Networks_2046.csv</csvFile>
+   		<csvFile year="2056">worlds/Scotland/Native_Networks/Native_Networks_2056.csv</csvFile>
+   		<csvFile year="2066">worlds/Scotland/Native_Networks/Native_Networks_2066.csv</csvFile>
+   		<csvFile year="2076">worlds/Scotland/Native_Networks/Native_Networks_2076.csv</csvFile>
+   		<csvFile year="2086">worlds/Scotland/Native_Networks/Native_Networks_2086.csv</csvFile>
+   		<csvFile year="2096">worlds/Scotland/Native_Networks/Native_Networks_2096.csv</csvFile>   		
 </updater>

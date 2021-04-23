@@ -1,12 +1,12 @@
 <updater class="org.volante.abm.update.CSVCapitalUpdater" X_COL="x" Y_COL="y" yearInFilename="true" reapplyPreviousFile="true">
-		<csvFile year="2020">worlds/Scotland/Multiple_Benefits/Multiple_Benefits_capitals.csv</csvFile> 
-  		<csvFile year="2021">worlds/Scotland/Multiple_Benefits/Multiple_Benefits_2021.csv</csvFile>   		
-  		<csvFile year="2031">worlds/Scotland/Multiple_Benefits/Multiple_Benefits_2031.csv</csvFile>   		
-   		<csvFile year="2041">worlds/Scotland/Multiple_Benefits/Multiple_Benefits_2041.csv</csvFile>
-   		<csvFile year="2051">worlds/Scotland/Multiple_Benefits/Multiple_Benefits_2051.csv</csvFile>
-   		<csvFile year="2061">worlds/Scotland/Multiple_Benefits/Multiple_Benefits_2061.csv</csvFile>
-   		<csvFile year="2071">worlds/Scotland/Multiple_Benefits/Multiple_Benefits_2071.csv</csvFile>
-   		<csvFile year="2081">worlds/Scotland/Multiple_Benefits/Multiple_Benefits_2081.csv</csvFile>
-   		<csvFile year="2091">worlds/Scotland/Multiple_Benefits/Multiple_Benefits_2091.csv</csvFile>   		
-	
+		<csvFile year="2015">worlds/Scotland/Multiple_Benefits/Multiple_Benefits_capitals.csv</csvFile>
+  		<csvFile year="2016">worlds/Scotland/Multiple_Benefits/Multiple_Benefits_2016.csv</csvFile>
+  		<csvFile year="2026">worlds/Scotland/Multiple_Benefits/Multiple_Benefits_2026.csv</csvFile>
+   		<csvFile year="2036">worlds/Scotland/Multiple_Benefits/Multiple_Benefits_2036.csv</csvFile>
+   		<csvFile year="2046">worlds/Scotland/Multiple_Benefits/Multiple_Benefits_2046.csv</csvFile>
+   		<csvFile year="2056">worlds/Scotland/Multiple_Benefits/Multiple_Benefits_2056.csv</csvFile>
+   		<csvFile year="2066">worlds/Scotland/Multiple_Benefits/Multiple_Benefits_2066.csv</csvFile>
+   		<csvFile year="2076">worlds/Scotland/Multiple_Benefits/Multiple_Benefits_2076.csv</csvFile>
+   		<csvFile year="2086">worlds/Scotland/Multiple_Benefits/Multiple_Benefits_2086.csv</csvFile>
+   		<csvFile year="2096">worlds/Scotland/Multiple_Benefits/Multiple_Benefits_2096.csv</csvFile> 		
 </updater>
