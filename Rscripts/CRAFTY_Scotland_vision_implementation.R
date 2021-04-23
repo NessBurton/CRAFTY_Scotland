@@ -23,8 +23,13 @@ summary(baseline)
 
 baseline[is.na(baseline)] <- 0
 
+# new agent allocations
+AFT <- read.csv(paste0(dirData,"/output/AFT_allocation_Apr2021.csv"))
+head(AFT)
+
 baseline$id <- NULL
-baseline$FR <- baseline$Agent
+#baseline$FR <- baseline$Agent
+baseline$FR <- AFT$AFT
 baseline$BT <- 0
 baseline$Agent <- NULL
 colnames(baseline)[1:2] <- c("x","y")
@@ -47,7 +52,7 @@ head(baseline)
 
 updater <- baseline[,-c(27:28)]
 
-yrList <- seq(2021,2100,by=10)
+yrList <- seq(2016,2096,by=10)
 
 for (yr in yrList){
   
@@ -157,8 +162,6 @@ MB$deer.density <- z
 
 MB <- MB[-c(1,4)]
 
-yrList <- seq(2021,2100,by=10)
-
 for (yr in yrList){
   
   write.csv(MB, paste0(dirOut,"/worlds/Scotland/Multiple_Benefits/Multiple_Benefits_",yr,".csv"), row.names = F)
@@ -196,8 +199,6 @@ z <- abs(invert)
 MB$deer.density <- z
 
 MB <- MB[-c(1,4)]
-
-yrList <- seq(2021,2100,by=10)
 
 for (yr in yrList){
   
@@ -254,7 +255,7 @@ WW1$deer.density <- z
 
 WW1 <- WW1[-c(1,4)]
 
-write.csv(WW1, paste0(dirOut,"/worlds/Scotland/Wild_Woodlands/Wild_Woodlands_2021.csv"), row.names = F)
+write.csv(WW1, paste0(dirOut,"/worlds/Scotland/Wild_Woodlands/Wild_Woodlands_2016.csv"), row.names = F)
 
 # 2031
 # introduce first stage of land reform and reduce grassland capital by a 1/4
@@ -313,7 +314,8 @@ WW2$deer.density <- z
 
 WW2 <- WW2[-c(1,4)]
 
-write.csv(WW2, paste0(dirOut,"/worlds/Scotland/Wild_Woodlands/Wild_Woodlands_2031.csv"), row.names = F)
+write.csv(WW2, paste0(dirOut,"/worlds/Scotland/Wild_Woodlands/Wild_Woodlands_2026.csv"), row.names = F)
+write.csv(WW2, paste0(dirOut,"/worlds/Scotland/Wild_Woodlands/Wild_Woodlands_2036.csv"), row.names = F)
 
 # 2041
 # reduce deer density capital by 20%
@@ -333,7 +335,7 @@ invert <- WW3$deer.density - 1
 z <- abs(invert)
 WW3$deer.density <- z
 
-write.csv(WW3, paste0(dirOut,"/worlds/Scotland/Wild_Woodlands/Wild_Woodlands_2041.csv"), row.names = F)
+write.csv(WW3, paste0(dirOut,"/worlds/Scotland/Wild_Woodlands/Wild_Woodlands_2046.csv"), row.names = F)
 
 # 2051
 # introduce second stage of land reform and reduce grassland capital by half
@@ -395,7 +397,7 @@ WW4$deer.density <- z
 
 WW4 <- WW4[-c(1,4)]
 
-write.csv(WW4, paste0(dirOut,"/worlds/Scotland/Wild_Woodlands/Wild_Woodlands_2051.csv"), row.names = F)
+write.csv(WW4, paste0(dirOut,"/worlds/Scotland/Wild_Woodlands/Wild_Woodlands_2056.csv"), row.names = F)
 
 # 2061
 # reduce deer density by 40% (another 20% on what it's been reduced already)
@@ -415,7 +417,7 @@ invert <- WW5$deer.density - 1
 z <- abs(invert)
 WW5$deer.density <- z
 
-write.csv(WW5, paste0(dirOut,"/worlds/Scotland/Wild_Woodlands/Wild_Woodlands_2061.csv"), row.names = F)
+write.csv(WW5, paste0(dirOut,"/worlds/Scotland/Wild_Woodlands/Wild_Woodlands_2066.csv"), row.names = F)
 
 # 2071
 # introduce land reform 3, reduce deer density by 50%
@@ -477,7 +479,7 @@ WW6$deer.density <- z
 
 WW6 <- WW6[-c(1,4)]
 
-write.csv(WW6, paste0(dirOut,"/worlds/Scotland/Wild_Woodlands/Wild_Woodlands_2071.csv"), row.names = F)
+write.csv(WW6, paste0(dirOut,"/worlds/Scotland/Wild_Woodlands/Wild_Woodlands_2076.csv"), row.names = F)
 
 
 # 2081
@@ -497,8 +499,8 @@ invert <- WW7$deer.density - 1
 z <- abs(invert)
 WW7$deer.density <- z
 
-write.csv(WW7, paste0(dirOut,"/worlds/Scotland/Wild_Woodlands/Wild_Woodlands_2081.csv"), row.names = F)
-write.csv(WW7, paste0(dirOut,"/worlds/Scotland/Wild_Woodlands/Wild_Woodlands_2091.csv"), row.names = F)
+write.csv(WW7, paste0(dirOut,"/worlds/Scotland/Wild_Woodlands/Wild_Woodlands_2086.csv"), row.names = F)
+write.csv(WW7, paste0(dirOut,"/worlds/Scotland/Wild_Woodlands/Wild_Woodlands_2096.csv"), row.names = F)
 
 
 ### native networks  -----------------------------------------------------------
@@ -540,8 +542,6 @@ z <- abs(invert)
 NN$deer.density <- z
 
 NN <- NN[-c(1,4)]
-
-yrList <- seq(2021,2100,by=10)
 
 for (yr in yrList){
   
@@ -603,8 +603,6 @@ z <- abs(invert)
 GG$deer.density <- z
 
 GG <- GG[-c(1,4)]
-
-yrList <- seq(2021,2100,by=10)
 
 for (yr in yrList){
   
@@ -681,7 +679,8 @@ WC1$deer.density <- z
 
 WC1 <- WC1[-c(1,4)]
 
-write.csv(WC1, paste0(dirOut,"/worlds/Scotland/Woodland_Culture/Woodland_Culture_2021.csv"), row.names = F)
+write.csv(WC1, paste0(dirOut,"/worlds/Scotland/Woodland_Culture/Woodland_Culture_2016.csv"), row.names = F)
+write.csv(WC1, paste0(dirOut,"/worlds/Scotland/Woodland_Culture/Woodland_Culture_2026.csv"), row.names = F)
 
 # 2031 
 # first stage land reform
@@ -728,7 +727,7 @@ WC2$deer.density <- z
 
 WC2 <- WC2[-c(1,4)]
 
-write.csv(WC2, paste0(dirOut,"/worlds/Scotland/Woodland_Culture/Woodland_Culture_2031.csv"), row.names = F)
+write.csv(WC2, paste0(dirOut,"/worlds/Scotland/Woodland_Culture/Woodland_Culture_2036.csv"), row.names = F)
 
 # 2041
 # reduce grassland capital by 1/2
@@ -770,7 +769,7 @@ WC3$deer.density <- z
 
 WC3 <- WC3[-c(1,4)]
 
-write.csv(WC3, paste0(dirOut,"/worlds/Scotland/Woodland_Culture/Woodland_Culture_2041.csv"), row.names = F)
+write.csv(WC3, paste0(dirOut,"/worlds/Scotland/Woodland_Culture/Woodland_Culture_2046.csv"), row.names = F)
 
 # 2051
 # second stage land reform
@@ -814,7 +813,7 @@ WC4$deer.density <- z
 
 WC4 <- WC4[-c(1,4)]
 
-write.csv(WC4, paste0(dirOut,"/worlds/Scotland/Woodland_Culture/Woodland_Culture_2051.csv"), row.names = F)
+write.csv(WC4, paste0(dirOut,"/worlds/Scotland/Woodland_Culture/Woodland_Culture_2056.csv"), row.names = F)
 
 # 2061
 # reduce grassland capital by 3/4
@@ -858,7 +857,7 @@ WC5$deer.density <- z
 
 WC5 <- WC5[-c(1,4)]
 
-write.csv(WC5, paste0(dirOut,"/worlds/Scotland/Woodland_Culture/Woodland_Culture_2061.csv"), row.names = F)
+write.csv(WC5, paste0(dirOut,"/worlds/Scotland/Woodland_Culture/Woodland_Culture_2066.csv"), row.names = F)
 
 # 2071 
 # third stage land reform
@@ -902,7 +901,7 @@ WC6$deer.density <- z
 
 WC6 <- WC6[-c(1,4)]
 
-write.csv(WC6, paste0(dirOut,"/worlds/Scotland/Woodland_Culture/Woodland_Culture_2071.csv"), row.names = F)
-write.csv(WC6, paste0(dirOut,"/worlds/Scotland/Woodland_Culture/Woodland_Culture_2081.csv"), row.names = F)
-write.csv(WC6, paste0(dirOut,"/worlds/Scotland/Woodland_Culture/Woodland_Culture_2091.csv"), row.names = F)
+write.csv(WC6, paste0(dirOut,"/worlds/Scotland/Woodland_Culture/Woodland_Culture_2076.csv"), row.names = F)
+write.csv(WC6, paste0(dirOut,"/worlds/Scotland/Woodland_Culture/Woodland_Culture_2086.csv"), row.names = F)
+write.csv(WC6, paste0(dirOut,"/worlds/Scotland/Woodland_Culture/Woodland_Culture_2096.csv"), row.names = F)
 
