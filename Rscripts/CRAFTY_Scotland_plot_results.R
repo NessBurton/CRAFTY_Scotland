@@ -151,15 +151,16 @@ for (vision in lstVisions){
                                             timestep$Agent == "multinc"|
                                             timestep$Agent == "multinnb"|
                                             timestep$Agent == "multinnc"])/length(timestep$Agent)*100
-    estmW[i]<-length(timestep$Agent[which(timestep$Agent=='estatemulti'&timestep$Service.softwood.timber>0|timestep$Service.hardwood.timber>0)])/length(timestep$Agent)*100
-    estsW[i]<-length(timestep$Agent[which(timestep$Agent=='estatesport'&timestep$Service.softwood.timber>0|timestep$Service.hardwood.timber>0)])/length(timestep$Agent)*100
-    estcW[i]<-length(timestep$Agent[which(timestep$Agent=='estateconsv'&timestep$Service.softwood.timber>0|timestep$Service.hardwood.timber>0)])/length(timestep$Agent)*100
-    agroW[i]<-length(timestep$Agent[which(timestep$Agent=='agroforestry'&timestep$Service.softwood.timber>0|timestep$Service.hardwood.timber>0)])/length(timestep$Agent)*100
+    #estmW[i]<-length(timestep$Agent[which(timestep$Agent=='estatemulti'&timestep$Service.softwood.timber>0|timestep$Service.hardwood.timber>0)])/length(timestep$Agent)*100
+    #estsW[i]<-length(timestep$Agent[which(timestep$Agent=='estatesport'&timestep$Service.softwood.timber>0|timestep$Service.hardwood.timber>0)])/length(timestep$Agent)*100
+    #estcW[i]<-length(timestep$Agent[which(timestep$Agent=='estateconsv'&timestep$Service.softwood.timber>0|timestep$Service.hardwood.timber>0)])/length(timestep$Agent)*100
+    #agroW[i]<-length(timestep$Agent[which(timestep$Agent=='agroforestry'&timestep$Service.softwood.timber>0|timestep$Service.hardwood.timber>0)])/length(timestep$Agent)*100
     
   }
   
-  wood_cover<-wood.cover+estcW+estmW+estsW+agroW
+  #wood_cover<-wood.cover+estcW+estmW+estsW+agroW
   #wood_cover<-wood_cover # adjust?
+  wood_cover <- wood.cover
   
   print(paste0("Woodland cover calculated for vision: ", vision))
   
@@ -308,7 +309,7 @@ for (vision in lstVisions){
                    ext.agri.ext)
   dfMetrics <- as.data.frame(metrics)
   
-  write.csv(dfMetrics, paste0(dirMetrics,"/",vision,"_metrics_Apr21.csv"))
+  write.csv(dfMetrics, paste0(dirMetrics,"/",vision,"_metrics_23rdApr21.csv"))
   
   print(paste0("Metrics file written for vision: ", vision))
   
@@ -320,7 +321,7 @@ for (vision in lstVisions){
 ### plots ----------------------------------------------------------------------
 
 lstMetrics <- list.files(dirMetrics, full.names = T)
-lstMetrics <- grep("Apr21", lstMetrics, value = TRUE)
+lstMetrics <- grep("23rdApr21", lstMetrics, value = TRUE)
 
 dfAll <- vroom(lstMetrics, id="path")
 
