@@ -6,9 +6,8 @@
 
 ### working dirs --------------------------------------------------------
 
-#wd <- "~/CRAFTY-opm" # sandbox VM
-#wd <- "~/eclipse-workspace/CRAFTY_Scotland/data_Scotland/"
-wd <- "~/R/CRAFTY_Scotland/" # FR laptop
+wd <- "~/eclipse-workspace/CRAFTY_Scotland/data_Scotland/"
+#wd <- "~/R/CRAFTY_Scotland/" # FR laptop
 dirData <- paste0(wd,"data_raw")
 dirOut <- paste0(wd,"data_Scotland")
 
@@ -25,7 +24,7 @@ library(viridis)
 # essentially proportions of either landuse/woodland type/ngo owner/designation/wild land
 # deer density also included
 
-landcover <- read.csv(paste0(dirData,'/output/landcover_landownership4.csv'))
+landcover <- read.csv("data_raw/output/landcover_landownership4.csv")
 head(landcover)
 summary(landcover)
 
