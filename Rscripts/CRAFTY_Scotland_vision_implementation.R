@@ -38,6 +38,7 @@ colnames(baseline)[1:2] <- c("x","y")
 baseline$FR
 baseline$FR <- str_replace_all(baseline$FR, "[[.]]", "")
 
+
 write.csv(baseline, paste0(dirOut,"/worlds/Scotland/Baseline/Baseline_capitals.csv"), row.names = F)
 write.csv(baseline, paste0(dirOut,"/worlds/Scotland/Multiple_Benefits/Multiple_Benefits_capitals.csv"), row.names = F)
 write.csv(baseline, paste0(dirOut,"/worlds/Scotland/Green_Gold/Green_Gold_capitals.csv"), row.names = F)
