@@ -560,6 +560,9 @@ GG<-merge(GG,weag,by='id')
 ggplot(GG)+
   geom_tile(aes(x,y,fill=phase3))
 
+ggplot(GG)+
+  geom_tile(aes(x,y,fill=n.conifer.yc))
+
 GG$n.conifer.yc[which(GG$n.conifer.yc > 0 & GG$phase3 > 0)] <- GG$n.conifer.yc[which(GG$n.conifer.yc > 0 & GG$phase3 > 0)] * 1.5
 GG$nn.conifer.yc[which(GG$nn.conifer.yc > 0 & GG$phase3 > 0)] <- GG$nn.conifer.yc[which(GG$nn.conifer.yc > 0 & GG$phase3 > 0)] * 1.5
 GG$n.broad.yc[which(GG$n.broad.yc > 0 & GG$phase3 > 0)] <- GG$n.broad.yc[which(GG$n.broad.yc > 0 & GG$phase3 > 0)] * 1.5
