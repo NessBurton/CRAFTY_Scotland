@@ -672,7 +672,6 @@ for (yr in yrList){
 
 WC <- capitalsRAW
 
-# 2021
 # increase human capital - initial growth in knowledge and motivation
 summary(WC$human) # take mean (if less than this)
 nrows <- length(WC[,1])
@@ -735,12 +734,24 @@ invert <- WC1$deer.density - 1
 z <- abs(invert)
 WC1$deer.density <- z
 
-WC1 <- WC1[-c(1,4)]
+WC1$id <- NULL
+#WC1$FR <- WC1$Agent
+WC1$FR <- AFT$AFT
+WC1$BT <- 0
+WC1$Agent <- NULL
+colnames(WC1)[1:2] <- c("x","y")
+#WC1 <- WC1[,-c(27:35)]
+
+WC1$FR
+WC1$FR <- str_replace_all(WC1$FR, "[[.]]", "")
+
+write.csv(WC1, paste0(dirOut,"/worlds/Scotland/Woodland_Culture/Woodland_Culture_capitals.csv"), row.names = F)
+
+WC1 <- WC1[-c(27:28)]
 
 write.csv(WC1, paste0(dirOut,"/worlds/Scotland/Woodland_Culture/Woodland_Culture_2016.csv"), row.names = F)
 write.csv(WC1, paste0(dirOut,"/worlds/Scotland/Woodland_Culture/Woodland_Culture_2026.csv"), row.names = F)
 
-# 2031 
 # first stage land reform
 
 WC2 <- WC
@@ -787,7 +798,6 @@ WC2 <- WC2[-c(1,4)]
 
 write.csv(WC2, paste0(dirOut,"/worlds/Scotland/Woodland_Culture/Woodland_Culture_2036.csv"), row.names = F)
 
-# 2041
 # reduce grassland capital by 1/2
 WC3 <- WC
 
@@ -829,7 +839,6 @@ WC3 <- WC3[-c(1,4)]
 
 write.csv(WC3, paste0(dirOut,"/worlds/Scotland/Woodland_Culture/Woodland_Culture_2046.csv"), row.names = F)
 
-# 2051
 # second stage land reform
 
 WC4 <- WC
@@ -873,7 +882,6 @@ WC4 <- WC4[-c(1,4)]
 
 write.csv(WC4, paste0(dirOut,"/worlds/Scotland/Woodland_Culture/Woodland_Culture_2056.csv"), row.names = F)
 
-# 2061
 # reduce grassland capital by 3/4
 
 WC5 <- WC
@@ -917,7 +925,6 @@ WC5 <- WC5[-c(1,4)]
 
 write.csv(WC5, paste0(dirOut,"/worlds/Scotland/Woodland_Culture/Woodland_Culture_2066.csv"), row.names = F)
 
-# 2071 
 # third stage land reform
 
 WC6 <- WC
