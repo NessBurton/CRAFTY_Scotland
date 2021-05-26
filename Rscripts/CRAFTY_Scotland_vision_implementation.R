@@ -530,7 +530,9 @@ NN <- capitalsRAW
 
 NN<-merge(NN,connect,by='id')
 ggplot(NN)+
-  geom_raster(mapping = aes(x=x, y=y, fill = connect))
+  geom_raster(mapping = aes(x=x, y=y, fill = connect))+
+  scale_fill_viridis()+
+  theme_bw()
 ggplot(NN)+
   geom_raster(mapping = aes(x=x, y=y, fill = n.conifer.yc))
 
