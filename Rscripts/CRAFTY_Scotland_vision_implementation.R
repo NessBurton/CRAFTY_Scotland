@@ -564,7 +564,21 @@ invert <- NN$deer.density - 1
 z <- abs(invert)
 NN$deer.density <- z
 
-NN <- NN[-c(1,4)]
+NN$id <- NULL
+NN$X <- NULL
+#WW$FR <- WW$Agent
+NN$FR <- AFT$AFT
+NN$BT <- 0
+NN$Agent <- NULL
+colnames(NN)[1:2] <- c("x","y")
+#WW <- WW[,-c(27:35)]
+
+NN$FR
+NN$FR <- str_replace_all(WW$FR, "[[.]]", "")
+
+write.csv(NN, paste0(dirOut,"/worlds/Scotland/Native_Networks/Native_Networks_capitals.csv"), row.names = F)
+
+NN <- NN[-c(27:28)]
 
 for (yr in yrList){
   
@@ -632,7 +646,21 @@ invert <- GG$deer.density - 1
 z <- abs(invert)
 GG$deer.density <- z
 
-GG <- GG[-c(1,4)]
+GG$id <- NULL
+#GG$FR <- GG$Agent
+GG$FR <- AFT$AFT
+GG$BT <- 0
+GG$Agent <- NULL
+colnames(GG)[1:2] <- c("x","y")
+#GG <- GG[,-c(27:35)]
+
+GG$FR
+GG$FR <- str_replace_all(GG$FR, "[[.]]", "")
+
+
+write.csv(GG, paste0(dirOut,"/worlds/Scotland/Green_Gold/Green_Gold_capitals.csv"), row.names = F)
+
+GG <- GG[-c(27:28)]
 
 for (yr in yrList){
   
