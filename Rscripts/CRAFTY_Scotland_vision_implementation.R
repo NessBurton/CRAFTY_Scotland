@@ -183,41 +183,41 @@ for (yr in yrList){
 
 
 # V2
-MB <- capitalsRAW
-ggplot(MB)+
-  geom_tile(aes(x,y,fill=financial))
-
-# increase financial capital where mixed yc capital >0.5
-MB$financial[which(MB$mixed.yc>0.5)] <- MB$financial[which(MB$mixed.yc>0.5)]+0.2
-# increase financial capital where agroforestry capital >0.5
-MB$financial[which(MB$agro.yc>0.5)] <- MB$financial[which(MB$agro.yc>0.5)]+0.2
-
-head(MB)
-# for cell updater specs
-MB$FR<-NULL
-MB$BT<-NULL
-MB$X <- NULL
-
-summary(MB)
-MB <- data.frame(MB[,c(1:5,29)], lapply(MB[6:28], normalise))
-summary(MB)
-MB[is.na(MB)] <- 0
-MB$crop.productivity[which(MB$agri.filter==1)]<-0 # remove cap where not suitable for crops
-#remove filter column
-MB$agri.filter <- NULL
-
-# invert deer density
-invert <- MB$deer.density - 1
-z <- abs(invert)
-MB$deer.density <- z
-
-MB <- MB[-c(1,4)]
-
-for (yr in yrList){
-  
-  write.csv(MB, paste0(dirOut,"/worlds/Scotland/Multiple_Benefits_V2/Multiple_Benefits_",yr,".csv"), row.names = F)
-  
-}
+# MB <- capitalsRAW
+# ggplot(MB)+
+#   geom_tile(aes(x,y,fill=financial))
+# 
+# # increase financial capital where mixed yc capital >0.5
+# MB$financial[which(MB$mixed.yc>0.5)] <- MB$financial[which(MB$mixed.yc>0.5)]+0.2
+# # increase financial capital where agroforestry capital >0.5
+# MB$financial[which(MB$agro.yc>0.5)] <- MB$financial[which(MB$agro.yc>0.5)]+0.2
+# 
+# head(MB)
+# # for cell updater specs
+# MB$FR<-NULL
+# MB$BT<-NULL
+# MB$X <- NULL
+# 
+# summary(MB)
+# MB <- data.frame(MB[,c(1:5,29)], lapply(MB[6:28], normalise))
+# summary(MB)
+# MB[is.na(MB)] <- 0
+# MB$crop.productivity[which(MB$agri.filter==1)]<-0 # remove cap where not suitable for crops
+# #remove filter column
+# MB$agri.filter <- NULL
+# 
+# # invert deer density
+# invert <- MB$deer.density - 1
+# z <- abs(invert)
+# MB$deer.density <- z
+# 
+# MB <- MB[-c(1,4)]
+# 
+# for (yr in yrList){
+#   
+#   write.csv(MB, paste0(dirOut,"/worlds/Scotland/Multiple_Benefits_V2/Multiple_Benefits_",yr,".csv"), row.names = F)
+#   
+# }
 
 
 ### wild woodlands -------------------------------------------------------------
@@ -236,7 +236,6 @@ WW<-merge(WW,weag,by='id')
 ggplot(WW)+
   geom_tile(aes(x,y,fill=phase3))
 
-# 2021
 # increase n.broad.consv in WEAG phase 3 areas by 50%
 WW$n.broad.consv[which(WW$n.broad.consv > 0 & WW$phase3 > 0)] <- WW$n.broad.consv[which(WW$n.broad.consv > 0 & WW$phase3 > 0)] * 1.5
 # increase mixed.yc in WEAG phase 3 areas by 50%
@@ -253,7 +252,7 @@ WW1$BT<-NULL
 WW1$X <- NULL
 
 summary(WW1)
-WW1 <- data.frame(WW1[,c(1:5,29)], lapply(WW1[6:28], normalise))
+WW1 <- data.frame(WW1[,c(1:5,29:30)], lapply(WW1[6:28], normalise))
 summary(WW1)
 WW1[is.na(WW1)] <- 0
 WW1$crop.productivity[which(WW1$agri.filter==1)]<-0 # remove cap where not suitable for crops
@@ -266,11 +265,23 @@ invert <- WW1$deer.density - 1
 z <- abs(invert)
 WW1$deer.density <- z
 
-WW1 <- WW1[-c(1,4)]
+WW1$id <- NULL
+WW1$X <- NULL
+#WW$FR <- WW$Agent
+WW1$FR <- AFT$AFT
+WW1$BT <- 0
+WW1$Agent <- NULL
+colnames(WW1)[1:2] <- c("x","y")
+#WW <- WW[,-c(27:35)]
+
+WW1$FR
+WW1$FR <- str_replace_all(WW$FR, "[[.]]", "")
+write.csv(WW1, paste0(dirOut,"/worlds/Scotland/Wild_Woodlands/Wild_Woodlands_capitals.csv"), row.names = F)
+
+WW1 <- WW1[-c(27:28)]
 
 write.csv(WW1, paste0(dirOut,"/worlds/Scotland/Wild_Woodlands/Wild_Woodlands_2016.csv"), row.names = F)
 
-# 2031
 # introduce first stage of land reform and reduce grassland capital by a 1/4
 WW2 <- WW
 summary(WW2)
@@ -350,7 +361,6 @@ WW3$deer.density <- z
 
 write.csv(WW3, paste0(dirOut,"/worlds/Scotland/Wild_Woodlands/Wild_Woodlands_2046.csv"), row.names = F)
 
-# 2051
 # introduce second stage of land reform and reduce grassland capital by half
 WW4 <- WW
 
@@ -412,7 +422,6 @@ WW4 <- WW4[-c(1,4)]
 
 write.csv(WW4, paste0(dirOut,"/worlds/Scotland/Wild_Woodlands/Wild_Woodlands_2056.csv"), row.names = F)
 
-# 2061
 # reduce deer density by 40% (another 20% on what it's been reduced already)
 WW5 <- WW4
 
@@ -495,7 +504,6 @@ WW6 <- WW6[-c(1,4)]
 write.csv(WW6, paste0(dirOut,"/worlds/Scotland/Wild_Woodlands/Wild_Woodlands_2076.csv"), row.names = F)
 
 
-# 2081
 WW7 <- WW6
 
 ggplot(WW)+
