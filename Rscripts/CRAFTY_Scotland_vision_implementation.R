@@ -275,7 +275,7 @@ colnames(WW1)[1:2] <- c("x","y")
 #WW <- WW[,-c(27:35)]
 
 WW1$FR
-WW1$FR <- str_replace_all(WW$FR, "[[.]]", "")
+WW1$FR <- str_replace_all(WW1$FR, "[[.]]", "")
 write.csv(WW1, paste0(dirOut,"/worlds/Scotland/Wild_Woodlands/Wild_Woodlands_capitals.csv"), row.names = F)
 
 WW1 <- WW1[-c(27:28)]
@@ -574,7 +574,7 @@ colnames(NN)[1:2] <- c("x","y")
 #WW <- WW[,-c(27:35)]
 
 NN$FR
-NN$FR <- str_replace_all(WW$FR, "[[.]]", "")
+NN$FR <- str_replace_all(NN$FR, "[[.]]", "")
 
 write.csv(NN, paste0(dirOut,"/worlds/Scotland/Native_Networks/Native_Networks_capitals.csv"), row.names = F)
 
