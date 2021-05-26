@@ -40,11 +40,11 @@ baseline$FR <- str_replace_all(baseline$FR, "[[.]]", "")
 
 
 write.csv(baseline, paste0(dirOut,"/worlds/Scotland/Baseline/Baseline_capitals.csv"), row.names = F)
-write.csv(baseline, paste0(dirOut,"/worlds/Scotland/Multiple_Benefits/Multiple_Benefits_capitals.csv"), row.names = F)
-write.csv(baseline, paste0(dirOut,"/worlds/Scotland/Green_Gold/Green_Gold_capitals.csv"), row.names = F)
-write.csv(baseline, paste0(dirOut,"/worlds/Scotland/Native_Networks/Native_Networks_capitals.csv"), row.names = F)
-write.csv(baseline, paste0(dirOut,"/worlds/Scotland/Wild_Woodlands/Wild_Woodlands_capitals.csv"), row.names = F)
-write.csv(baseline, paste0(dirOut,"/worlds/Scotland/Woodland_Culture/Woodland_Culture_capitals.csv"), row.names = F)
+#write.csv(baseline, paste0(dirOut,"/worlds/Scotland/Multiple_Benefits/Multiple_Benefits_capitals.csv"), row.names = F)
+#write.csv(baseline, paste0(dirOut,"/worlds/Scotland/Green_Gold/Green_Gold_capitals.csv"), row.names = F)
+#write.csv(baseline, paste0(dirOut,"/worlds/Scotland/Native_Networks/Native_Networks_capitals.csv"), row.names = F)
+#write.csv(baseline, paste0(dirOut,"/worlds/Scotland/Wild_Woodlands/Wild_Woodlands_capitals.csv"), row.names = F)
+#write.csv(baseline, paste0(dirOut,"/worlds/Scotland/Woodland_Culture/Woodland_Culture_capitals.csv"), row.names = F)
 
 
 # baseline updater files
@@ -103,7 +103,7 @@ connect$connectivity[which(connect$ZONE == 'Secondary Zone')] <- 0.5
 
 # check
 ggplot(connect)+
-  geom_raster(mapping = aes(x=X, y=Y, fill = connectivity))
+  geom_tile(mapping = aes(x=X, y=Y, fill = connectivity))
 
 connect<-connect[,c(1,8)]
 colnames(connect)<-c('id','connect')
@@ -161,7 +161,19 @@ invert <- MB$deer.density - 1
 z <- abs(invert)
 MB$deer.density <- z
 
-MB <- MB[-c(1,4)]
+MB$id <- NULL
+#MB$FR <- MB$Agent
+MB$FR <- AFT$AFT
+MB$BT <- 0
+MB$Agent <- NULL
+colnames(MB)[1:2] <- c("x","y")
+#MB <- MB[,-c(27:35)]
+
+MB$FR
+MB$FR <- str_replace_all(MB$FR, "[[.]]", "")
+write.csv(MB, paste0(dirOut,"/worlds/Scotland/Multiple_Benefits/Multiple_Benefits_capitals.csv"), row.names = F)
+
+MB <- MB[-c(27,28)]
 
 for (yr in yrList){
   
@@ -558,15 +570,19 @@ GG <- capitalsRAW
 # increase productive woodland capitals in WEAG areas
 GG<-merge(GG,weag,by='id')
 ggplot(GG)+
-  geom_tile(aes(x,y,fill=phase3))
+  geom_tile(aes(x,y,fill=phase3))+
+  scale_fill_viridis()+
+  theme_bw()
 
 ggplot(GG)+
-  geom_tile(aes(x,y,fill=n.conifer.yc))
+  geom_tile(aes(x,y,fill=n.conifer.yc))+
+  scale_fill_viridis()+
+  theme_bw()
 
-GG$n.conifer.yc[which(GG$n.conifer.yc > 0 & GG$phase3 > 0)] <- GG$n.conifer.yc[which(GG$n.conifer.yc > 0 & GG$phase3 > 0)] * 1.5
-GG$nn.conifer.yc[which(GG$nn.conifer.yc > 0 & GG$phase3 > 0)] <- GG$nn.conifer.yc[which(GG$nn.conifer.yc > 0 & GG$phase3 > 0)] * 1.5
-GG$n.broad.yc[which(GG$n.broad.yc > 0 & GG$phase3 > 0)] <- GG$n.broad.yc[which(GG$n.broad.yc > 0 & GG$phase3 > 0)] * 1.5
-GG$nn.broad.yc[which(GG$nn.broad.yc > 0 & GG$phase3 > 0)] <- GG$nn.broad.yc[which(GG$nn.broad.yc > 0 & GG$phase3 > 0)] * 1.5
+GG$n.conifer.yc[which(GG$n.conifer.yc > 0 & GG$phase3 == 1)] <- GG$n.conifer.yc[which(GG$n.conifer.yc > 0 & GG$phase3 == 1)] * 1.5
+GG$nn.conifer.yc[which(GG$nn.conifer.yc > 0 & GG$phase3 == 1)] <- GG$nn.conifer.yc[which(GG$nn.conifer.yc > 0 & GG$phase3 == 1)] * 1.5
+GG$n.broad.yc[which(GG$n.broad.yc > 0 & GG$phase3 == 1)] <- GG$n.broad.yc[which(GG$n.broad.yc > 0 & GG$phase3 == 1)] * 1.5
+GG$nn.broad.yc[which(GG$nn.broad.yc > 0 & GG$phase3 == 1)] <- GG$nn.broad.yc[which(GG$nn.broad.yc > 0 & GG$phase3 == 1)] * 1.5
 
 # reduce grassland capital in LFA by half
 GG <- merge(GG, lfa, by = 'id', all.x = TRUE)
