@@ -1,4 +1,4 @@
-<scenario startTick="2015" endTick="2100" world="Scotland" 
+<scenario startTick="2015" endTick="2100" world="Scotland_V2" 
  version="Thesis" 
  	scenario="Green_Gold">
  	<capitals class="org.volante.abm.serialization.CSVCapitalLoader" file="csv/Capitals.csv" indexed="true"></capitals>
