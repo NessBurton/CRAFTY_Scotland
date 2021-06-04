@@ -1,0 +1,10 @@
+"Service","region","nn.conifer.yc","nn.broad.yc","n.conifer.yc","n.broad.yc","n.broad.consv","agro.yc","mixed.yc","crop.productivity","grassland","water.runoff","human","social","manufactured","financial","moreNW","lessNW","moreF","lessF","moreNAT","lessNAT","deep.peat","deer.density","wild.land","Production"
+"softwood.timber",0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1,1,1,1,0,0
+"hardwood.timber",0,0,0,0,0,0.49,0,0,0,0,0,0.13,0,0.08,0.23,1,1,0,0,1,1,1,1,0,0
+"biodiversity",0,0,0,0,0,0.07,0,0,0,0,0,0,0,0,0,1,1,0,0,1,1,1,1,0,0.68
+"carbon",0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1,1,1,1,0,0.72
+"flood.regulation",0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,1,0,0,1,1,1,1,0,0.8
+"recreation",0,0,0,0,0,0.028,0,0,0,0,0,0.03,0,0,0,1,1,0,0,1,1,1,1,0.5,0.08
+"livestock",0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1,1,1,1,0,0
+"crop.service",0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1,1,1,1,0,0
+"employment",0,0,0,0,0,0,0,0,0,0,0,0.015,0.098,0.5,0,1,1,0,0,1,1,1,1,0,0.16

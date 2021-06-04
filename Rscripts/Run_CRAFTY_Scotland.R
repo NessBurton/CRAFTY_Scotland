@@ -223,7 +223,7 @@ scenario.filenames <- c("Scenario_Baseline_noGUI.xml",
                         "Scenario_Wild_Woodlands_noGUI.xml",
                         "Scenario_Woodland_Culture_noGUI.xml") 
 
-version <- "V1"
+version <- "Thesis"
 
 # set up CRAFTY job
 if (!exists(x = "CRAFTY_jobj")) {   # not to create CRAFTY_jobj multiple times
@@ -235,8 +235,9 @@ if (!exists(x = "CRAFTY_jobj")) {   # not to create CRAFTY_jobj multiple times
 
 for (scenario in scenario.filenames){
   
+  scenario <- scenario.filenames[2]
   scenario.filename <- scenario
-  scenario.split <- strsplit(scenario, "[_]")[[1]][2]
+  scenario.split <- paste0(strsplit(scenario, "[_]")[[1]][2],"_",strsplit(scenario, "[_]")[[1]][3])
   
   print(paste0("============CRAFTY JAVA-R API: Running for scenario = ", scenario.split))
   

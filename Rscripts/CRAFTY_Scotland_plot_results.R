@@ -57,6 +57,8 @@ lu.colours<-c("mixed.estate" = "#C2A5CF",
 
 lstVisions <- c("Baseline","Green_Gold","Multiple_Benefits","Native_Networks","Wild_Woodlands","Woodland_Culture")
 
+dateRun <- "26May"
+
 for (vision in lstVisions){
   
   #vision <- lstVisions[6]
@@ -311,7 +313,7 @@ for (vision in lstVisions){
                    ext.agri.ext)
   dfMetrics <- as.data.frame(metrics)
   
-  write.csv(dfMetrics, paste0(dirMetrics,"/",vision,"_metrics_10thMay.csv"))
+  write.csv(dfMetrics, paste0(dirMetrics,"/",vision,"_metrics_",dateRun,".csv"))
   
   print(paste0("Metrics file written for vision: ", vision))
   
@@ -323,7 +325,7 @@ for (vision in lstVisions){
 ### plots ----------------------------------------------------------------------
 
 lstMetrics <- list.files(dirMetrics, full.names = T)
-lstMetrics <- grep("10thMay", lstMetrics, value = TRUE)
+lstMetrics <- grep(dateRun, lstMetrics, value = TRUE)
 
 dfAll <- vroom(lstMetrics, id="path")
 
