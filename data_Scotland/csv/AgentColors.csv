@@ -1,22 +1,22 @@
-"Name		",Color
-"agroforestry		",#00D8B70A
-"consvnative	",#001B9E77
-"estateconsv			",#00762A83
-"estatemulti			",#00C2A5CF
-"estatesport	",#009970AB
-"extarable		",#00F0E68C
-"extpastoral		",#00A6DBA0
-"intarable			",#00BDB76B
-"intpastoral			",#00A2A475
-"marginal			",#00D3D3D3
-"multimixed			",#00238B45
-"multinb		",#0041AB5D
-"multinc			",#00005A32
-"multinnc		",#00005A32
-"multinnb			",#0041AB5D
-"prodnbroad		",#0041AB5D
-"prodnconifer		",#00005A32
-prodnnbroad,#0041AB5D
-prodnnconifer,#00005A32
-waterurban,#00FFFFFF
-Lazy FR, #00FFFFFF
+"Name","Color"
+"agroforestry","#00D8B70A"
+"consvnative","#001B9E77"
+"estateconsv","#00762A83"
+"estatemulti","#00C2A5CF"
+"estatesport","#009970AB"
+"extarable","#00F0E68C"
+"extpastoral","#00A6DBA0"
+"intarable","#00BDB76B"
+"intpastoral","#00A2A475"
+"marginal","#00D3D3D3"
+"multimixed","#00238B45"
+"multinb","#0041AB5D"
+"multinc","#00005A32"
+"multinnc","#00005A32"
+"multinnb","#0041AB5D"
+"prodnbroad","#0041AB5D"
+"prodnconifer","#00005A32"
+"prodnnbroad","#0041AB5D"
+"prodnnconifer","#00005A32"
+"waterurban","#00FFFFFF"
+"Lazy FR","#00FFFFFF"

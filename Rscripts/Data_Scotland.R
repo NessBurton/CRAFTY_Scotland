@@ -29,17 +29,17 @@ location_UK <- "Local"
 #path_dropbox <- "KIT_Modelling/CRAFTY/CRAFTY_WEB_UK_DATA/"
 
 # local data archive (Sandbox data drive)
-path_localstorage <- "D:/CRAFTY_Scotland/output/" #paste0("~/CRAFTY_WEB_UK_DATA/")
+path_localstorage <- "D:/CRAFTY_Scotland/" #paste0("~/CRAFTY_WEB_UK_DATA/")
 
 # data version
-data_prefix <- "V1/"
+data_prefix <- ""
 #data_prefix = "16May2021_v5_NewProduction_SN2_originaldemand/"
 #data_prefix = "16May2021_v6_NewProduction_originaldemand/"
 #data_prefix <- ""
 #data_prefix = "21May2021_v9_NotRemovingNegative/"
 
-version_names <- c("V1", "V2")
-#version_prefix =c("SN_Removal", "SN_NoRemoval", "NoSN_Removal", "NoSN_NoRemoval") 
+version_names <- c("V1","V2")
+version_prefix <- c("V1") 
 version_default <- version_names[1]
 
 # absolute path (for local)
@@ -58,17 +58,21 @@ default_fname <- paste0(version_default, "/Baseline/Baseline-0-99-Scotland_V2-Ce
 getFname <- function(version, paramset, scenario, year ) { 
   
   # fs::path_expand(paste0( fooddemand, "/" ,foodprice,"/", paramset, "/", scenario, "/", scenario, "-", runid, "-99-UK-Cell-", year, ".csv"))
-  fs::path_expand(paste0(version_prefix[match(version,version_names)], "/", paramset, "/", scenario, "/", scenario, "-", runid, "-99-Scotland_V2-Cell-", year, ".csv"))
+  #fs::path_expand(paste0(version_prefix[match(version,version_names)], "/", paramset, "/", scenario, "/", scenario, "-", runid, "-99-Scotland_V2-Cell-", year, ".csv"))
+  fs::path_expand(paste0("/", paramset, "/", scenario, "/", scenario, "-", runid, "-99-Scotland_V2-Cell-", year, ".csv"))
+
   
 }
 
+#getFname("","V1","Green_Gold","2015")
 
-### unsure about this part for now ---------------------------------------------
 
-#scenarioname.default <- "Baseline"
-#r_default <- raster("GISData/UK_default.tif")
+### raster for extent ----------------------------------------------------------
 
-# ext = extent(projectRaster(r.default, crs = proj4.LL))
+scenarioname.default <- "Baseline"
+r_default <- raster("~/eclipse-workspace/CRAFTY_Scotland/data_raw/input/lcm15_1k.tif")
+
+ext <- extent(projectRaster(r_default, crs = proj4.LL))
 #ext <- c(-8.439121, 2.794859, 49.77235, 60.93977 )
 
 #drop_token_name <- "Authentication/droptoken.rds"
