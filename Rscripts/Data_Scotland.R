@@ -23,6 +23,8 @@ seedid <- "99"
 # number of threads to process raster
 n_thread <- 4
 
+location_UK <- "Local"
+
 # dropbox relative path 
 #path_dropbox <- "KIT_Modelling/CRAFTY/CRAFTY_WEB_UK_DATA/"
 
@@ -76,13 +78,17 @@ getFname <- function(version, paramset, scenario, year ) {
 
 # Cell ID and coordinates 
 
-BNG_csv <- read.csv("~/eclipse-workspace/CRAFTY_Scotland/data_raw/intermediate/lcm_props.csv") 
+BNG_csv <- read.csv("~/eclipse-workspace/CRAFTY_Scotland/data_raw/input/lcm_iap_coords.csv") 
+BNG_csv <- BNG_csv[, c("landcover.id", "landcover.X", "landcover.Y")]
+names(BNG_csv) <- c("id","long","lat")
 
-#BNG_csv <- BNG_csv[, c("FID", "POINT_X", "POINT_Y")]
+scot_coords <- read.csv("~/eclipse-workspace/CRAFTY_Scotland/data_raw/output/capitals_normalised_Feb21.csv")
+scot_coords <- scot_coords[, c("id","x","y")]
 
-#scot_coords <- #read.csv("Tables/Cell_ID_XY_UK.csv")
+scot_coords <- left_join(scot_coords,BNG_csv,by="id")
   
-# scenarios 
+# Scenarios and agent parameter sets
+
 scenario_names <- c("Baseline","Green_Gold","Multiple_Benefits","Native_Networks","Wild_Woodlands","Woodland_Culture")
 
 paramsets_fullnames <- c("V1") #"V2"
@@ -91,10 +97,14 @@ n_paramset <- length(paramsets_fullnames)
 # paramsets <- paste0("Paramset", 1:n.paramset)
 paramsets <-  c("V1") # "V2", 
 
+
+# Services and capitals
+
 service_tb <- read.csv("~/eclipse-workspace/CRAFTY_Scotland/data_Scotland/csv/Services.csv") %>% as.data.frame
 serviceNames <- service_tb$Name
 # adapt palette
 #serviceColours = c("Food.crops" = "coral1", "Fodder.crops" ="goldenrod1", "GF.redMeat" = "turquoise", "Fuel" = "tan4", "Softwood" = "black", "Hardwood" = "grey", "Biodiversity" = "dodgerblue2", "Carbon"="darkgreen", "Recreation" = "orange", "Flood.reg" = "lightblue", "Employment" = "purple", "Ldiversity" = "brown", "GF.milk" = "green", "Sus.Prod" = "pink")
+
 
 capital_tb <- read.csv("~/eclipse-workspace/CRAFTY_Scotland/data_Scotland/csv/Capitals.csv") %>% as.data.frame
 capitalNames <- capital_tb$Name
@@ -105,3 +115,87 @@ capitalNames <- capital_tb$Name
 indicator_names <- c(paste0("Service:", serviceNames), paste0("Capital:", capitalNames), "LandUseIndex") #, "Agent")
 indicator_names_dot <- c(paste0("Service.", serviceNames), paste0("Capital.", capitalNames), "LandUseIndex") #, "Agent")
 
+
+# AFTs
+
+aftnames <- data.frame(rbind(c("prodnnconifer","prodnnconifer","Productive NN Conifer"),
+                            c("prodnconifer","prodnconifer","Productive N Conifer"),
+                            c("multinc" ,"multinc","Multifunctional N Conifer"),
+                            c("multinnc","multinnc","Multifunctional NN Conifer"),
+                            c("multimixed","multimixed","Multifunctional Mixed"),
+                            c("prodnnbroad","prodnnbroad","Productive NN Broadleaf"),
+                            c("prodnbroad","prodnbroad","Productive N Broadleaf"),
+                            c("multinb","multinb","Multifunctional N Broadleaf"),
+                            c("multinnb","multinnb","Multifunctional NN Broadleaf"),
+                            c("consvnative","consvnative","Conservationist Native Wood"),
+                            c("agroforestry","agroforestry","Agroforestry"),
+                            c("intarable","intarable","Intensive arable farming"),
+                            c("extarable","extarable","Extensive arable farming"),
+                            c("intpastoral","intpastoral","Intensive pastoral farming"),
+                            c("extpastoral","extpastoral","Extensive pastoral farming"),
+                            c("estatemulti","estatemulti","Traditional multifunctional"),
+                            c("estatesport","estatesport","Sporting estate"),
+                            c("estateconsv","estateconsv","Conservation estate"),
+                            c("marginal","marginal","Marginal land"),
+                            c("waterurban","waterurban","Waterbody or urban area")))
+
+colnames(aftnames) <- c("AFT", "AFT_cb", "Description")
+
+aft_shortnames_fromzero <- as.character(aftnames$AFT)
+#aft_shortnames_fromzero[20] = "Unmanaged"
+
+aft_names_fromzero <-  as.character(aftnames$Description)
+
+n_aft <- length(aft_shortnames_fromzero)
+
+capital_names <- data.frame(Capital = capitalNames)
+
+aft_tb <- read.csv("~/eclipse-workspace/CRAFTY_Scotland/data_Scotland/csv/AgentColors.csv", strip.white = T, stringsAsFactors = F) %>% as.data.frame
+#aft_tb <- aft_tb[-21,]
+#aft_tb[aft_tb$Name == "Lazy FR", ]$Name = "Unmanaged"
+
+aft_colors_alpha <- aft_tb$Color[match(aft_shortnames_fromzero, aft_tb$Name)]
+
+aft_colors_fromzero <- col2hex(paste0("#", substr(aft_colors_alpha, start = 4, stop = 10), substr(aft_colors_alpha, start = 2, stop = 3))) # ignore alpha channel
+
+# 17 colours
+aft_colors_fromzero_17 = aft_colors_fromzero
+
+# reduced colours
+aft_colors_fromzero[aft_shortnames_fromzero %in% c("prodnnconifer",
+                                                   "prodnconifer",
+                                                   "multinc" ,
+                                                   "multinnc",
+                                                   "multimixed",
+                                                   "prodnnbroad",
+                                                   "prodnbroad",
+                                                   "multinb",
+                                                   "multinnb",
+                                                   "consvnative")] = col2hex("darkblue")
+
+
+target_years_aggcsv <- seq(2015, 2100, 5)
+target_years_other <-  seq(2015, 2100, 5)
+
+aft_colors_fromzero_ts <- aft_colors_fromzero
+#aft_colors_fromzero_ts[17] <- "black" 
+aft_lty_ts <- c(rep(1, 11), 2)
+
+n_cell_total <- nrow(scot_coords)
+
+aft_pal <- colorFactor(col2hex(as.character(aft_colors_fromzero)),  levels = as.character(c(0:20, -1)), na.color = "transparent")
+
+# aft.pal(6)
+
+# 
+# # reduced
+# aft_group_colors =  aft_colors_fromzero_17[ c(1:5, 7:9, 14:17)]
+# aft_group_colors[7] = "darkblue"
+# aft_group_colors[12] = "black"
+# 
+# aft_group_names = c( aft_names_fromzero)[ c(1:5, 7:9, 14:17)]
+# aft_group_names[5] = "Intensive Agriculture"
+# aft_group_names[7] = "Productive Woodland"
+# aft_group_shortnames = c( aft_shortnames_fromzero  )[ c(1:5, 7:9, 14:17)]
+# aft_group_shortnames[5] = "IA"
+# aft_group_shortnames[7] = "PW"
