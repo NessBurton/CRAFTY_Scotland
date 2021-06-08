@@ -190,7 +190,7 @@ foreach(s.idx = 1:n.scenario, .errorhandling = "stop",.packages = c("doSNOW"), .
     }  
     
     CRAFTY_jobj$EXTcloseRrun()
-    print(paste0("============CRAFTY JAVA-R API: Finished for scenario = ", scenario.split))
+    #print(paste0("============CRAFTY JAVA-R API: Finished for scenario = ", scenario.split))
     
 }
 stopCluster(cl)   
