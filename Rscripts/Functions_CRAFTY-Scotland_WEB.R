@@ -134,6 +134,7 @@ getCSV <- function(filename_in, location = "Dropbox") {
 
 #getCSV(getFname("","V1","Green_Gold","2015"))
 
+
 ### create spatial data frame --------------------------------------------------
 
 getSPDF_Scot <- function(tmp_in_name, location = "Dropbox") {

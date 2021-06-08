@@ -53,11 +53,11 @@ lu.colours<-c("mixed.estate" = "#C2A5CF",
               "marginal" ="lightgrey")
 
 
+dateRun <- "7June"
+
 ### Visions --------------------------------------------------------------------
 
 lstVisions <- c("Baseline","Green_Gold","Multiple_Benefits","Native_Networks","Wild_Woodlands","Woodland_Culture")
-
-dateRun <- "7June"
 
 for (vision in lstVisions){
   
