@@ -73,6 +73,24 @@ provider_names <- c(
   # , "Wikimedia"      
 )
 
+
+### create temp folders --------------------------------------------------------
+
+app_init <- function() { 
+  
+  # create caching folders
+  if(!dir.exists(path_filecache)) { 
+    dir.create(path_filecache, recursive = T)
+    dir.create(path_rastercache, recursive = T)
+  }
+  
+  # begin cluster for raster processing
+  # endCluster()
+  beginCluster(n_thread)
+}
+
+app_init()
+
 ### get data -------------------------------------------------------------------
 
 getCSV <- function(filename_in, location = "Dropbox") { 
