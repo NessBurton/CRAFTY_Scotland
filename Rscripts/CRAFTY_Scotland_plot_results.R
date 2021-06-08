@@ -57,7 +57,7 @@ lu.colours<-c("mixed.estate" = "#C2A5CF",
 
 lstVisions <- c("Baseline","Green_Gold","Multiple_Benefits","Native_Networks","Wild_Woodlands","Woodland_Culture")
 
-dateRun <- "26May"
+dateRun <- "7June"
 
 for (vision in lstVisions){
   
@@ -67,7 +67,7 @@ for (vision in lstVisions){
     list.files(path = paste0(dirResults,vision,"/"),
                pattern = "*.csv", 
                full.names = T) %>% 
-    grep("-Cell-", value=TRUE, .) %>% 
+    grep("V2-Cell-", value=TRUE, .) %>% 
     #map_df(~read_csv(., col_types = cols(.default = "c")))
     map_df(~read.csv(.))
   
