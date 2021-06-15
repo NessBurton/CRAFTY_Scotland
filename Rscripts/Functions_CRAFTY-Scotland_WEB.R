@@ -23,6 +23,7 @@ library(Gmisc) # transition plot
 ### source data script ---------------------------------------------------------
 
 source("~/eclipse-workspace/CRAFTY_Scotland/RScripts/Data_Scotland.R")
+source("Data_Scotland.R")
 
 
 ### plot parameters ------------------------------------------------------------
@@ -183,7 +184,7 @@ getRaster<- function(fname, band.name, location = location_UK, resolution = RESO
       print(fname)
     }
     
-    spdf.out <- getSPDF_UK(fname, location = location)
+    spdf.out <- getSPDF_Scot(fname, location = location)
     
     
     # Create a spatial pixels data frame using the lon-lat table (Cell_ID_LatLong.csv) and the input data 
@@ -208,46 +209,49 @@ getRaster<- function(fname, band.name, location = location_UK, resolution = RESO
 }
 
 
-### read in rasters and write?? ------------------------------------------------
+r_dummy = r_default
 
-# call once on a local workstation
-# write tifs
-# create a report 
-
-createTempFiles <- function() {
-  # price = "Normal"
-  # demand = "Normal"
-  # paramset = "Paramset1"
-  # scenario = "RCP8_5-SSP3"
-  
-  endCluster()
-  library(parallel)
-  library(doMC)
-  registerDoMC(6)
-  
-  foreach(paramset = paramsets, .errorhandling = "stop") %do% {
-    print(paramset)
-    
-    res1 <- foreach(scenario = scenario_names,  .errorhandling = "stop") %do% {
-      print(scenario)
-      
-      res2 <- sapply(target_years_other, FUN = function(year) sapply(indicator_names, FUN = function(b_name) {
-        
-        res3 <- getRaster(getFname(version_tmp, paramset = paramset, scenario = scenario, year =  year), band.name =  b_name, location = location_UK, printPath = FALSE);
-        
-        return(TRUE);
-        
-      }))
-      
-      print("ok")
-      
-      return(res)
-    }
-    
-    
-  }
-  
-  
-  return(TRUE)
-}
+# ### read in rasters and write?? ------------------------------------------------
+# to improve performacne - not necessary before production -  (14June2021 by ABS)
+# 
+# # call once on a local workstation
+# # write tifs
+# # create a report 
+# 
+# createTempFiles <- function() {
+#   # price = "Normal"
+#   # demand = "Normal"
+#   # paramset = "Paramset1"
+#   # scenario = "RCP8_5-SSP3"
+#   
+#   endCluster()
+#   library(parallel)
+#   library(doMC)
+#   registerDoMC(6)
+#   
+#   foreach(paramset = paramsets, .errorhandling = "stop") %do% {
+#     print(paramset)
+#     
+#     res1 <- foreach(scenario = scenario_names,  .errorhandling = "stop") %do% {
+#       print(scenario)
+#       
+#       res2 <- sapply(target_years_other, FUN = function(year) sapply(indicator_names, FUN = function(b_name) {
+#         
+#         res3 <- getRaster(getFname(version_tmp, paramset = paramset, scenario = scenario, year =  year), band.name =  b_name, location = location_UK, printPath = FALSE);
+#         
+#         return(TRUE);
+#         
+#       }))
+#       
+#       print("ok")
+#       
+#       return(res)
+#     }
+#     
+#     
+#   }
+#   
+#   
+#   return(TRUE)
+# }
 

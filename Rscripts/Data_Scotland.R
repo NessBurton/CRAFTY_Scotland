@@ -7,6 +7,7 @@ library(gplots)
 library(leaflet)
 library(raster)
 
+proj4.LL <- CRS("+proj=longlat +datum=WGS84")
 
 ### description ----------------------------------------------------------------
 
