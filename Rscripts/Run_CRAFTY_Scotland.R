@@ -223,7 +223,7 @@ scenario.filenames <- c("Scenario_Baseline_everyyear_relative_GUI.xml",
                         "Scenario_Wild_Woodlands_everyyear_relative_GUI.xml",
                         "Scenario_Woodland_Culture_everyyear_relative_GUI.xml") 
 
-version <- "V1"
+version <- "V2_June21"
 
 # set up CRAFTY job
 if (!exists(x = "CRAFTY_jobj")) {   # not to create CRAFTY_jobj multiple times

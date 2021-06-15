@@ -1,5 +1,5 @@
 <world>
-	<region id="Scotland_V2">
+	<region id="Scotland_financial">
 	
 	<allocation class="org.volante.abm.example.GiveUpGiveInAllocationModel" percentageCells="5" percentageTakeOvers="5" relativeThresholding="true"/> 
    

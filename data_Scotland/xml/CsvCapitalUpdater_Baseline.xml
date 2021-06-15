@@ -1,12 +1,12 @@
 <updater class="org.volante.abm.update.CSVCapitalUpdater" X_COL="x" Y_COL="y" yearInFilename="true" reapplyPreviousFile="true"> -->
-  		<csvFile year="2015">worlds/Scotland_V2/Baseline/Baseline_capitals.csv</csvFile>
-  		<csvFile year="2016">worlds/Scotland_V2/Baseline/Baseline_2016.csv</csvFile>
-  		<csvFile year="2026">worlds/Scotland_V2/Baseline/Baseline_2026.csv</csvFile>
-   		<csvFile year="2036">worlds/Scotland_V2/Baseline/Baseline_2036.csv</csvFile>
-   		<csvFile year="2046">worlds/Scotland_V2/Baseline/Baseline_2046.csv</csvFile>
-   		<csvFile year="2056">worlds/Scotland_V2/Baseline/Baseline_2056.csv</csvFile>
-   		<csvFile year="2066">worlds/Scotland_V2/Baseline/Baseline_2066.csv</csvFile>
-   		<csvFile year="2076">worlds/Scotland_V2/Baseline/Baseline_2076.csv</csvFile>
-   		<csvFile year="2086">worlds/Scotland_V2/Baseline/Baseline_2086.csv</csvFile>
-   		<csvFile year="2096">worlds/Scotland_V2/Baseline/Baseline_2096.csv</csvFile>
+  		<csvFile year="2015">worlds/Scotland_financial/Baseline/Baseline_capitals.csv</csvFile>
+  		<csvFile year="2016">worlds/Scotland_financial/Baseline/Baseline_2016.csv</csvFile>
+  		<csvFile year="2026">worlds/Scotland_financial/Baseline/Baseline_2026.csv</csvFile>
+   		<csvFile year="2036">worlds/Scotland_financial/Baseline/Baseline_2036.csv</csvFile>
+   		<csvFile year="2046">worlds/Scotland_financial/Baseline/Baseline_2046.csv</csvFile>
+   		<csvFile year="2056">worlds/Scotland_financial/Baseline/Baseline_2056.csv</csvFile>
+   		<csvFile year="2066">worlds/Scotland_financial/Baseline/Baseline_2066.csv</csvFile>
+   		<csvFile year="2076">worlds/Scotland_financial/Baseline/Baseline_2076.csv</csvFile>
+   		<csvFile year="2086">worlds/Scotland_financial/Baseline/Baseline_2086.csv</csvFile>
+   		<csvFile year="2096">worlds/Scotland_financial/Baseline/Baseline_2096.csv</csvFile>
 </updater>

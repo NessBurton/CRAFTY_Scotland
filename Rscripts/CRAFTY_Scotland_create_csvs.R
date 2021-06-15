@@ -34,7 +34,7 @@ dirOut <- paste0(wd,"data_Scotland")
 
 ### behavioural parameters -----------------------------------------------------
 
-# V1
+# V1 (now Thresholds)
 # woodland agents, marginal, water&urban, estates stubborn/don't give in once established
 aftParamId <- 0
 givingInDistributionMean <- 1 # woodland agents don't give in once established
@@ -79,7 +79,7 @@ for (i in otherAgents){
   
 }
 
-# V2 - take away giving-in threshold from estates
+# Take away giving-in threshold from estates (not yet implemented)
 
 aftParamId <- 0
 givingInDistributionMean <- 1 # woodland agents don't give in once established
