@@ -16,7 +16,7 @@ library(wesanderson)
 ### directories ----------------------------------------------------------------
 
 wd <- "D:/"
-dirResults <- paste0(wd,"CRAFTY_Scotland/output/V1/")
+dirResults <- paste0(wd,"CRAFTY_Scotland/output/V2_June21/")
 dirMetrics <- paste0(wd,"CRAFTY_Scotland/vision_metrics")
 
 ### palettes -------------------------------------------------------------------
@@ -53,7 +53,7 @@ lu.colours<-c("mixed.estate" = "#C2A5CF",
               "marginal" ="lightgrey")
 
 
-dateRun <- "7June"
+dateRun <- "14June"
 
 ### Visions --------------------------------------------------------------------
 
@@ -67,7 +67,7 @@ for (vision in lstVisions){
     list.files(path = paste0(dirResults,vision,"/"),
                pattern = "*.csv", 
                full.names = T) %>% 
-    grep("V2-Cell-", value=TRUE, .) %>% 
+    grep("financial-Cell-", value=TRUE, .) %>% 
     #map_df(~read_csv(., col_types = cols(.default = "c")))
     map_df(~read.csv(.))
   
