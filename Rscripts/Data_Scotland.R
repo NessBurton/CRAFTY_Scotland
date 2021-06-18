@@ -30,7 +30,7 @@ location_UK <- "Local"
 #path_dropbox <- "KIT_Modelling/CRAFTY/CRAFTY_WEB_UK_DATA/"
 
 # local data archive (Sandbox data drive)
-path_localstorage <- "D:/CRAFTY_Scotland/" #paste0("~/CRAFTY_WEB_UK_DATA/")
+path_localstorage <- "D:/CRAFTY_Scotland/output/" #paste0("~/CRAFTY_WEB_UK_DATA/")
 
 # data version
 data_prefix <- ""
@@ -39,9 +39,9 @@ data_prefix <- ""
 #data_prefix <- ""
 #data_prefix = "21May2021_v9_NotRemovingNegative/"
 
-version_names <- c("V1","V2")
-version_prefix <- c("V1") 
-version_default <- version_names[1]
+version_names <- c("Thesis","V2_June21")
+version_prefix <- c("V2_June21") 
+version_default <- version_names[2]
 
 # absolute path (for local)
 path_data_local <- paste0(path_localstorage, data_prefix)
@@ -54,13 +54,13 @@ path_filecache <- paste0(path_shinywd, "/filetmp/")
 path_rastercache <- paste0(path_shinywd, "/rastertmp/")
 
 # dummy name
-default_fname <- paste0(version_default, "/Baseline/Baseline-0-99-Scotland_V2-Cell-2015.csv")
+default_fname <- paste0(version_default, "/Baseline/Baseline-0-99-Scotland_financial-Cell-2015.csv")
 
 getFname <- function(version, paramset, scenario, year ) { 
   
   # fs::path_expand(paste0( fooddemand, "/" ,foodprice,"/", paramset, "/", scenario, "/", scenario, "-", runid, "-99-UK-Cell-", year, ".csv"))
   #fs::path_expand(paste0(version_prefix[match(version,version_names)], "/", paramset, "/", scenario, "/", scenario, "-", runid, "-99-Scotland_V2-Cell-", year, ".csv"))
-  fs::path_expand(paste0("/", paramset, "/", scenario, "/", scenario, "-", runid, "-99-Scotland_V2-Cell-", year, ".csv"))
+  fs::path_expand(paste0(paramset, "/", scenario, "/", scenario, "-", runid, "-99-Scotland_financial-Cell-", year, ".csv"))
 
   
 }
@@ -96,11 +96,11 @@ scot_coords <- left_join(scot_coords,BNG_csv,by="id")
 
 scenario_names <- c("Baseline","Green_Gold","Multiple_Benefits","Native_Networks","Wild_Woodlands","Woodland_Culture")
 
-paramsets_fullnames <- c("V1") #"V2"
+paramsets_fullnames <- c("V2_June21") #"V2"
 
 n_paramset <- length(paramsets_fullnames)
 # paramsets <- paste0("Paramset", 1:n.paramset)
-paramsets <-  c("V1") # "V2", 
+paramsets <-  c("V2_June21") # "V2", 
 
 
 # Services and capitals

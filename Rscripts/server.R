@@ -129,7 +129,7 @@ shinyServer(function(input, output, session) {
     scenario_tmp = "Baseline"
     # scenario_tmp = "RCP4_5-SSP4"
     # scenario_tmp = "Baseline"
-    paramset_tmp = "V1"
+    paramset_tmp = "V2_June21"
     
     scenario_tmp = input$scenario
     paramset_tmp = paramsets[p.idx]
@@ -254,7 +254,7 @@ shinyServer(function(input, output, session) {
     
     # barplot(height = demand_m_norm, beside=T, ylab="Relative to 2020's supply (%)", col = serviceColours, main = "Service Demand", names= demand_dt$Tick, ylim=y_lim_v, border=NA)
     
-    plot(demand_dt$Tick, demand_m_norm[1,], type="l", col = serviceColours[1], ylim=y_lim_v, xlab="Year", ylab="Relative to 2020's demand (%)",  main = "Service Demand", las=1, xaxt="n" )
+    plot(demand_dt$Tick, demand_m_norm[1,], type="l", col = serviceColours[1], ylim=y_lim_v, xlab="Year", ylab="Relative to 2015 demand (%)",  main = "Service Demand", las=1, xaxt="n" )
     axis(side=1, at = target_years_other, labels = target_years_other)
     # axis(side=2, at = seq(floor(-shortfall_max), ceiling(shortfall_max), shortfall_intv))
     abline(h = 0, lty=2)
@@ -528,7 +528,7 @@ shinyServer(function(input, output, session) {
                          , opacity = input$alpha, maxBytes = 4 * 1024 * 1024)
         if (input$legend) { proxy %>%
             addLegend(pal = pal, values = quantile(dt.v, probs=seq(1, 0, -0.05), na.rm=T),
-                      , title = paste0("Output ", input$outputlayer), labFormat = labelFormat(transform = function(x) sort(quantile(dt.v, probs=seq(0, 1, 0.33), na.rm=T), decreasing = FALSE)), group = "ModelResult", opacity=input$alpha)
+                      title = paste0("Output ", input$outputlayer), labFormat = labelFormat(transform = function(x) sort(quantile(dt.v, probs=seq(0, 1, 0.33), na.rm=T), decreasing = FALSE)), group = "ModelResult", opacity=input$alpha)
         }
       }
     }
