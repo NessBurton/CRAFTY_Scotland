@@ -1,7 +1,7 @@
 
 library(shiny)
 
-source("~/eclipse-workspace/CRAFTY_Scotland/RScripts/Functions_CRAFTY-Scotland_WEB.R")
+source("Functions_CRAFTY-Scotland_WEB.R")
 
 # Define server logic 
 shinyServer(function(input, output, session) {

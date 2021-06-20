@@ -22,9 +22,8 @@ library(Gmisc) # transition plot
 
 ### source data script ---------------------------------------------------------
 
-source("~/eclipse-workspace/CRAFTY_Scotland/RScripts/Data_Scotland.R")
 source("Data_Scotland.R")
-
+ 
 
 ### plot parameters ------------------------------------------------------------
 

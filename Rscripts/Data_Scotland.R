@@ -13,6 +13,16 @@ proj4.LL <- CRS("+proj=longlat +datum=WGS84")
 
 # adapting from Bumsuk's CRAFTY-UK script here: https://github.com/CRAFTY-ABM/CRAFTY_WEB/blob/UK/RScripts/Data_UK.R#L56
 
+path_data_raw = "~/eclipse-workspace/CRAFTY_Scotland/data_raw/"
+path_base = "~/eclipse-workspace/CRAFTY_Scotland/data_Scotland"
+# local data archive (Sandbox data drive)
+path_localstorage <- "D:/CRAFTY_Scotland/" #paste0("~/CRAFTY_WEB_UK_DATA/")
+
+# ABS
+path_data_raw = "~/Nextcloud/CRAFTY/CRAFTY_Scotland_rawdata/"
+path_base = "~/Nextcloud/CRAFTY/CRAFTY_Scotland/"
+path_localstorage <- "~/Nextcloud/CRAFTY/CRAFTY_Scotland_output/" #paste0("~/CRAFTY_WEB_UK_DATA/")
+
 
 ### set up file paths ----------------------------------------------------------
 
@@ -71,7 +81,7 @@ getFname <- function(version, paramset, scenario, year ) {
 ### raster for extent ----------------------------------------------------------
 
 scenarioname.default <- "Baseline"
-r_default <- raster("~/eclipse-workspace/CRAFTY_Scotland/data_raw/input/lcm15_1k.tif")
+r_default <- raster(paste0(path_data_raw, "/input/lcm15_1k.tif"))
 
 ext <- extent(projectRaster(r_default, crs = proj4.LL))
 #ext <- c(-8.439121, 2.794859, 49.77235, 60.93977 )
@@ -83,11 +93,11 @@ ext <- extent(projectRaster(r_default, crs = proj4.LL))
 
 # Cell ID and coordinates 
 
-BNG_csv <- read.csv("~/eclipse-workspace/CRAFTY_Scotland/data_raw/input/lcm_iap_coords.csv") 
+BNG_csv <- read.csv(paste0(path_data_raw, "/input/lcm_iap_coords.csv"))
 BNG_csv <- BNG_csv[, c("landcover.id", "landcover.X", "landcover.Y")]
 names(BNG_csv) <- c("id","long","lat")
 
-scot_coords <- read.csv("~/eclipse-workspace/CRAFTY_Scotland/data_raw/output/capitals_normalised_Feb21.csv")
+scot_coords <- read.csv(paste0(path_data_raw, "/output/capitals_normalised_Feb21.csv"))
 scot_coords <- scot_coords[, c("id","x","y")]
 
 scot_coords <- left_join(scot_coords,BNG_csv,by="id")
@@ -105,13 +115,13 @@ paramsets <-  c("V2_June21") # "V2",
 
 # Services and capitals
 
-service_tb <- read.csv("~/eclipse-workspace/CRAFTY_Scotland/data_Scotland/csv/Services.csv") %>% as.data.frame
+service_tb <- read.csv(paste0(path_base, "/csv/Services.csv")) %>% as.data.frame
 serviceNames <- service_tb$Name
 # adapt palette
 #serviceColours = c("Food.crops" = "coral1", "Fodder.crops" ="goldenrod1", "GF.redMeat" = "turquoise", "Fuel" = "tan4", "Softwood" = "black", "Hardwood" = "grey", "Biodiversity" = "dodgerblue2", "Carbon"="darkgreen", "Recreation" = "orange", "Flood.reg" = "lightblue", "Employment" = "purple", "Ldiversity" = "brown", "GF.milk" = "green", "Sus.Prod" = "pink")
 
 
-capital_tb <- read.csv("~/eclipse-workspace/CRAFTY_Scotland/data_Scotland/csv/Capitals.csv") %>% as.data.frame
+capital_tb <- read.csv(paste0(path_base, "/csv/Capitals.csv")) %>% as.data.frame
 capitalNames <- capital_tb$Name
 # adapt palette
 #capital_colours <- (c("Ext_AF" = "yellowgreen", "IA"  = "yellow1", "Int_AF" =  "darkolivegreen1", "Int_Fa" = "lightgoldenrod1",  "IP" = "red1", "MF" =  "green3", "Min_man" = "lightyellow3",  "Mix_Fa" = "darkgoldenrod",  "Mix_For" = "green4",   "Mix_P" = "violetred",  "Multifun" = "blueviolet", "NNBroadleaf"="orange", "NBroadleaf" = "lightblue", "UMF" = "darkgreen", "Ur" = "black", "VEP" = "red4", "EP" = "red3")) # , "Lazy FR" = "black")
@@ -155,7 +165,7 @@ n_aft <- length(aft_shortnames_fromzero)
 
 capital_names <- data.frame(Capital = capitalNames)
 
-aft_tb <- read.csv("~/eclipse-workspace/CRAFTY_Scotland/data_Scotland/csv/AgentColors.csv", strip.white = T, stringsAsFactors = F) %>% as.data.frame
+aft_tb <- read.csv(paste0(path_base, "/csv/AgentColors.csv"), strip.white = T, stringsAsFactors = F) %>% as.data.frame
 #aft_tb <- aft_tb[-21,]
 #aft_tb[aft_tb$Name == "Lazy FR", ]$Name = "Unmanaged"
 
