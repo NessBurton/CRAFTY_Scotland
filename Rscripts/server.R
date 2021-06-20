@@ -448,6 +448,102 @@ shinyServer(function(input, output, session) {
     proxy %>% clearTiles() %>% addProviderTiles(input$background, options = providerTileOptions(noWrap = TRUE), group = "TileLayer")
     
   })
+ 
+  
+  # should be managed in its own observer.
+  observe({
+    print("redraw output layer")
+    dt = rnew()
+    # print(which (input$indicator == indicator_names))
+    
+    proxy <- leafletProxy("Tab1_MapPane", data =dt)
+    proxy %>% clearImages() %>% clearControls()
+    
+    # touches
+    input$background
+    
+    # Layers control
+    proxy %>% addLayersControl(
+      # baseGroups = c("OSM (default)", "Toner", "Toner Lite"),
+      baseGroups = c("ModelResult",  "Basemap"),
+      # overlayGroups = c("TileLayer"),
+      options = layersControlOptions(collapsed = FALSE)
+    )
+    
+ 
+    
+    # if (input$outputGroup == "print_out") { 
+    #   
+    #   # Add output layer
+    #   
+    #   if (input$outputlayer == "LandUseIndex") {  # land use index
+    #     
+    #     if (input$colorsGroup == "Reduced (7)") { 
+    #       pal_out = aft_pal_group2
+    #       col_out = aft_group2_colours_17
+    #     } else if (input$colorsGroup == "Distinctive (17)") { 
+    #       pal_out = aft_pal_group2
+    #       col_out = aft_group2_colours_17
+    #     } else {
+    #       pal_out = aft_pal 
+    #       col_out = aft_colors_fromzero 
+    #     }
+    #     proxy %>% addRasterImage(dt, project = FALSE, colors = pal_out, group = "ModelResult"
+    #                              , opacity = input$alpha, maxBytes = 4 * 1024 * 1024)
+    #     if (input$legend) {
+    #       
+    #       proxy %>% addLegend(colors = col2hex(as.character(col_out)), labels = aft_shortnames_fromzero, title = paste0("Output: ", input$outputlayer),group = "ModelResult", opacity = input$alpha)
+    #     }
+    #     
+    #      
+    #     
+    #   } else {
+    #     dt.v = getValues(dt)
+    #     dt.rng = range(dt.v, na.rm = T)
+    #     print(dt.rng)
+    #     pal = colorNumeric(input$colors,reverse = input$InvertColour, domain = dt.rng,  na.color = "transparent")
+    #     
+    #     proxy %>%
+    #       addRasterImage(dt, project = FALSE, colors =pal, group = "ModelResult", method = "bilinear"
+    #                      , opacity = input$alpha, maxBytes = 4 * 1024 * 1024)
+    #     if (input$legend) { proxy %>%
+    #         addLegend(pal = pal, values = quantile(dt.v, probs=seq(1, 0, -0.05), na.rm=T),
+    #                   , title = paste0("Output ", input$outputlayer), labFormat = labelFormat(transform = function(x) sort(quantile(dt.v, probs=seq(0, 1, 0.33), na.rm=T), decreasing = FALSE)), group = "ModelResult", opacity=input$alpha)
+    #     }
+    #   }
+    # }
+    
+    # if (input$outputGroup == "print_in") { 
+    #   # Add input layer
+    #   dt_input = rnew_input()
+    #   dt_input.v = getValues(dt_input)
+    #   dt_input.rng = range(dt_input.v, na.rm = T)
+    #   # print(dt_input.rng)
+    #   
+    #   pal_input = colorNumeric(input$colors, reverse = input$InvertColour, domain = dt_input.rng, na.color = "transparent")
+    #   
+    #   proxy %>%
+    #     addRasterImage(dt_input, project = FALSE, colors =pal_input, method = "bilinear", group = "ModelResult"
+    #                    , opacity = input$alpha, maxBytes = 4 * 1024 * 1024)
+    #   if (input$legend) { proxy %>%
+    #       addLegend(pal = pal_input, values = quantile(dt_input.v, probs=seq(1, 0, -0.05), na.rm=T),
+    #                 , title = paste0("Input ", input$inputlayer), labFormat = labelFormat(transform = function(x) sort(quantile(dt_input.v, probs=seq(0, 1, 0.33), na.rm=T), decreasing = FALSE)), group = "ModelResult")
+    #   }
+    # }
+    
+    
+    # add empty layer 
+    proxy %>% addRasterImage(r_dummy, project = FALSE, group = "Basemap", opacity = 0) %>% addMiniMap(position = "bottomleft", zoomAnimation = T, toggleDisplay = TRUE)  %>% addMeasure()
+  })
+  
+  
+  
+  
+   
+   
+  
+  
+  
   
   rnew <- reactive( {
     print("Rnew called")

@@ -143,7 +143,7 @@ navbarPage("CRAFTY interactive web-interface", windowTitle =  "CRAFTY interactiv
                                      fluidPage(br(), h4("Land use transition from"))
                                      
                                      , selectInput("version_from", "Version",
-                                                   version_names, selected = version_names[1]
+                                                   version_names, selected = version_names[version_default_idx]
                                      )
                                      , sliderInput("year_from",
                                                    "Year",
