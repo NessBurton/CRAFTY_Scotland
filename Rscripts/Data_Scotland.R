@@ -13,16 +13,20 @@ proj4.LL <- CRS("+proj=longlat +datum=WGS84")
 
 # adapting from Bumsuk's CRAFTY-UK script here: https://github.com/CRAFTY-ABM/CRAFTY_WEB/blob/UK/RScripts/Data_UK.R#L56
 
-path_data_raw = "~/eclipse-workspace/CRAFTY_Scotland/data_raw/"
-path_base = "~/eclipse-workspace/CRAFTY_Scotland/data_Scotland"
-# local data archive (Sandbox data drive)
-path_localstorage <- "D:/CRAFTY_Scotland/" #paste0("~/CRAFTY_WEB_UK_DATA/")
 
-# ABS
-path_data_raw = "~/Nextcloud/CRAFTY/CRAFTY_Scotland_rawdata/"
-path_base = "~/Nextcloud/CRAFTY/CRAFTY_Scotland/"
-path_localstorage <- "~/Nextcloud/CRAFTY/CRAFTY_Scotland_output/" #paste0("~/CRAFTY_WEB_UK_DATA/")
-
+if (Sys.getenv()["USER"] %in% c("alan", "seo-b")) { 
+  # ABS
+  path_data_raw = "~/Nextcloud/CRAFTY/CRAFTY_Scotland_rawdata/"
+  path_base = "~/Nextcloud/CRAFTY/CRAFTY_Scotland/"
+  path_localstorage <- "~/Nextcloud/CRAFTY/CRAFTY_Scotland_output/" #paste0("~/CRAFTY_WEB_UK_DATA/")
+} else { 
+  path_data_raw = "~/eclipse-workspace/CRAFTY_Scotland/data_raw/"
+  path_base = "~/eclipse-workspace/CRAFTY_Scotland/data_Scotland"
+  # local data archive (Sandbox data drive)
+  path_localstorage <- "D:/CRAFTY_Scotland/" #paste0("~/CRAFTY_WEB_UK_DATA/")
+  
+  
+}
 
 ### set up file paths ----------------------------------------------------------
 
@@ -71,7 +75,7 @@ getFname <- function(version, paramset, scenario, year ) {
   # fs::path_expand(paste0( fooddemand, "/" ,foodprice,"/", paramset, "/", scenario, "/", scenario, "-", runid, "-99-UK-Cell-", year, ".csv"))
   #fs::path_expand(paste0(version_prefix[match(version,version_names)], "/", paramset, "/", scenario, "/", scenario, "-", runid, "-99-Scotland_V2-Cell-", year, ".csv"))
   fs::path_expand(paste0(paramset, "/", scenario, "/", scenario, "-", runid, "-99-Scotland_financial-Cell-", year, ".csv"))
-
+  
   
 }
 
@@ -101,7 +105,7 @@ scot_coords <- read.csv(paste0(path_data_raw, "/output/capitals_normalised_Feb21
 scot_coords <- scot_coords[, c("id","x","y")]
 
 scot_coords <- left_join(scot_coords,BNG_csv,by="id")
-  
+
 # Scenarios and agent parameter sets
 
 scenario_names <- c("Baseline","Green_Gold","Multiple_Benefits","Native_Networks","Wild_Woodlands","Woodland_Culture")
@@ -134,25 +138,25 @@ indicator_names_dot <- c(paste0("Service.", serviceNames), paste0("Capital.", ca
 # AFTs
 
 aftnames <- data.frame(rbind(c("prodnnconifer","prodnnconifer","Productive NN Conifer"),
-                            c("prodnconifer","prodnconifer","Productive N Conifer"),
-                            c("multinc" ,"multinc","Multifunctional N Conifer"),
-                            c("multinnc","multinnc","Multifunctional NN Conifer"),
-                            c("multimixed","multimixed","Multifunctional Mixed"),
-                            c("prodnnbroad","prodnnbroad","Productive NN Broadleaf"),
-                            c("prodnbroad","prodnbroad","Productive N Broadleaf"),
-                            c("multinb","multinb","Multifunctional N Broadleaf"),
-                            c("multinnb","multinnb","Multifunctional NN Broadleaf"),
-                            c("consvnative","consvnative","Conservationist Native Wood"),
-                            c("agroforestry","agroforestry","Agroforestry"),
-                            c("intarable","intarable","Intensive arable farming"),
-                            c("extarable","extarable","Extensive arable farming"),
-                            c("intpastoral","intpastoral","Intensive pastoral farming"),
-                            c("extpastoral","extpastoral","Extensive pastoral farming"),
-                            c("estatemulti","estatemulti","Traditional multifunctional"),
-                            c("estatesport","estatesport","Sporting estate"),
-                            c("estateconsv","estateconsv","Conservation estate"),
-                            c("marginal","marginal","Marginal land"),
-                            c("waterurban","waterurban","Waterbody or urban area")))
+                             c("prodnconifer","prodnconifer","Productive N Conifer"),
+                             c("multinc" ,"multinc","Multifunctional N Conifer"),
+                             c("multinnc","multinnc","Multifunctional NN Conifer"),
+                             c("multimixed","multimixed","Multifunctional Mixed"),
+                             c("prodnnbroad","prodnnbroad","Productive NN Broadleaf"),
+                             c("prodnbroad","prodnbroad","Productive N Broadleaf"),
+                             c("multinb","multinb","Multifunctional N Broadleaf"),
+                             c("multinnb","multinnb","Multifunctional NN Broadleaf"),
+                             c("consvnative","consvnative","Conservationist Native Wood"),
+                             c("agroforestry","agroforestry","Agroforestry"),
+                             c("intarable","intarable","Intensive arable farming"),
+                             c("extarable","extarable","Extensive arable farming"),
+                             c("intpastoral","intpastoral","Intensive pastoral farming"),
+                             c("extpastoral","extpastoral","Extensive pastoral farming"),
+                             c("estatemulti","estatemulti","Traditional multifunctional"),
+                             c("estatesport","estatesport","Sporting estate"),
+                             c("estateconsv","estateconsv","Conservation estate"),
+                             c("marginal","marginal","Marginal land"),
+                             c("waterurban","waterurban","Waterbody or urban area")))
 
 colnames(aftnames) <- c("AFT", "AFT_cb", "Description")
 
