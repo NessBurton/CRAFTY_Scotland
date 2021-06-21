@@ -10,7 +10,7 @@ library(rgdal)
 library(rgeos)
 library(stringr)
 library(maptools)
-library(spatstat) # density map
+# library(spatstat) # density map
 library(dplyr)    # reshaping data frame 
 library(leaflet)  # leaflet.js
 library(leaflet.extras)
@@ -133,7 +133,7 @@ getCSV <- function(filename_in, location = "Dropbox") {
 }
 
 #getCSV(getFname("","V1","Green_Gold","2015"))
-
+default_df = getCSV(default_fname)
 
 ### create spatial data frame --------------------------------------------------
 

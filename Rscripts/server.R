@@ -1,7 +1,7 @@
 
 library(shiny)
 
- 
+
 
 # Define server logic 
 shinyServer(function(input, output, session) {
@@ -58,7 +58,7 @@ shinyServer(function(input, output, session) {
     print("draw stat pane")
     
     target_data = rnew()
-
+    
     
     par(mar = c(5.1, 4.1, 4, 1), mfrow=c(1,2))
     hist(getValues(target_data), main="Histogram", xlab= input$outputlayer)
@@ -79,7 +79,7 @@ shinyServer(function(input, output, session) {
   
   ### Behavioural table -----
   output$Tab1_BehaviouralTablePane <- renderDataTable({
-      
+    
     print("draw behavioural pane")
     
     p.idx <- which(input$paramset_full == paramsets_fullnames)
@@ -94,28 +94,28 @@ shinyServer(function(input, output, session) {
     
     DT::datatable(aftparams_df, options= list(paging = FALSE),  editable = F) 
     
-    })
+  })
   
   ### Production table -----
   output$Tab1_ProductionTablePane <- renderDataTable({
     
-      print("draw production pane")
-      
-      p.idx <- which(input$paramset_full == paramsets_fullnames)
-      
-      foldername_tmp <- ("Tables/production/Baseline")
-      foldername_tmp <- paste0("Tables/production/", input$scenario)
-      
-      productionparams_l <- lapply(aft_shortnames_fromzero[-length(aft_shortnames_fromzero)], FUN = function(x) read.csv(paste0(foldername_tmp, "/", x, ".csv"))) 
-      
-      a_idx <- 1 
-      x <- productionparams_l[[a_idx]]
-      
-      colnames(x)[1] = "Service"
-      
-      DT::datatable(x, options= list(paging = F),  editable = F, rownames = F, caption = aft_names_fromzero[a_idx]) 
-      
-      })
+    print("draw production pane")
+    
+    p.idx <- which(input$paramset_full == paramsets_fullnames)
+    
+    foldername_tmp <- ("Tables/production/Baseline")
+    foldername_tmp <- paste0("Tables/production/", input$scenario)
+    
+    productionparams_l <- lapply(aft_shortnames_fromzero[-length(aft_shortnames_fromzero)], FUN = function(x) read.csv(paste0(foldername_tmp, "/", x, ".csv"))) 
+    
+    a_idx <- 1 
+    x <- productionparams_l[[a_idx]]
+    
+    colnames(x)[1] = "Service"
+    
+    DT::datatable(x, options= list(paging = F),  editable = F, rownames = F, caption = aft_names_fromzero[a_idx]) 
+    
+  })
   
   
   ### Timeseries plot -----
@@ -146,22 +146,22 @@ shinyServer(function(input, output, session) {
     #   demand_dt = getCSV(demand_csvname_changed, location = location_UK)
     #   
     # } else { 
-      
+    
     # aft composition
     aft_csvname_changed_v <- fs::path_expand(paste0(version_prefix[match(input$version, version_names)], "/", paramset_tmp, "/", scenario_tmp, "/",  scenario_tmp, "-", runid, "-99-", region_names, "-AggregateAFTComposition.csv"))
-      
+    
     aftcomp_dt_l <- lapply(aft_csvname_changed_v, FUN = function(x) getCSV(x, location = location_UK))
-      
+    
     aftcomp_dt <- cbind(aftcomp_dt_l[[1]][,c("Tick", "Region")],  Reduce("+", lapply(aftcomp_dt_l, FUN = function(x) x[,-c(1:2)])))
-      
-   # supply and demand files
+    
+    # supply and demand files
     demand_csvname_changed_v = fs::path_expand(paste0(version_prefix[match(input$version, version_names)], "/", paramset_tmp, "/", scenario_tmp, "/", scenario_tmp, "-", runid, "-99-", region_names, "-AggregateServiceDemand.csv"))
     demand_dt_l = lapply(demand_csvname_changed_v, FUN = function(x) getCSV(x, location = location_UK))
-      
+    
     rem_col_idx = match(c("Tick", "Region"), colnames(demand_dt_l[[1]]))
-      
+    
     demand_dt = cbind( Reduce("+", lapply(demand_dt_l, FUN = function(x) x[,-rem_col_idx ])), Region= "UK", Tick = demand_dt_l[[1]][,c("Tick")])
-      
+    
     #}
     
     # mean capital level
@@ -212,7 +212,7 @@ shinyServer(function(input, output, session) {
     
     aftcomp_perc_m =  aftcomp_m/n_cell_total * 100
     
-
+    
     plot(aftcomp_dt$Tick, aftcomp_perc_m[1,], type="l", xlab= "Year", ylab="Proportion (%)", col = aft_group_colors[1], ylim=c(0, max(aftcomp_perc_m, na.rm = T) * 1.1), main = "AFT composition changes", xaxt="n", lty= aft_lty_ts)
     axis(side=1, at = target_years_other, labels = target_years_other)
     
@@ -273,7 +273,7 @@ shinyServer(function(input, output, session) {
     sdgap  = (demand_m[idx_dem_st,] - demand_m[idx_sup_st,])
     # sdgap = (sdgap /demand_m[idx_sup_st,1]  ) * 100
     
-        sdgap_range = range(sdgap, na.rm=T)
+    sdgap_range = range(sdgap, na.rm=T)
     y_lim_max = max(1, max(abs(sdgap_range)) * 1.2,  demand_m[idx_sup_st,1]*0.3) 
     
     y_lim_v = c(-y_lim_max, y_lim_max)
@@ -343,8 +343,8 @@ shinyServer(function(input, output, session) {
       capital_scene_tmp[-1] = capital_scene_tmp[-1] / capital_scene_tmp[-1] #all 1 
     } 
     
-    })
-    
+  })
+  
   ### Transition plot -----
   
   output$Tab3_TransitionPlotPane <- renderPlot(height = PLOT_HEIGHT, res = 96, {
@@ -448,102 +448,6 @@ shinyServer(function(input, output, session) {
     proxy %>% clearTiles() %>% addProviderTiles(input$background, options = providerTileOptions(noWrap = TRUE), group = "TileLayer")
     
   })
- 
-  
-  # should be managed in its own observer.
-  observe({
-    print("redraw output layer")
-    dt = rnew()
-    # print(which (input$indicator == indicator_names))
-    
-    proxy <- leafletProxy("Tab1_MapPane", data =dt)
-    proxy %>% clearImages() %>% clearControls()
-    
-    # touches
-    input$background
-    
-    # Layers control
-    proxy %>% addLayersControl(
-      # baseGroups = c("OSM (default)", "Toner", "Toner Lite"),
-      baseGroups = c("ModelResult",  "Basemap"),
-      # overlayGroups = c("TileLayer"),
-      options = layersControlOptions(collapsed = FALSE)
-    )
-    
- 
-    
-    # if (input$outputGroup == "print_out") { 
-    #   
-    #   # Add output layer
-    #   
-    #   if (input$outputlayer == "LandUseIndex") {  # land use index
-    #     
-    #     if (input$colorsGroup == "Reduced (7)") { 
-    #       pal_out = aft_pal_group2
-    #       col_out = aft_group2_colours_17
-    #     } else if (input$colorsGroup == "Distinctive (17)") { 
-    #       pal_out = aft_pal_group2
-    #       col_out = aft_group2_colours_17
-    #     } else {
-    #       pal_out = aft_pal 
-    #       col_out = aft_colors_fromzero 
-    #     }
-    #     proxy %>% addRasterImage(dt, project = FALSE, colors = pal_out, group = "ModelResult"
-    #                              , opacity = input$alpha, maxBytes = 4 * 1024 * 1024)
-    #     if (input$legend) {
-    #       
-    #       proxy %>% addLegend(colors = col2hex(as.character(col_out)), labels = aft_shortnames_fromzero, title = paste0("Output: ", input$outputlayer),group = "ModelResult", opacity = input$alpha)
-    #     }
-    #     
-    #      
-    #     
-    #   } else {
-    #     dt.v = getValues(dt)
-    #     dt.rng = range(dt.v, na.rm = T)
-    #     print(dt.rng)
-    #     pal = colorNumeric(input$colors,reverse = input$InvertColour, domain = dt.rng,  na.color = "transparent")
-    #     
-    #     proxy %>%
-    #       addRasterImage(dt, project = FALSE, colors =pal, group = "ModelResult", method = "bilinear"
-    #                      , opacity = input$alpha, maxBytes = 4 * 1024 * 1024)
-    #     if (input$legend) { proxy %>%
-    #         addLegend(pal = pal, values = quantile(dt.v, probs=seq(1, 0, -0.05), na.rm=T),
-    #                   , title = paste0("Output ", input$outputlayer), labFormat = labelFormat(transform = function(x) sort(quantile(dt.v, probs=seq(0, 1, 0.33), na.rm=T), decreasing = FALSE)), group = "ModelResult", opacity=input$alpha)
-    #     }
-    #   }
-    # }
-    
-    # if (input$outputGroup == "print_in") { 
-    #   # Add input layer
-    #   dt_input = rnew_input()
-    #   dt_input.v = getValues(dt_input)
-    #   dt_input.rng = range(dt_input.v, na.rm = T)
-    #   # print(dt_input.rng)
-    #   
-    #   pal_input = colorNumeric(input$colors, reverse = input$InvertColour, domain = dt_input.rng, na.color = "transparent")
-    #   
-    #   proxy %>%
-    #     addRasterImage(dt_input, project = FALSE, colors =pal_input, method = "bilinear", group = "ModelResult"
-    #                    , opacity = input$alpha, maxBytes = 4 * 1024 * 1024)
-    #   if (input$legend) { proxy %>%
-    #       addLegend(pal = pal_input, values = quantile(dt_input.v, probs=seq(1, 0, -0.05), na.rm=T),
-    #                 , title = paste0("Input ", input$inputlayer), labFormat = labelFormat(transform = function(x) sort(quantile(dt_input.v, probs=seq(0, 1, 0.33), na.rm=T), decreasing = FALSE)), group = "ModelResult")
-    #   }
-    # }
-    
-    
-    # add empty layer 
-    proxy %>% addRasterImage(r_dummy, project = FALSE, group = "Basemap", opacity = 0) %>% addMiniMap(position = "bottomleft", zoomAnimation = T, toggleDisplay = TRUE)  %>% addMeasure()
-  })
-  
-  
-  
-  
-   
-   
-  
-  
-  
   
   rnew <- reactive( {
     print("Rnew called")
@@ -557,10 +461,8 @@ shinyServer(function(input, output, session) {
     r_changed = getRaster(fname_changed, band.name = input$outputlayer, resolution = RESOLUTION_WEB, location = location_UK)
     
     return(r_changed)
-  
-    })
-  
-  
+    
+  })
   
   
   # should be managed in its own observer.
@@ -584,26 +486,16 @@ shinyServer(function(input, output, session) {
     )
     
     
-    # proxy %>% hideGroup("ModelInput")
-    
-    # print(dt)
-    
-    if (input$outputGroup == "print_out") { 
+    if (input$outputGroup == "print_out") {
       
       # Add output layer
       
       if (input$outputlayer == "LandUseIndex") {  # land use index
         
-        if (input$colorsGroup == "Reduced (7)") { 
-          pal_out = aft_pal_group2
-          col_out = aft_group2_colours_17
-        } else if (input$colorsGroup == "Distinctive (17)") { 
-          pal_out = aft_pal_group2
-          col_out = aft_group2_colours_17
-        } else {
-          pal_out = aft_pal 
-          col_out = aft_colors_fromzero 
-        }
+        
+        pal_out = aft_pal
+        col_out = aft_colors_fromzero
+        
         proxy %>% addRasterImage(dt, project = FALSE, colors = pal_out, group = "ModelResult"
                                  , opacity = input$alpha, maxBytes = 4 * 1024 * 1024)
         if (input$legend) {
@@ -611,7 +503,7 @@ shinyServer(function(input, output, session) {
           proxy %>% addLegend(colors = col2hex(as.character(col_out)), labels = aft_shortnames_fromzero, title = paste0("Output: ", input$outputlayer),group = "ModelResult", opacity = input$alpha)
         }
         
-         
+        
         
       } else {
         dt.v = getValues(dt)
@@ -624,32 +516,32 @@ shinyServer(function(input, output, session) {
                          , opacity = input$alpha, maxBytes = 4 * 1024 * 1024)
         if (input$legend) { proxy %>%
             addLegend(pal = pal, values = quantile(dt.v, probs=seq(1, 0, -0.05), na.rm=T),
-                      title = paste0("Output ", input$outputlayer), labFormat = labelFormat(transform = function(x) sort(quantile(dt.v, probs=seq(0, 1, 0.33), na.rm=T), decreasing = FALSE)), group = "ModelResult", opacity=input$alpha)
+                      , title = paste0("Output ", input$outputlayer), labFormat = labelFormat(transform = function(x) sort(quantile(dt.v, probs=seq(0, 1, 0.33), na.rm=T), decreasing = FALSE)), group = "ModelResult", opacity=input$alpha)
         }
       }
     }
     
-    # if (input$outputGroup == "print_in") { 
-    #   # Add input layer
-    #   dt_input = rnew_input()
-    #   dt_input.v = getValues(dt_input)
-    #   dt_input.rng = range(dt_input.v, na.rm = T)
-    #   # print(dt_input.rng)
-    #   
-    #   pal_input = colorNumeric(input$colors, reverse = input$InvertColour, domain = dt_input.rng, na.color = "transparent")
-    #   
-    #   proxy %>%
-    #     addRasterImage(dt_input, project = FALSE, colors =pal_input, method = "bilinear", group = "ModelResult"
-    #                    , opacity = input$alpha, maxBytes = 4 * 1024 * 1024)
-    #   if (input$legend) { proxy %>%
-    #       addLegend(pal = pal_input, values = quantile(dt_input.v, probs=seq(1, 0, -0.05), na.rm=T),
-    #                 , title = paste0("Input ", input$inputlayer), labFormat = labelFormat(transform = function(x) sort(quantile(dt_input.v, probs=seq(0, 1, 0.33), na.rm=T), decreasing = FALSE)), group = "ModelResult")
-    #   }
-    # }
+    if (input$outputGroup == "print_in") {
+      # Add input layer
+      dt_input = rnew_input()
+      dt_input.v = getValues(dt_input)
+      dt_input.rng = range(dt_input.v, na.rm = T)
+      # print(dt_input.rng)
+      
+      pal_input = colorNumeric(input$colors, reverse = input$InvertColour, domain = dt_input.rng, na.color = "transparent")
+      
+      proxy %>%
+        addRasterImage(dt_input, project = FALSE, colors =pal_input, method = "bilinear", group = "ModelResult"
+                       , opacity = input$alpha, maxBytes = 4 * 1024 * 1024)
+      if (input$legend) { proxy %>%
+          addLegend(pal = pal_input, values = quantile(dt_input.v, probs=seq(1, 0, -0.05), na.rm=T),
+                    , title = paste0("Input ", input$inputlayer), labFormat = labelFormat(transform = function(x) sort(quantile(dt_input.v, probs=seq(0, 1, 0.33), na.rm=T), decreasing = FALSE)), group = "ModelResult")
+      }
+    }
     
     
     # add empty layer 
-    
     proxy %>% addRasterImage(r_dummy, project = FALSE, group = "Basemap", opacity = 0) %>% addMiniMap(position = "bottomleft", zoomAnimation = T, toggleDisplay = TRUE)  %>% addMeasure()
-  })
+  }) 
+  
 })

@@ -44,6 +44,30 @@ location_UK <- "Local"
 #path_dropbox <- "KIT_Modelling/CRAFTY/CRAFTY_WEB_UK_DATA/"
 
  
+# For UI
+start_year = 2015
+end_year= 2100
+default_year = 2015
+
+
+
+# [1] "Tick"                      "X"                         "Y"                         "Service.softwood.timber"  
+# [5] "Service.hardwood.timber"   "Service.biodiversity"      "Service.carbon"            "Service.flood.regulation" 
+# [9] "Service.recreation"        "Service.livestock"         "Service.crop.service"      "Service.employment"       
+# [13] "Capital.region"            "Capital.nn.conifer.yc"     "Capital.nn.broad.yc"       "Capital.n.conifer.yc"     
+# [17] "Capital.n.broad.yc"        "Capital.n.broad.consv"     "Capital.agro.yc"           "Capital.mixed.yc"         
+# [21] "Capital.crop.productivity" "Capital.grassland"         "Capital.water.runoff"      "Capital.human"            
+# [25] "Capital.social"            "Capital.manufactured"      "Capital.financial"         "Capital.moreNW"           
+# [29] "Capital.lessNW"            "Capital.moreF"             "Capital.lessF"             "Capital.moreNAT"          
+# [33] "Capital.lessNAT"           "Capital.deep.peat"         "Capital.deer.density"      "Capital.wild.land"        
+# [37] "LandUseIndex"              "Agent"                     "Competitiveness"         
+
+
+
+
+
+
+
 
 
 paramsets_fullnames <- c("V1", "V2_June21") #"V2"
@@ -131,6 +155,15 @@ capitalNames <- capital_tb$Name
 
 indicator_names <- c(paste0("Service:", serviceNames), paste0("Capital:", capitalNames), "LandUseIndex") #, "Agent")
 indicator_names_dot <- c(paste0("Service.", serviceNames), paste0("Capital.", capitalNames), "LandUseIndex") #, "Agent")
+
+# For UI
+# default column (csv)
+indicator_output_default_idx = 34
+indicator_input_default_idx = 10
+
+# column (csv)
+indicator_output_idxs = c(1:9, 34)
+indicator_input_idxs = c(10:33)
 
 
 # AFTs

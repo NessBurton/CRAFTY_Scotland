@@ -39,9 +39,9 @@ navbarPage("CRAFTY interactive web-interface", windowTitle =  "CRAFTY interactiv
                                    fluidPage(br(), h4("Scenario customisation"))
                                    , sliderInput("year",
                                                  "Year:",
-                                                 min = 2015,
-                                                 max = 2100, sep = "",
-                                                 value = 2015, step=10, animate =animationOptions(interval = 5000, loop = FALSE, playButton = NULL, pauseButton = NULL)),
+                                                 min = start_year,
+                                                 max = end_year, sep = "",
+                                                 value = default_year, step=10, animate =animationOptions(interval = 5000, loop = FALSE, playButton = NULL, pauseButton = NULL)),
                                    
                                    selectInput("paramset_full", label = "Behavioural parameter set-up",
                                                choices = paramsets_fullnames, selected = paramsets_fullnames[1]
@@ -57,10 +57,10 @@ navbarPage("CRAFTY interactive web-interface", windowTitle =  "CRAFTY interactiv
                                    # ,
                                    fluidPage(br(), h4("Map customisation"))
                                    , selectInput("outputlayer", "Model Output", 
-                                                 indicator_names[c(29, 1:14)], selected=indicator_names[28]
+                                                 indicator_names[indicator_output_idxs], selected=indicator_names[indicator_output_default_idx]
                                    )                                  
                                    , selectInput("inputlayer", "Model Input",
-                                                 indicator_names[15:28], selected=indicator_names[28]
+                                                 indicator_names[indicator_input_idxs], selected=indicator_names[indicator_input_default_idx]
                                    )
                                    , htmlOutput("ReferenceToScenarios")
                                    
@@ -148,9 +148,9 @@ navbarPage("CRAFTY interactive web-interface", windowTitle =  "CRAFTY interactiv
                                      )
                                      , sliderInput("year_from",
                                                    "Year",
-                                                   min = 2015,
-                                                   max = 2100, sep = "",
-                                                   value = 2015, step=10),
+                                                   min = start_year,
+                                                   max = end_year, sep = "",
+                                                   value = start_year, step=10),
                                      selectInput("paramset_full_from", label = "Behavioural parameter set-up",
                                                  choices = paramsets_fullnames, selected = paramsets_fullnames[1]
                                      ),
@@ -165,9 +165,9 @@ navbarPage("CRAFTY interactive web-interface", windowTitle =  "CRAFTY interactiv
                                      )
                                      ,  sliderInput("year_to",
                                                     "Year",
-                                                    min = 2015,
-                                                    max = 2100, sep = "",
-                                                    value = 2080, step=10),
+                                                    min = start_year,
+                                                    max = end_year, sep = "",
+                                                    value = end_year, step=10),
                                      selectInput("paramset_full_to", label = "Behavioural parameter set-up",
                                                  choices = paramsets_fullnames, selected = paramsets_fullnames[1]
                                      ),
