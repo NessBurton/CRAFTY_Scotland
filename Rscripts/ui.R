@@ -35,8 +35,8 @@ navbarPage("CRAFTY interactive web-interface", windowTitle =  "CRAFTY interactiv
                                    
                                    # selectInput("version", "Version",
                                    #             version_names, selected = version_names[1]
-                                   # )
-                                   , fluidPage(br(), h4("Scenario customisation"))
+                                   # ), 
+                                   fluidPage(br(), h4("Scenario customisation"))
                                    , sliderInput("year",
                                                  "Year:",
                                                  min = 2015,
