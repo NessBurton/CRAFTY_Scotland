@@ -3,7 +3,8 @@
 library(shiny)
 
 
-source("Functions_CRAFTY-Scotland_WEB.R")
+source("Functions_CRAFTY-Scotland_WEB.R")  # shiny runs at the folder in which server and ui scripts exist.
+
 
 # 
 # absolutePanel(
@@ -32,9 +33,9 @@ navbarPage("CRAFTY interactive web-interface", windowTitle =  "CRAFTY interactiv
                       sidebarPanel(width=SIDEBAR_WIDTH,
                                    
                                    
-                                   selectInput("version", "Version",
-                                               version_names, selected = version_names[1]
-                                   )
+                                   # selectInput("version", "Version",
+                                   #             version_names, selected = version_names[1]
+                                   # )
                                    , fluidPage(br(), h4("Scenario customisation"))
                                    , sliderInput("year",
                                                  "Year:",

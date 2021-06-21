@@ -45,6 +45,13 @@ location_UK <- "Local"
 
  
 
+
+paramsets_fullnames <- c("V1", "V2_June21") #"V2"
+paramsets <-  c("V1", "V2_June21") # "V2", 
+
+n_paramset <- length(paramsets)
+
+## versions (might just remove?)
 version_names <- c("V1", "Thesis","V2_June21")
 version_prefix <- c("V1", "Thesis", "V2_June21")
 
@@ -52,7 +59,7 @@ version_prefix <- c("V1", "Thesis", "V2_June21")
 version_default_idx= 1
 version_default <- version_names[version_default_idx]
 
-data_suffix = "V2" 
+version_suffix = "V2" # need to sort out what it is.. 
 
 # absolute path (for local)
 path_data_local <- paste0(path_localstorage)
@@ -71,9 +78,8 @@ getFname <- function(version, paramset, scenario, year ) {
   
   # fs::path_expand(paste0( fooddemand, "/" ,foodprice,"/", paramset, "/", scenario, "/", scenario, "-", runid, "-99-UK-Cell-", year, ".csv"))
   #fs::path_expand(paste0(version_prefix[match(version,version_names)], "/", paramset, "/", scenario, "/", scenario, "-", runid, "-99-Scotland_V2-Cell-", year, ".csv"))
-  fs::path_expand(paste0(paramset, "/", scenario, "/", scenario, "-", runid, "-99-Scotland_", data_suffix,"-Cell-", year, ".csv"))
-  
-  
+  fs::path_expand(paste0(paramset, "/", scenario, "/", scenario, "-", runid, "-99-Scotland_", version_suffix,"-Cell-", year, ".csv"))
+   
 }
 
 #getFname("","V1","Green_Gold","2015")
@@ -107,11 +113,6 @@ scot_coords <- left_join(scot_coords,BNG_csv,by="id")
 
 scenario_names <- c("Baseline","Green_Gold","Multiple_Benefits","Native_Networks","Wild_Woodlands","Woodland_Culture")
 
-paramsets_fullnames <- c("V1", "V2_June21") #"V2"
-
-n_paramset <- length(paramsets_fullnames)
-# paramsets <- paste0("Paramset", 1:n.paramset)
-paramsets <-  c("V1", "V2_June21") # "V2", 
 
 
 # Services and capitals

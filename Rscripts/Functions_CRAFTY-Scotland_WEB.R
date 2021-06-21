@@ -22,7 +22,7 @@ library(Gmisc) # transition plot
 
 ### source data script ---------------------------------------------------------
 
-source("Data_Scotland.R")
+source("Data_Scotland.R") # shiny runs at the folder in which server and ui scripts exist.
  
 
 ### plot parameters ------------------------------------------------------------
@@ -209,6 +209,7 @@ getRaster<- function(fname, band.name, location = location_UK, resolution = RESO
 
 
 r_dummy = r_default
+r_dummy[!is.na(r_dummy)] = 1
 
 # ### read in rasters and write?? ------------------------------------------------
 # to improve performacne - not necessary before production -  (14June2021 by ABS)
