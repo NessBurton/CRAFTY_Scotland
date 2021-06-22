@@ -8,9 +8,8 @@ shinyServer(function(input, output, session) {
   
   ### return run information -----
   runinfo <- reactive({
-    p.idx = which(input$paramset_full == paramsets_fullnames)
     
-    paste0("Simulated ", input$outputlayer, " in ", input$year, " with the ", input$paramset_full, " parameters and ",  input$scenario, " scenario." )
+    paste0("Simulated ", input$outputlayer, " in ", input$year, " with the ", input$production, " parameters and ",  input$scenario, " scenario." )
   })
   
   ### ? -----
@@ -34,9 +33,9 @@ shinyServer(function(input, output, session) {
   rnew_input <- reactive({
     print("rnew_input called")
     
-    p.idx <- which(input$paramset_full == paramsets_fullnames)
+    w_idx <- which(input$world == world_shortnames)
     
-    fname_changed <- getFname(input$version,  paramsets[p.idx], input$scenario, input$year)
+    fname_changed <- getFname( world_names[w_idx], input$production, input$scenario, input$year)
     
     r_changed <- getRaster(fname_changed, band.name = input$inputlayer, resolution = RESOLUTION_WEB, location = location_UK)
     
@@ -65,16 +64,19 @@ shinyServer(function(input, output, session) {
     
   })
   
-  ### AFT table? -----
-  # output$Tab1_AFTTablePane <- renderDataTable({
-  #     
-  #   print("draw AFT pane")
-  #   
-  #   AFT_tb = read.csv("Tables/AFT_Names_UK.csv")
-  #   
-  #   DT::datatable(AFT_tb[,c("Name", "Description", "Group", "Type")], options= list(paging = FALSE),  editable = F)
-  #   
-  #   })
+  ## AFT table? -----
+  output$Tab1_AFTTablePane <- renderDataTable({
+    
+    print("draw AFT pane")
+    
+    AFT_tb = aftnames # read.csv("Tables/AFT_Names_UK.csv")
+    # AFT_tb[,c("Name", "Description", "Group", "Type")]
+    AFT_tb_toplot = AFT_tb[,-1]
+    
+    
+    DT::datatable(AFT_tb_toplot, options= list(paging = FALSE),  editable = F)
+    
+  })
   
   
   ### Behavioural table -----
@@ -82,9 +84,7 @@ shinyServer(function(input, output, session) {
     
     print("draw behavioural pane")
     
-    p.idx <- which(input$paramset_full == paramsets_fullnames)
-    
-    foldername_tmp <- paste0("Tables/agents/", paramsets[p.idx], "/", input$scenario)
+    foldername_tmp <- paste0("Tables/agents/")
     
     aftparams_df <- sapply(aft_shortnames_fromzero[-length(aft_shortnames_fromzero)], FUN = function(x) read.csv(paste0(foldername_tmp, "/AftParams_", x, ".csv"))) %>% t
     
@@ -96,26 +96,25 @@ shinyServer(function(input, output, session) {
     
   })
   
-  ### Production table -----
-  output$Tab1_ProductionTablePane <- renderDataTable({
-    
-    print("draw production pane")
-    
-    p.idx <- which(input$paramset_full == paramsets_fullnames)
-    
-    foldername_tmp <- ("Tables/production/Baseline")
-    foldername_tmp <- paste0("Tables/production/", input$scenario)
-    
-    productionparams_l <- lapply(aft_shortnames_fromzero[-length(aft_shortnames_fromzero)], FUN = function(x) read.csv(paste0(foldername_tmp, "/", x, ".csv"))) 
-    
-    a_idx <- 1 
-    x <- productionparams_l[[a_idx]]
-    
-    colnames(x)[1] = "Service"
-    
-    DT::datatable(x, options= list(paging = F),  editable = F, rownames = F, caption = aft_names_fromzero[a_idx]) 
-    
-  })
+  # ### Production table -----
+  # output$Tab1_ProductionTablePane <- renderDataTable({
+  #   
+  #   print("draw production pane")
+  #   
+  #   
+  #   foldername_tmp <- ("Tables/production/Baseline")
+  #   foldername_tmp <- paste0("Tables/production/", input$scenario)
+  #   
+  #   productionparams_l <- lapply(aft_shortnames_fromzero[-length(aft_shortnames_fromzero)], FUN = function(x) read.csv(paste0(foldername_tmp, "/", x, ".csv"))) 
+  #   
+  #   a_idx <- 1 
+  #   x <- productionparams_l[[a_idx]]
+  #   
+  #   colnames(x)[1] = "Service"
+  #   
+  #   DT::datatable(x, options= list(paging = F),  editable = F, rownames = F, caption = aft_names_fromzero[a_idx]) 
+  #   
+  # })
   
   
   ### Timeseries plot -----
@@ -124,38 +123,26 @@ shinyServer(function(input, output, session) {
     
     print("draw timeseries pane")
     
-    p.idx <- which(input$paramset_full == paramsets_fullnames)
     
     scenario_tmp = "Baseline"
     # scenario_tmp = "RCP4_5-SSP4"
     # scenario_tmp = "Baseline"
-    paramset_tmp = "V2_June21"
+    production_tmp = "V2_June21"
     
     scenario_tmp = input$scenario
-    paramset_tmp = paramsets[p.idx]
+    production_tmp = input$production
     
-    # File names
-    # if (!str_detect(scenario_tmp, "SSP3")) {
-    #   # aft composition
-    #   aft_csvname_changed = fs::path_expand(paste0(version_prefix[match(input$version, version_names)], "/",paramset_tmp , "/", scenario_tmp, "/",  scenario_tmp, "-", runid, "-99-UK-AggregateAFTComposition.csv"))
-    #   
-    #   # supply and demand files
-    #   demand_csvname_changed = fs::path_expand(paste0(version_prefix[match(input$version, version_names)], "/", paramset_tmp, "/", scenario_tmp, "/", scenario_tmp, "-", runid, "-99-UK-AggregateServiceDemand.csv"))
-    #   
-    #   aftcomp_dt = getCSV(aft_csvname_changed, location = location_UK)
-    #   demand_dt = getCSV(demand_csvname_changed, location = location_UK)
-    #   
-    # } else { 
+    
     
     # aft composition
-    aft_csvname_changed_v <- fs::path_expand(paste0(version_prefix[match(input$version, version_names)], "/", paramset_tmp, "/", scenario_tmp, "/",  scenario_tmp, "-", runid, "-99-", region_names, "-AggregateAFTComposition.csv"))
+    aft_csvname_changed_v <- fs::path_expand(paste0(version_prefix[match(input$world, version_names)], "/", production_tmp, "/", scenario_tmp, "/",  scenario_tmp, "-", runid, "-99-", region_names, "-AggregateAFTComposition.csv"))
     
     aftcomp_dt_l <- lapply(aft_csvname_changed_v, FUN = function(x) getCSV(x, location = location_UK))
     
     aftcomp_dt <- cbind(aftcomp_dt_l[[1]][,c("Tick", "Region")],  Reduce("+", lapply(aftcomp_dt_l, FUN = function(x) x[,-c(1:2)])))
     
     # supply and demand files
-    demand_csvname_changed_v = fs::path_expand(paste0(version_prefix[match(input$version, version_names)], "/", paramset_tmp, "/", scenario_tmp, "/", scenario_tmp, "-", runid, "-99-", region_names, "-AggregateServiceDemand.csv"))
+    demand_csvname_changed_v = fs::path_expand(paste0(version_prefix[match(input$world, version_names)], "/", production_tmp, "/", scenario_tmp, "/", scenario_tmp, "-", runid, "-99-", region_names, "-AggregateServiceDemand.csv"))
     demand_dt_l = lapply(demand_csvname_changed_v, FUN = function(x) getCSV(x, location = location_UK))
     
     rem_col_idx = match(c("Tick", "Region"), colnames(demand_dt_l[[1]]))
@@ -170,16 +157,6 @@ shinyServer(function(input, output, session) {
     capital_scene_tmp <- read.csv(paste0("Tables/Summary/", capital_csvname_changed))
     
     aftcomp_dt_org = aftcomp_dt
-    
-    # reclassify
-    # aftcomp_dt[,"AFT.IAfood"] = aftcomp_dt[,"AFT.IAfood"] + aftcomp_dt[,"AFT.IAfodder"]
-    # aftcomp_dt[,"AFT.IAfodder"] = NULL
-    # 
-    # aftcomp_dt[,"AFT.MW"] = aftcomp_dt[,"AFT.PNB"] + aftcomp_dt[,"AFT.PNC"] + aftcomp_dt[,"AFT.PNNB"] + aftcomp_dt[,"AFT.PNNC"]
-    # aftcomp_dt[, c("AFT.PNB", "AFT.PNC","AFT.PNNB","AFT.PNNC")] = NULL
-    # 
-    # colnames(aftcomp_dt)[  colnames(aftcomp_dt) == "AFT.IAfood"] = "AFT.IA"
-    # colnames(aftcomp_dt)[  colnames(aftcomp_dt) == "AFT.MW"] = "AFT.PW"
     
     
     aftcomp_m <- t(as.matrix(sapply(aftcomp_dt[, -c(1,2)] , FUN = function(x) as.numeric(as.character(x)))))
@@ -347,17 +324,14 @@ shinyServer(function(input, output, session) {
   
   ### Transition plot -----
   
+  
   output$Tab3_TransitionPlotPane <- renderPlot(height = PLOT_HEIGHT, res = 96, {
     
+    w_from_idx <- which(input$world_from == world_shortnames)
+    w_to_idx <- which(input$world_to == world_shortnames)
     
-    p_from.idx = which(input$paramset_full_from == paramsets_fullnames)
-    p_to.idx = which(input$paramset_full_to  == paramsets_fullnames)
-    
-    # fname_from = paste0(input$version_tr, "/BehaviouralBaseline/Baseline/Baseline-0-99-UK-Cell-2020.csv")
-    # fname_to =  paste0(input$version_tr, "/BehaviouralBaseline/RCP4_5-SSP4/RCP4_5-SSP4-0-99-UK-Cell-2080.csv")
-    
-    fname_from =  getFname(input$version_from, paramsets[p_from.idx], input$scenario_from, year =  input$year_from)
-    fname_to   =  getFname(input$version_to, paramsets[p_to.idx], input$scenario_to, year =  input$year_to)
+    fname_from =  getFname( world_names[w_from_idx], input$production_from, input$scenario_from, year =  input$year_from)
+    fname_to   =  getFname(world_names[w_to_idx], input$production_to, input$scenario_to, year =  input$year_to)
     
     # Transition matrix
     
@@ -454,9 +428,9 @@ shinyServer(function(input, output, session) {
     
     # input$background # touch
     
-    p.idx = which(input$paramset_full == paramsets_fullnames)
+    w_idx <- which(input$world == world_shortnames)
     
-    fname_changed =getFname(input$version, paramsets[p.idx], input$scenario,input$year)   
+    fname_changed =getFname(world_names[w_idx],input$production, input$scenario,input$year)   
     
     r_changed = getRaster(fname_changed, band.name = input$outputlayer, resolution = RESOLUTION_WEB, location = location_UK)
     

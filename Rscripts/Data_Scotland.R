@@ -61,28 +61,14 @@ default_year = 2015
 # [29] "Capital.lessNW"            "Capital.moreF"             "Capital.lessF"             "Capital.moreNAT"          
 # [33] "Capital.lessNAT"           "Capital.deep.peat"         "Capital.deer.density"      "Capital.wild.land"        
 # [37] "LandUseIndex"              "Agent"                     "Competitiveness"         
-
-
-
-
-
-
-
-
-
-paramsets_fullnames <- c("V1", "V2_June21") #"V2"
-paramsets <-  c("V1", "V2_June21") # "V2", 
-
-n_paramset <- length(paramsets)
+ 
 
 ## versions (might just remove?)
-version_names <- c("V1", "Thesis","V2_June21")
-version_prefix <- c("V1", "Thesis", "V2_June21")
+production_names <- c("V1", "Thesis", "V2_June21")
 
-
-version_default_idx= 1
-version_default <- version_names[version_default_idx]
-
+world_shortnames = c("Financial", "Natural")
+world_names = c("Scotland_financial", "Scotland_natural")
+ 
 version_suffix = "V2" # need to sort out what it is.. 
 
 # absolute path (for local)
@@ -95,25 +81,18 @@ path_shinywd <- "~/shiny_tmp_dev"
 path_filecache <- paste0(path_shinywd, "/filetmp/")
 path_rastercache <- paste0(path_shinywd, "/rastertmp/")
 
-# dummy name
-default_fname <- paste0(version_default, "/Baseline/Baseline-0-99-Scotland_V2-Cell-2015.csv")
 
-getFname <- function(version, paramset, scenario, year ) { 
+getFname <- function(world_name, production_name, scenario, year ) { 
   
-  # fs::path_expand(paste0( fooddemand, "/" ,foodprice,"/", paramset, "/", scenario, "/", scenario, "-", runid, "-99-UK-Cell-", year, ".csv"))
-  #fs::path_expand(paste0(version_prefix[match(version,version_names)], "/", paramset, "/", scenario, "/", scenario, "-", runid, "-99-Scotland_V2-Cell-", year, ".csv"))
-  fs::path_expand(paste0(paramset, "/", scenario, "/", scenario, "-", runid, "-99-Scotland_", version_suffix,"-Cell-", year, ".csv"))
+  fs::path_expand(paste0(world_name, "/", production_name, "/", scenario, "/", scenario, "-", runid, "-99-Scotland_", version_suffix,"-Cell-", year, ".csv"))
    
 }
+# getFname("Scotland_financial","V1","Green_Gold","2015")  
 
-#getFname("","V1","Green_Gold","2015")
-
+ 
 
 ### raster for extent ----------------------------------------------------------
-
-scenarioname.default <- "Baseline"
 r_default <- raster(paste0(path_data_raw, "/input/lcm15_1k.tif"))
-
 ext <- extent(projectRaster(r_default, crs = proj4.LL))
 #ext <- c(-8.439121, 2.794859, 49.77235, 60.93977 )
 
@@ -136,6 +115,8 @@ scot_coords <- left_join(scot_coords,BNG_csv,by="id")
 # Scenarios and agent parameter sets
 
 scenario_names <- c("Baseline","Green_Gold","Multiple_Benefits","Native_Networks","Wild_Woodlands","Woodland_Culture")
+
+scenarioname.default <- scenario_names[1]
 
 
 
