@@ -63,13 +63,13 @@ default_year = 2015
 # [37] "LandUseIndex"              "Agent"                     "Competitiveness"         
  
 
-## versions (might just remove?)
-production_names <- c("V1", "Thesis", "V2_June21")
+## versions 
+production_names <- c("V2_June21")#"V1", "Thesis", "V2_June21")
 
-world_shortnames = c("Financial", "Natural")
-world_names = c("Scotland_financial", "Scotland_natural")
+world_shortnames <- c("Financial", "Natural")
+world_names <- c("Scotland_financial", "Scotland_natural")
  
-version_suffix = "V2" # need to sort out what it is.. 
+version_suffix <- "financial" 
 
 # absolute path (for local)
 path_data_local <- paste0(path_localstorage)
@@ -87,11 +87,12 @@ getFname <- function(world_name, production_name, scenario, year ) {
   fs::path_expand(paste0(world_name, "/", production_name, "/", scenario, "/", scenario, "-", runid, "-99-Scotland_", version_suffix,"-Cell-", year, ".csv"))
    
 }
-# getFname("Scotland_financial","V1","Green_Gold","2015")  
+# getFname("Scotland_financial","V2_June21","Green_Gold","2015")  
 
  
 
 ### raster for extent ----------------------------------------------------------
+
 r_default <- raster(paste0(path_data_raw, "/input/lcm15_1k.tif"))
 ext <- extent(projectRaster(r_default, crs = proj4.LL))
 #ext <- c(-8.439121, 2.794859, 49.77235, 60.93977 )
