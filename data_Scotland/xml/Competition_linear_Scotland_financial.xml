@@ -1,0 +1,29 @@
+<competition class="org.volante.abm.example.NormalisedCurveCompetitivenessModel" removeNegative = 'true'>
+		<curve service="softwood.timber">
+			<curve class="com.moseph.modelutils.curve.LinearFunction" a="0.0" b="0.000986935" />
+		</curve>
+		<curve service="hardwood.timber">
+			<curve class="com.moseph.modelutils.curve.LinearFunction" a="0.0" b="0.006801564" />
+		</curve>
+		<curve service="biodiversity">
+			<curve class="com.moseph.modelutils.curve.LinearFunction" a="0.0" b="0.00009623425" />
+		</curve>
+		<curve service="carbon">
+			<curve class="com.moseph.modelutils.curve.LinearFunction" a="0.0" b="0.0001725566" />
+		</curve>
+		<curve service="flood.regulation">
+			<curve class="com.moseph.modelutils.curve.LinearFunction" a="0.0" b="0.0005727482" />
+		</curve>
+		<curve service="recreation">
+			<curve class="com.moseph.modelutils.curve.LinearFunction" a="0.0" b="0.0003766864" />
+		</curve>
+		<curve service="livestock">
+			<curve class="com.moseph.modelutils.curve.LinearFunction" a="0.0" b="0.000194564" />
+		</curve>
+		<curve service="crop.service">
+			<curve class="com.moseph.modelutils.curve.LinearFunction" a="0.0" b="0.0003789429" />
+		</curve>
+		<curve service="employment">
+			<curve class="com.moseph.modelutils.curve.LinearFunction" a="0.0" b="0.0003071167" />
+		</curve>
+	</competition>
