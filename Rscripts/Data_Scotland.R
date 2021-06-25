@@ -150,25 +150,25 @@ indicator_input_idxs = c(10:33)
 
 # AFTs
 
-aftnames <- data.frame(rbind(c("prodnnconifer","prodnnconifer","Productive NN Conifer"),
-                             c("prodnconifer","prodnconifer","Productive N Conifer"),
-                             c("multinc" ,"multinc","Multifunctional N Conifer"),
-                             c("multinnc","multinnc","Multifunctional NN Conifer"),
-                             c("multimixed","multimixed","Multifunctional Mixed"),
-                             c("prodnnbroad","prodnnbroad","Productive NN Broadleaf"),
-                             c("prodnbroad","prodnbroad","Productive N Broadleaf"),
-                             c("multinb","multinb","Multifunctional N Broadleaf"),
-                             c("multinnb","multinnb","Multifunctional NN Broadleaf"),
-                             c("consvnative","consvnative","Conservationist Native Wood"),
-                             c("agroforestry","agroforestry","Agroforestry"),
-                             c("intarable","intarable","Intensive arable farming"),
-                             c("extarable","extarable","Extensive arable farming"),
-                             c("intpastoral","intpastoral","Intensive pastoral farming"),
-                             c("extpastoral","extpastoral","Extensive pastoral farming"),
+aftnames <- data.frame(rbind(c("agroforestry","agroforestry","Agroforestry"),
+                             c("consvnative","consvnative","Conservationist native woodland"),
+                             c("estateconsv","estateconsv","Conservation estate"),
                              c("estatemulti","estatemulti","Traditional multifunctional"),
                              c("estatesport","estatesport","Sporting estate"),
-                             c("estateconsv","estateconsv","Conservation estate"),
+                             c("extarable","extarable","Extensive arable farming"),
+                             c("extpastoral","extpastoral","Extensive pastoral farming"),
+                             c("intarable","intarable","Intensive arable farming"),
+                             c("intpastoral","intpastoral","Intensive pastoral farming"),
                              c("marginal","marginal","Marginal land"),
+                             c("multimixed","multimixed","Multifunctional mixed woodland"),
+                             c("multinc" ,"multinc","Multifunctional native conifer"),
+                             c("multinnc","multinnc","Multifunctional non-native conifer"),
+                             c("multinb","multinb","Multifunctional native broadleaf"),
+                             c("multinnb","multinnb","Multifunctional non-native broadleaf"),
+                             c("prodnbroad","prodnbroad","Productive native broadleaf"),
+                             c("prodnconifer","prodnconifer","Productive native conifer"),
+                             c("prodnnbroad","prodnnbroad","Productive non-native broadleaf"),
+                             c("prodnnconifer","prodnnconifer","Productive non-native conifer"),
                              c("waterurban","waterurban","Waterbody or urban area")))
 
 colnames(aftnames) <- c("AFT", "AFT_cb", "Description")
@@ -191,19 +191,19 @@ aft_colors_alpha <- aft_tb$Color[match(aft_shortnames_fromzero, aft_tb$Name)]
 aft_colors_fromzero <- col2hex(paste0("#", substr(aft_colors_alpha, start = 4, stop = 10), substr(aft_colors_alpha, start = 2, stop = 3))) # ignore alpha channel
 
 # 17 colours
-aft_colors_fromzero_17 = aft_colors_fromzero
+aft_colors_fromzero_17 <- aft_colors_fromzero
 
 # reduced colours
-aft_colors_fromzero[aft_shortnames_fromzero %in% c("prodnnconifer",
-                                                   "prodnconifer",
-                                                   "multinc" ,
-                                                   "multinnc",
-                                                   "multimixed",
-                                                   "prodnnbroad",
-                                                   "prodnbroad",
-                                                   "multinb",
-                                                   "multinnb",
-                                                   "consvnative")] = col2hex("darkblue")
+# aft_colors_fromzero[aft_shortnames_fromzero %in% c("prodnnconifer",
+#                                                    "prodnconifer",
+#                                                    "multinc" ,
+#                                                    "multinnc",
+#                                                    "multimixed",
+#                                                    "prodnnbroad",
+#                                                    "prodnbroad",
+#                                                    "multinb",
+#                                                    "multinnb",
+#                                                    "consvnative")] = col2hex("darkblue")
 
 
 target_years_aggcsv <- seq(2015, 2100, 5)
