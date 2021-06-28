@@ -680,37 +680,64 @@ head(MB)
 MB$FR<-NULL
 MB$BT<-NULL
 MB$X <- NULL
-
-summary(MB)
-MB <- data.frame(MB[,c(1:5,29)], lapply(MB[6:28], normalise))
-summary(MB)
-MB[is.na(MB)] <- 0
-MB$crop.productivity[which(MB$agri.filter==1)]<-0 # remove cap where not suitable for crops
-#remove filter column
-MB$agri.filter <- NULL
-
-# invert deer density
-invert <- MB$deer.density - 1
-z <- abs(invert)
-MB$deer.density <- z
-
 MB$id <- NULL
-#MB$FR <- MB$Agent
-MB$FR <- AFT$AFT
-MB$BT <- 0
 MB$Agent <- NULL
-colnames(MB)[1:2] <- c("x","y")
-#MB <- MB[,-c(27:35)]
+head(baseline)
+baseline$FR<-NULL
+baseline$BT<-NULL
+baseline$X <- NULL
+baseline$id <- NULL
+baseline$Agent <- NULL
 
-MB$FR
-MB$FR <- str_replace_all(MB$FR, "[[.]]", "")
-write.csv(MB, paste0(dirOut,"/worlds/Scotland/Multiple_Benefits/Multiple_Benefits_capitals.csv"), row.names = F)
-
-MB <- MB[-c(27,28)]
+dfMB <- baseline
+dfMB$year <- 2015
+head(dfMB)
 
 for (yr in yrList){
   
-  write.csv(MB, paste0(dirOut,"/worlds/Scotland/Multiple_Benefits/Multiple_Benefits_",yr,".csv"), row.names = F)
+  MB$year <- yr
+  dfMB <- rbind(dfMB,MB)
+  
+}
+
+
+summary(dfMB)
+dfMB$crop.productivity[which(dfMB$agri.filter==1)]<-0 # remove cap where not suitable for crops
+head(dfMB)
+dfMB <- data.frame(dfMB[,c(1:3,27:28)], lapply(dfMB[4:26], normalise))
+summary(dfMB)
+dfMB[is.na(dfMB)] <- 0
+
+#remove filter column
+dfMB$agri.filter <- NULL
+
+# invert deer density
+invert <- dfMB$deer.density - 1
+z <- abs(invert)
+dfMB$deer.density <- z
+
+yrList <- seq(2015,2095,by=5)
+
+for (yr in yrList){
+  
+  #yr <- yrList[1]
+  
+  MB <- filter(dfMB, year == yr)
+  
+  if (yr == 2015){
+    
+    MB$FR <- AFT$AFT
+    MB$FR <- str_replace_all(MB$FR, "[[.]]", "")
+    MB$year <- NULL
+    write.csv(MB, paste0(dirOut,"/worlds/Scotland_natural/Multiple_Benefits/Multiple_Benefits_capitals.csv"), row.names = F)
+    
+    
+  }else{
+    
+    MB$year <- NULL
+    write.csv(MB, paste0(dirOut,"/worlds/Scotland_natural/Multiple_Benefits/Multiple_Benefits_",yr,".csv"), row.names = F)
+    
+  }
   
 }
 
@@ -771,11 +798,11 @@ colnames(WW1)[1:2] <- c("x","y")
 
 WW1$FR
 WW1$FR <- str_replace_all(WW1$FR, "[[.]]", "")
-write.csv(WW1, paste0(dirOut,"/worlds/Scotland/Wild_Woodlands/Wild_Woodlands_capitals.csv"), row.names = F)
+#write.csv(WW1, paste0(dirOut,"/worlds/Scotland/Wild_Woodlands/Wild_Woodlands_capitals.csv"), row.names = F)
 
 WW1 <- WW1[-c(27:28)]
 
-write.csv(WW1, paste0(dirOut,"/worlds/Scotland/Wild_Woodlands/Wild_Woodlands_2016.csv"), row.names = F)
+write.csv(WW1, paste0(dirOut,"/worlds/Scotland_natural/Wild_Woodlands/Wild_Woodlands_2020.csv"), row.names = F)
 
 # introduce first stage of land reform and reduce grassland capital by a 1/4
 WW2 <- WW
@@ -833,10 +860,11 @@ WW2$deer.density <- z
 
 WW2 <- WW2[-c(1,4)]
 
-write.csv(WW2, paste0(dirOut,"/worlds/Scotland/Wild_Woodlands/Wild_Woodlands_2026.csv"), row.names = F)
-write.csv(WW2, paste0(dirOut,"/worlds/Scotland/Wild_Woodlands/Wild_Woodlands_2036.csv"), row.names = F)
+write.csv(WW2, paste0(dirOut,"/worlds/Scotland_natural/Wild_Woodlands/Wild_Woodlands_2025.csv"), row.names = F)
+write.csv(WW2, paste0(dirOut,"/worlds/Scotland_natural/Wild_Woodlands/Wild_Woodlands_2030.csv"), row.names = F)
+write.csv(WW2, paste0(dirOut,"/worlds/Scotland_natural/Wild_Woodlands/Wild_Woodlands_2035.csv"), row.names = F)
 
-# 2041
+# 2040
 # reduce deer density capital by 20%
 WW3 <- WW2
 
@@ -854,7 +882,8 @@ invert <- WW3$deer.density - 1
 z <- abs(invert)
 WW3$deer.density <- z
 
-write.csv(WW3, paste0(dirOut,"/worlds/Scotland/Wild_Woodlands/Wild_Woodlands_2046.csv"), row.names = F)
+write.csv(WW3, paste0(dirOut,"/worlds/Scotland_natural/Wild_Woodlands/Wild_Woodlands_2040.csv"), row.names = F)
+write.csv(WW3, paste0(dirOut,"/worlds/Scotland_natural/Wild_Woodlands/Wild_Woodlands_2045.csv"), row.names = F)
 
 # introduce second stage of land reform and reduce grassland capital by half
 WW4 <- WW
@@ -915,7 +944,8 @@ WW4$deer.density <- z
 
 WW4 <- WW4[-c(1,4)]
 
-write.csv(WW4, paste0(dirOut,"/worlds/Scotland/Wild_Woodlands/Wild_Woodlands_2056.csv"), row.names = F)
+write.csv(WW4, paste0(dirOut,"/worlds/Scotland_natural/Wild_Woodlands/Wild_Woodlands_2050.csv"), row.names = F)
+write.csv(WW4, paste0(dirOut,"/worlds/Scotland_natural/Wild_Woodlands/Wild_Woodlands_2055.csv"), row.names = F)
 
 # reduce deer density by 40% (another 20% on what it's been reduced already)
 WW5 <- WW4
@@ -934,7 +964,8 @@ invert <- WW5$deer.density - 1
 z <- abs(invert)
 WW5$deer.density <- z
 
-write.csv(WW5, paste0(dirOut,"/worlds/Scotland/Wild_Woodlands/Wild_Woodlands_2066.csv"), row.names = F)
+write.csv(WW5, paste0(dirOut,"/worlds/Scotland_natural/Wild_Woodlands/Wild_Woodlands_2060.csv"), row.names = F)
+write.csv(WW5, paste0(dirOut,"/worlds/Scotland_natural/Wild_Woodlands/Wild_Woodlands_2065.csv"), row.names = F)
 
 # 2071
 # introduce land reform 3, reduce deer density by 50%
@@ -996,7 +1027,8 @@ WW6$deer.density <- z
 
 WW6 <- WW6[-c(1,4)]
 
-write.csv(WW6, paste0(dirOut,"/worlds/Scotland/Wild_Woodlands/Wild_Woodlands_2076.csv"), row.names = F)
+write.csv(WW6, paste0(dirOut,"/worlds/Scotland_natural/Wild_Woodlands/Wild_Woodlands_2070.csv"), row.names = F)
+write.csv(WW6, paste0(dirOut,"/worlds/Scotland_natural/Wild_Woodlands/Wild_Woodlands_2075.csv"), row.names = F)
 
 
 WW7 <- WW6
@@ -1015,9 +1047,10 @@ invert <- WW7$deer.density - 1
 z <- abs(invert)
 WW7$deer.density <- z
 
-write.csv(WW7, paste0(dirOut,"/worlds/Scotland/Wild_Woodlands/Wild_Woodlands_2086.csv"), row.names = F)
-write.csv(WW7, paste0(dirOut,"/worlds/Scotland/Wild_Woodlands/Wild_Woodlands_2096.csv"), row.names = F)
-
+write.csv(WW7, paste0(dirOut,"/worlds/Scotland_natural/Wild_Woodlands/Wild_Woodlands_2080.csv"), row.names = F)
+write.csv(WW7, paste0(dirOut,"/worlds/Scotland_natural/Wild_Woodlands/Wild_Woodlands_2085.csv"), row.names = F)
+write.csv(WW7, paste0(dirOut,"/worlds/Scotland_natural/Wild_Woodlands/Wild_Woodlands_2090.csv"), row.names = F)
+write.csv(WW7, paste0(dirOut,"/worlds/Scotland_natural/Wild_Woodlands/Wild_Woodlands_2095.csv"), row.names = F)
 
 ### native networks  -----------------------------------------------------------
 
