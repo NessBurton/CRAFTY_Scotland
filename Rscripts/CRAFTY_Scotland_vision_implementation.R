@@ -18,7 +18,7 @@ dirOut <- paste0(wd,"data_Scotland")
 AFT <- read.csv(paste0(dirData,"/output/AFT_allocation_Apr2021.csv"))
 head(AFT)
 
-yrList <- seq(2016,2096,by=10)
+yrList <- seq(2020,2095,by=5)
 
 
 ### baseline capitals ----------------------------------------------------------
@@ -42,26 +42,26 @@ baseline$FR
 baseline$FR <- str_replace_all(baseline$FR, "[[.]]", "")
 
 
-write.csv(baseline, paste0(dirOut,"/worlds/Scotland_V1/Baseline/Baseline_capitals.csv"), row.names = F)
-#write.csv(baseline, paste0(dirOut,"/worlds/Scotland/Multiple_Benefits/Multiple_Benefits_capitals.csv"), row.names = F)
-#write.csv(baseline, paste0(dirOut,"/worlds/Scotland/Green_Gold/Green_Gold_capitals.csv"), row.names = F)
-#write.csv(baseline, paste0(dirOut,"/worlds/Scotland/Native_Networks/Native_Networks_capitals.csv"), row.names = F)
-#write.csv(baseline, paste0(dirOut,"/worlds/Scotland/Wild_Woodlands/Wild_Woodlands_capitals.csv"), row.names = F)
-#write.csv(baseline, paste0(dirOut,"/worlds/Scotland/Woodland_Culture/Woodland_Culture_capitals.csv"), row.names = F)
+write.csv(baseline, paste0(dirOut,"/worlds/Scotland_natural/Baseline/Baseline_capitals.csv"), row.names = F)
+write.csv(baseline, paste0(dirOut,"/worlds/Scotland_natural/Multiple_Benefits/Multiple_Benefits_capitals.csv"), row.names = F)
+write.csv(baseline, paste0(dirOut,"/worlds/Scotland_natural/Green_Gold/Green_Gold_capitals.csv"), row.names = F)
+write.csv(baseline, paste0(dirOut,"/worlds/Scotland_natural/Native_Networks/Native_Networks_capitals.csv"), row.names = F)
+write.csv(baseline, paste0(dirOut,"/worlds/Scotland_natural/Wild_Woodlands/Wild_Woodlands_capitals.csv"), row.names = F)
+write.csv(baseline, paste0(dirOut,"/worlds/Scotland_natural/Woodland_Culture/Woodland_Culture_capitals.csv"), row.names = F)
 
 
 # baseline updater files
-baseline <- read.csv(paste0(dirOut,"/worlds/Scotland_V1/Baseline/Baseline_capitals.csv"))
+baseline <- read.csv(paste0(dirOut,"/worlds/Scotland_natural/Baseline/Baseline_capitals.csv"))
 head(baseline)
 
 updater <- baseline[,-c(27:28)]
 
-
 for (yr in yrList){
   
-  write.csv(updater,paste0(dirOut,"/worlds/Scotland_V1/Baseline/Baseline_",yr,".csv"),row.names = F)
+  write.csv(updater,paste0(dirOut,"/worlds/Scotland_natural/Baseline/Baseline_",yr,".csv"),row.names = F)
   
 }
+
 
 ### raw capitals & normalise function ------------------------------------------
 
@@ -128,7 +128,7 @@ landreform3$X.1 <- NULL
 landreform3<-landreform3[,c(1,19:24)]
 
 
-### V2 - changes to social capitals --------------------------------------------
+### Scotland_financial world - changes to social capitals (primarily financial to represent PES) -----
 
 # Multiple Benefits
 
@@ -657,10 +657,11 @@ for (yr in yrList){
 
 # same as V1
 
-### V1 - changes directly to natural capitals ---------------------------------
+### Scotland_natural changes directly to natural capitals ---------------------------------
 
 ### multiple benefits ----------------------------------------------------------
 
+baseline <- capitalsRAW
 MB <- capitalsRAW
 summary(MB$mixed.yc)
 
@@ -669,8 +670,6 @@ ggplot(MB)+
 ggplot(MB)+
   geom_tile(aes(x,y,fill=agro.yc))
 
-
-# V1 (thesis method)
 # increase actual natural capitals
 MB$mixed.yc <- MB$mixed.yc * 1.5
 # increase agroforestry capital
