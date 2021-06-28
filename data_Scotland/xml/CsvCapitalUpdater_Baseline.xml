@@ -1,12 +1,17 @@
 <updater class="org.volante.abm.update.CSVCapitalUpdater" X_COL="x" Y_COL="y" yearInFilename="true" reapplyPreviousFile="true"> -->
-  		<csvFile year="2015">worlds/Scotland_financial/Baseline/Baseline_capitals.csv</csvFile>
-  		<csvFile year="2016">worlds/Scotland_financial/Baseline/Baseline_2016.csv</csvFile>
-  		<csvFile year="2026">worlds/Scotland_financial/Baseline/Baseline_2026.csv</csvFile>
-   		<csvFile year="2036">worlds/Scotland_financial/Baseline/Baseline_2036.csv</csvFile>
-   		<csvFile year="2046">worlds/Scotland_financial/Baseline/Baseline_2046.csv</csvFile>
-   		<csvFile year="2056">worlds/Scotland_financial/Baseline/Baseline_2056.csv</csvFile>
-   		<csvFile year="2066">worlds/Scotland_financial/Baseline/Baseline_2066.csv</csvFile>
-   		<csvFile year="2076">worlds/Scotland_financial/Baseline/Baseline_2076.csv</csvFile>
-   		<csvFile year="2086">worlds/Scotland_financial/Baseline/Baseline_2086.csv</csvFile>
-   		<csvFile year="2096">worlds/Scotland_financial/Baseline/Baseline_2096.csv</csvFile>
+  		<csvFile year="2015">worlds/Scotland_natural/Baseline/Baseline_capitals.csv</csvFile>
+  		<csvFile year="2020">worlds/Scotland_natural/Baseline/Baseline_2016.csv</csvFile>
+  		<csvFile year="2025">worlds/Scotland_natural/Baseline/Baseline_2026.csv</csvFile>
+   		<csvFile year="2030">worlds/Scotland_natural/Baseline/Baseline_2036.csv</csvFile>
+   		<csvFile year="2045">worlds/Scotland_natural/Baseline/Baseline_2046.csv</csvFile>
+   		<csvFile year="2050">worlds/Scotland_natural/Baseline/Baseline_2056.csv</csvFile>
+   		<csvFile year="2055">worlds/Scotland_natural/Baseline/Baseline_2066.csv</csvFile>
+   		<csvFile year="2060">worlds/Scotland_natural/Baseline/Baseline_2076.csv</csvFile>
+   		<csvFile year="2065">worlds/Scotland_natural/Baseline/Baseline_2086.csv</csvFile>
+   		<csvFile year="2070">worlds/Scotland_natural/Baseline/Baseline_2096.csv</csvFile>
+   		<csvFile year="2075">worlds/Scotland_natural/Baseline/Baseline_2096.csv</csvFile>
+   		<csvFile year="2080">worlds/Scotland_natural/Baseline/Baseline_2096.csv</csvFile>
+   		<csvFile year="2085">worlds/Scotland_natural/Baseline/Baseline_2096.csv</csvFile>
+   		<csvFile year="2090">worlds/Scotland_natural/Baseline/Baseline_2096.csv</csvFile>
+   		<csvFile year="2095">worlds/Scotland_natural/Baseline/Baseline_2096.csv</csvFile>
 </updater>
