@@ -765,44 +765,22 @@ WW$mixed.yc[which(WW$mixed.yc > 0 & WW$phase3 > 0)] <- WW$mixed.yc[which(WW$mixe
 # increase n.conifer.yc in WEAG phase 3 areas by 50%
 WW$n.conifer.yc[which(WW$n.conifer.yc > 0 & WW$phase3 > 0)] <- WW$n.conifer.yc[which(WW$n.conifer.yc > 0 & WW$phase3 > 0)] * 1.5
 
-# normalise and write updaters
+dfWW <- baseline
+dfWW$year <- 2015
+head(dfWW)
+
 WW1 <- WW
 head(WW1)
+
 # for cell updater specs
-WW1$FR<-NULL
-WW1$BT<-NULL
+WW1$id<-NULL
 WW1$X <- NULL
-
-summary(WW1)
-WW1 <- data.frame(WW1[,c(1:5,29:30)], lapply(WW1[6:28], normalise))
-summary(WW1)
-WW1[is.na(WW1)] <- 0
-WW1$crop.productivity[which(WW1$agri.filter==1)]<-0 # remove cap where not suitable for crops
-# remove filter column
-WW1$agri.filter <- NULL
-# remove WEAG column
-WW1$phase3 <- NULL
-# invert deer density
-invert <- WW1$deer.density - 1
-z <- abs(invert)
-WW1$deer.density <- z
-
-WW1$id <- NULL
-WW1$X <- NULL
-#WW$FR <- WW$Agent
-WW1$FR <- AFT$AFT
-WW1$BT <- 0
 WW1$Agent <- NULL
-colnames(WW1)[1:2] <- c("x","y")
-#WW <- WW[,-c(27:35)]
+WW1$phase3 <- NULL
 
-WW1$FR
-WW1$FR <- str_replace_all(WW1$FR, "[[.]]", "")
-#write.csv(WW1, paste0(dirOut,"/worlds/Scotland/Wild_Woodlands/Wild_Woodlands_capitals.csv"), row.names = F)
+WW1$year <- 2020
 
-WW1 <- WW1[-c(27:28)]
-
-write.csv(WW1, paste0(dirOut,"/worlds/Scotland_natural/Wild_Woodlands/Wild_Woodlands_2020.csv"), row.names = F)
+dfWW <- rbind(dfWW,WW1)
 
 # introduce first stage of land reform and reduce grassland capital by a 1/4
 WW2 <- WW
@@ -837,34 +815,23 @@ for (i in c(1:nrows)) {
   }
 }
 
-# normalise and write updaters
 head(WW2)
 # for cell updater specs
-WW2$FR<-NULL
-WW2$BT<-NULL
+WW2$id<-NULL
+WW2$Agent<-NULL
 WW2$X <- NULL
+WW2$phase3 <- NULL
+WW2$status <- NULL
 
-summary(WW2)
-WW2 <- data.frame(WW2[,c(1:5,29)], lapply(WW2[6:28], normalise))
-summary(WW2)
-WW2[is.na(WW2)] <- 0
-WW2$crop.productivity[which(WW2$agri.filter==1)]<-0 # remove cap where not suitable for crops
+head(dfWW)
 
-# remove filter column
-WW2$agri.filter <- NULL
+for (yr in c(2025,2030,2035)){
+  
+  WW2$year <- yr
+  dfWW <- rbind(dfWW, WW2)
+  
+}
 
-# invert deer density
-invert <- WW2$deer.density - 1
-z <- abs(invert)
-WW2$deer.density <- z
-
-WW2 <- WW2[-c(1,4)]
-
-write.csv(WW2, paste0(dirOut,"/worlds/Scotland_natural/Wild_Woodlands/Wild_Woodlands_2025.csv"), row.names = F)
-write.csv(WW2, paste0(dirOut,"/worlds/Scotland_natural/Wild_Woodlands/Wild_Woodlands_2030.csv"), row.names = F)
-write.csv(WW2, paste0(dirOut,"/worlds/Scotland_natural/Wild_Woodlands/Wild_Woodlands_2035.csv"), row.names = F)
-
-# 2040
 # reduce deer density capital by 20%
 WW3 <- WW2
 
@@ -872,18 +839,17 @@ ggplot(WW)+
   geom_raster(mapping = aes(x=x, y=y, fill = deer.density))
 
 deer <- WW$deer.density - (WW$deer.density/100*20)
-deer <- normalise(deer)
+#deer <- normalise(deer)
 
 head(WW3)
 WW3$deer.density <- deer
 
-# invert deer density
-invert <- WW3$deer.density - 1
-z <- abs(invert)
-WW3$deer.density <- z
-
-write.csv(WW3, paste0(dirOut,"/worlds/Scotland_natural/Wild_Woodlands/Wild_Woodlands_2040.csv"), row.names = F)
-write.csv(WW3, paste0(dirOut,"/worlds/Scotland_natural/Wild_Woodlands/Wild_Woodlands_2045.csv"), row.names = F)
+for (yr in c(2040,2045)){
+  
+  WW3$year <- yr
+  dfWW <- rbind(dfWW, WW3)
+  
+}
 
 # introduce second stage of land reform and reduce grassland capital by half
 WW4 <- WW
@@ -924,28 +890,18 @@ WW4$deer.density <- WW4$deer.density - (WW4$deer.density/100*20)
 # normalise and write updaters
 head(WW4)
 # for cell updater specs
-WW4$FR<-NULL
-WW4$BT<-NULL
+WW4$id<-NULL
+WW4$Agent<-NULL
 WW4$X <- NULL
+WW4$phase3 <- NULL
+WW4$status <- NULL
 
-summary(WW4)
-WW4 <- data.frame(WW4[,c(1:5,29)], lapply(WW4[6:28], normalise))
-summary(WW4)
-WW4[is.na(WW4)] <- 0
-WW4$crop.productivity[which(WW4$agri.filter==1)]<-0 # remove cap where not suitable for crops
-
-# remove filter column
-WW4$agri.filter <- NULL
-
-# invert deer density
-invert <- WW4$deer.density - 1
-z <- abs(invert)
-WW4$deer.density <- z
-
-WW4 <- WW4[-c(1,4)]
-
-write.csv(WW4, paste0(dirOut,"/worlds/Scotland_natural/Wild_Woodlands/Wild_Woodlands_2050.csv"), row.names = F)
-write.csv(WW4, paste0(dirOut,"/worlds/Scotland_natural/Wild_Woodlands/Wild_Woodlands_2055.csv"), row.names = F)
+for (yr in c(2050,2055)){
+  
+  WW4$year <- yr
+  dfWW <- rbind(dfWW, WW4)
+  
+}
 
 # reduce deer density by 40% (another 20% on what it's been reduced already)
 WW5 <- WW4
@@ -954,20 +910,17 @@ ggplot(WW)+
   geom_raster(mapping = aes(x=x, y=y, fill = deer.density))
 
 deer <- WW$deer.density - (WW$deer.density/100*40)
-deer <- normalise(deer)
+#deer <- normalise(deer)
 
-head(WW5)
 WW5$deer.density <- deer
 
-# invert deer density
-invert <- WW5$deer.density - 1
-z <- abs(invert)
-WW5$deer.density <- z
+for (yr in c(2060,2065)){
+  
+  WW5$year <- yr
+  dfWW <- rbind(dfWW, WW5)
+  
+}
 
-write.csv(WW5, paste0(dirOut,"/worlds/Scotland_natural/Wild_Woodlands/Wild_Woodlands_2060.csv"), row.names = F)
-write.csv(WW5, paste0(dirOut,"/worlds/Scotland_natural/Wild_Woodlands/Wild_Woodlands_2065.csv"), row.names = F)
-
-# 2071
 # introduce land reform 3, reduce deer density by 50%
 WW6 <- WW
 
@@ -1004,32 +957,20 @@ for (i in c(1:nrows)) {
 # deer density
 WW6$deer.density <- WW6$deer.density - (WW6$deer.density/100*50)
 
-# normalise and write updaters
 head(WW6)
 # for cell updater specs
-WW6$FR<-NULL
-WW6$BT<-NULL
+WW6$id<-NULL
+WW6$Agent<-NULL
 WW6$X <- NULL
+WW6$phase3 <- NULL
+WW6$status <- NULL
 
-summary(WW6)
-WW6 <- data.frame(WW6[,c(1:5,29)], lapply(WW6[6:28], normalise))
-summary(WW6)
-WW6[is.na(WW6)] <- 0
-WW6$crop.productivity[which(WW6$agri.filter==1)]<-0 # remove cap where not suitable for crops
-
-# remove filter column
-WW6$agri.filter <- NULL
-
-# invert deer density
-invert <- WW6$deer.density - 1
-z <- abs(invert)
-WW6$deer.density <- z
-
-WW6 <- WW6[-c(1,4)]
-
-write.csv(WW6, paste0(dirOut,"/worlds/Scotland_natural/Wild_Woodlands/Wild_Woodlands_2070.csv"), row.names = F)
-write.csv(WW6, paste0(dirOut,"/worlds/Scotland_natural/Wild_Woodlands/Wild_Woodlands_2075.csv"), row.names = F)
-
+for (yr in c(2070,2075)){
+  
+  WW6$year <- yr
+  dfWW <- rbind(dfWW, WW6)
+  
+}
 
 WW7 <- WW6
 
@@ -1037,20 +978,63 @@ ggplot(WW)+
   geom_raster(mapping = aes(x=x, y=y, fill = deer.density))
 
 deer <- WW$deer.density - (WW$deer.density/100*80)
-deer <- normalise(deer)
-
-head(WW5)
+#deer <- normalise(deer)
 WW7$deer.density <- deer
 
-# invert deer density
-invert <- WW7$deer.density - 1
-z <- abs(invert)
-WW7$deer.density <- z
+for (yr in c(2080,2085,2090,2095)){
+  
+  WW7$year <- yr
+  dfWW <- rbind(dfWW, WW7)
+  
+}
 
-write.csv(WW7, paste0(dirOut,"/worlds/Scotland_natural/Wild_Woodlands/Wild_Woodlands_2080.csv"), row.names = F)
-write.csv(WW7, paste0(dirOut,"/worlds/Scotland_natural/Wild_Woodlands/Wild_Woodlands_2085.csv"), row.names = F)
-write.csv(WW7, paste0(dirOut,"/worlds/Scotland_natural/Wild_Woodlands/Wild_Woodlands_2090.csv"), row.names = F)
-write.csv(WW7, paste0(dirOut,"/worlds/Scotland_natural/Wild_Woodlands/Wild_Woodlands_2095.csv"), row.names = F)
+
+unique(dfWW$year)
+summary(dfWW)
+
+# use agri-filter
+dfWW$crop.productivity[which(dfWW$agri.filter==1)]<-0 # remove cap where not suitable for crops
+head(dfWW)
+
+# normalise
+dfWW <- data.frame(dfWW[,c(1:3,27:28)], lapply(dfWW[4:26], normalise))
+summary(dfWW)
+dfWW[is.na(dfWW)] <- 0
+
+#remove filter column
+dfWW$agri.filter <- NULL
+
+# invert deer density
+invert <- dfWW$deer.density - 1
+z <- abs(invert)
+dfWW$deer.density <- z
+
+
+# write to files
+yrList <- seq(2015,2095,by=5)
+
+for (yr in yrList){
+  
+  #yr <- yrList[1]
+  
+  WW <- filter(dfWW, year == yr)
+  
+  if (yr == 2015){
+    
+    WW$FR <- AFT$AFT
+    WW$FR <- str_replace_all(WW$FR, "[[.]]", "")
+    WW$year <- NULL
+    write.csv(WW, paste0(dirOut,"/worlds/Scotland_natural/Wild_Woodlands/Wild_Woodlands_capitals.csv"), row.names = F)
+    
+    
+  }else{
+    
+    WW$year <- NULL
+    write.csv(WW, paste0(dirOut,"/worlds/Scotland_natural/Wild_Woodlands/Wild_Woodlands_",yr,".csv"), row.names = F)
+    
+  }
+  
+}
 
 ### native networks  -----------------------------------------------------------
 
