@@ -766,6 +766,9 @@ WW$mixed.yc[which(WW$mixed.yc > 0 & WW$phase3 > 0)] <- WW$mixed.yc[which(WW$mixe
 # increase n.conifer.yc in WEAG phase 3 areas by 50%
 WW$n.conifer.yc[which(WW$n.conifer.yc > 0 & WW$phase3 > 0)] <- WW$n.conifer.yc[which(WW$n.conifer.yc > 0 & WW$phase3 > 0)] * 1.5
 
+baseline$X <- NULL
+baseline$id <- NULL
+baseline$Agent <- NULL
 dfWW <- baseline
 dfWW$year <- 2015
 head(dfWW)
@@ -1267,43 +1270,24 @@ for (i in c(1:nrows)) {
 
 head(WC1)
 # for cell updater specs
-WC1$FR<-NULL
-WC1$BT<-NULL
+WC1$id<-NULL
+WC1$Agent<-NULL
 WC1$X <- NULL
+WC1$status <- NULL
 
-summary(WC1)
-WC1 <- data.frame(WC1[,c(1:5,29)], lapply(WC1[6:28], normalise))
-summary(WC1)
-WC1[is.na(WC1)] <- 0
-WC1$crop.productivity[which(WC1$agri.filter==1)]<-0 # remove cap where not suitable for crops
-#remove filter column
-WC1$agri.filter <- NULL
+dfWC <- baseline
+dfWC$year <- 2015
+head(dfWC)
 
-# invert deer density
-invert <- WC1$deer.density - 1
-z <- abs(invert)
-WC1$deer.density <- z
+for (yr in c(2020,2025,2030)){
+  
+  WC1$year <- yr
+  dfWC <- rbind(dfWC, WC1)
+  
+}
 
-WC1$id <- NULL
-#WC1$FR <- WC1$Agent
-WC1$FR <- AFT$AFT
-WC1$BT <- 0
-WC1$Agent <- NULL
-colnames(WC1)[1:2] <- c("x","y")
-#WC1 <- WC1[,-c(27:35)]
-
-WC1$FR
-WC1$FR <- str_replace_all(WC1$FR, "[[.]]", "")
-
-write.csv(WC1, paste0(dirOut,"/worlds/Scotland/Woodland_Culture/Woodland_Culture_capitals.csv"), row.names = F)
-
-WC1 <- WC1[-c(27:28)]
-
-write.csv(WC1, paste0(dirOut,"/worlds/Scotland/Woodland_Culture/Woodland_Culture_2016.csv"), row.names = F)
-write.csv(WC1, paste0(dirOut,"/worlds/Scotland/Woodland_Culture/Woodland_Culture_2026.csv"), row.names = F)
 
 # first stage land reform
-
 WC2 <- WC
 
 ggplot(WC2)+
@@ -1326,27 +1310,21 @@ for (i in c(1:nrows)) {
 }
 
 head(WC2)
+
 # for cell updater specs
-WC2$FR<-NULL
-WC2$BT<-NULL
+WC2$id<-NULL
+WC2$Agent<-NULL
 WC2$X <- NULL
+WC2$status <- NULL
 
-summary(WC2)
-WC2 <- data.frame(WC2[,c(1:5,29)], lapply(WC2[6:28], normalise))
-summary(WC2)
-WC2[is.na(WC2)] <- 0
-WC2$crop.productivity[which(WC2$agri.filter==1)]<-0 # remove cap where not suitable for crops
-#remove filter column
-WC2$agri.filter <- NULL
 
-# invert deer density
-invert <- WC2$deer.density - 1
-z <- abs(invert)
-WC2$deer.density <- z
+for (yr in c(2035,2040)){
+  
+  WC2$year <- yr
+  dfWC <- rbind(dfWC, WC2)
+  
+}
 
-WC2 <- WC2[-c(1,4)]
-
-write.csv(WC2, paste0(dirOut,"/worlds/Scotland/Woodland_Culture/Woodland_Culture_2036.csv"), row.names = F)
 
 # reduce grassland capital by 1/2
 WC3 <- WC
@@ -1369,25 +1347,18 @@ WC3$lessNAT <- landreform$lessNAT
 
 head(WC3)
 # for cell updater specs
-WC3$FR<-NULL
-WC3$BT<-NULL
+WC3$id<-NULL
+WC3$Agent<-NULL
 WC3$X <- NULL
+WC3$status <- NULL
 
-WC3 <- data.frame(WC3[,c(1:5,29)], lapply(WC3[6:28], normalise))
-summary(WC3)
-WC3[is.na(WC3)] <- 0
-WC3$crop.productivity[which(WC3$agri.filter==1)]<-0 # remove cap where not suitable for crops
-#remove filter column
-WC3$agri.filter <- NULL
+for (yr in c(2045,2050)){
+  
+  WC3$year <- yr
+  dfWC <- rbind(dfWC, WC3)
+  
+}
 
-# invert deer density
-invert <- WC3$deer.density - 1
-z <- abs(invert)
-WC3$deer.density <- z
-
-WC3 <- WC3[-c(1,4)]
-
-write.csv(WC3, paste0(dirOut,"/worlds/Scotland/Woodland_Culture/Woodland_Culture_2046.csv"), row.names = F)
 
 # second stage land reform
 
@@ -1411,29 +1382,20 @@ for (i in c(1:nrows)) {
 
 head(WC4)
 # for cell updater specs
-WC4$FR<-NULL
-WC4$BT<-NULL
+WC4$id<-NULL
+WC4$Agent<-NULL
 WC4$X <- NULL
+WC4$status <- NULL
 
-summary(WC4)
-WC4 <- data.frame(WC4[,c(1:5,29)], lapply(WC4[6:28], normalise))
-summary(WC4)
-WC4[is.na(WC4)] <- 0
-WC4$crop.productivity[which(WC4$agri.filter==1)]<-0 # remove cap where not suitable for crops
-#remove filter column
-WC4$agri.filter <- NULL
+for (yr in c(2055,2060)){
+  
+  WC4$year <- yr
+  dfWC <- rbind(dfWC, WC4)
+  
+}
 
-# invert deer density
-invert <- WC4$deer.density - 1
-z <- abs(invert)
-WC4$deer.density <- z
-
-WC4 <- WC4[-c(1,4)]
-
-write.csv(WC4, paste0(dirOut,"/worlds/Scotland/Woodland_Culture/Woodland_Culture_2056.csv"), row.names = F)
 
 # reduce grassland capital by 3/4
-
 WC5 <- WC
 
 WC5$moreNW <- landreform2$moreNW
@@ -1454,29 +1416,19 @@ for (i in c(1:nrows)) {
 
 head(WC5)
 # for cell updater specs
-WC5$FR<-NULL
-WC5$BT<-NULL
+WC5$id<-NULL
+WC5$Agent<-NULL
 WC5$X <- NULL
+WC5$status <- NULL
 
-summary(WC5)
-WC5 <- data.frame(WC5[,c(1:5,29)], lapply(WC5[6:28], normalise))
-summary(WC5)
-WC5[is.na(WC5)] <- 0
-WC5$crop.productivity[which(WC5$agri.filter==1)]<-0 # remove cap where not suitable for crops
-#remove filter column
-WC5$agri.filter <- NULL
-
-# invert deer density
-invert <- WC5$deer.density - 1
-z <- abs(invert)
-WC5$deer.density <- z
-
-WC5 <- WC5[-c(1,4)]
-
-write.csv(WC5, paste0(dirOut,"/worlds/Scotland/Woodland_Culture/Woodland_Culture_2066.csv"), row.names = F)
+for (yr in c(2065,2070)){
+  
+  WC5$year <- yr
+  dfWC <- rbind(dfWC, WC5)
+  
+}
 
 # third stage land reform
-
 WC6 <- WC
 
 WC6$moreNW <- landreform3$moreNW
@@ -1497,26 +1449,61 @@ for (i in c(1:nrows)) {
 
 head(WC6)
 # for cell updater specs
-WC6$FR<-NULL
-WC6$BT<-NULL
+WC6$id<-NULL
+WC6$Agent<-NULL
 WC6$X <- NULL
+WC6$status <- NULL
 
-summary(WC6)
-WC6 <- data.frame(WC6[,c(1:5,29)], lapply(WC6[6:28], normalise))
-summary(WC6)
-WC6[is.na(WC6)] <- 0
-WC6$crop.productivity[which(WC6$agri.filter==1)]<-0 # remove cap where not suitable for crops
+for (yr in c(2075,2080,2085,2090,2095)){
+  
+  WC6$year <- yr
+  dfWC <- rbind(dfWC, WC6)
+  
+}
+
+unique(dfWC$year)
+summary(dfWC)
+
+# use agri-filter
+dfWC$crop.productivity[which(dfWC$agri.filter==1)]<-0 # remove cap where not suitable for crops
+head(dfWC)
+
+# normalise
+dfWC <- data.frame(dfWC[,c(1:3,27:28)], lapply(dfWC[4:26], normalise))
+summary(dfWC)
+dfWC[is.na(dfWC)] <- 0
+
 #remove filter column
-WC6$agri.filter <- NULL
+dfWC$agri.filter <- NULL
 
 # invert deer density
-invert <- WC6$deer.density - 1
+invert <- dfWC$deer.density - 1
 z <- abs(invert)
-WC6$deer.density <- z
+dfWC$deer.density <- z
 
-WC6 <- WC6[-c(1,4)]
 
-write.csv(WC6, paste0(dirOut,"/worlds/Scotland/Woodland_Culture/Woodland_Culture_2076.csv"), row.names = F)
-write.csv(WC6, paste0(dirOut,"/worlds/Scotland/Woodland_Culture/Woodland_Culture_2086.csv"), row.names = F)
-write.csv(WC6, paste0(dirOut,"/worlds/Scotland/Woodland_Culture/Woodland_Culture_2096.csv"), row.names = F)
+# write to files
+yrList <- seq(2015,2095,by=5)
 
+for (yr in yrList){
+  
+  #yr <- yrList[1]
+  
+  WC <- filter(dfWC, year == yr)
+  
+  if (yr == 2015){
+    
+    WC$FR <- AFT$AFT
+    WC$FR <- str_replace_all(WC$FR, "[[.]]", "")
+    WC$year <- NULL
+    write.csv(WC, paste0(dirOut,"/worlds/Scotland_natural/Woodland_Culture/Woodland_Culture_capitals.csv"), row.names = F)
+    
+    
+  }else{
+    
+    WC$year <- NULL
+    write.csv(WC, paste0(dirOut,"/worlds/Scotland_natural/Woodland_Culture/Woodland_Culture_",yr,".csv"), row.names = F)
+    
+  }
+  
+}
