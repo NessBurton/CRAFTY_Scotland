@@ -1158,44 +1158,63 @@ for (i in c(1:nrows)) {
   }
 }
 
+dfGG <- baseline
+dfGG$year <- 2015
+head(dfGG)
+
 head(GG)
 # for cell updater specs
-GG$FR<-NULL
-GG$BT<-NULL
+GG$id<-NULL
+GG$Agent<-NULL
 GG$X <- NULL
+GG$phase3 <- NULL
+GG$status <- NULL
 
-summary(GG)
-GG <- data.frame(GG[,c(1:5,29)], lapply(GG[6:28], normalise))
-summary(GG)
-GG[is.na(GG)] <- 0
-GG$crop.productivity[which(GG$agri.filter==1)]<-0 # remove cap where not suitable for crops
+for (yr in yrList[-1]){
+  
+  GG$year <- yr
+  dfGG <- rbind(dfGG,GG)
+  
+}
+
+summary(dfGG);unique(dfGG$year)
+
+dfGG$crop.productivity[which(dfGG$agri.filter==1)]<-0 # remove cap where not suitable for crops
+head(dfGG)
+dfGG <- data.frame(dfGG[,c(1:3,27:28)], lapply(dfGG[4:26], normalise))
+summary(dfGG)
+dfGG[is.na(dfGG)] <- 0
+
 #remove filter column
-GG$agri.filter <- NULL
+dfGG$agri.filter <- NULL
 
 # invert deer density
-invert <- GG$deer.density - 1
+invert <- dfGG$deer.density - 1
 z <- abs(invert)
-GG$deer.density <- z
+dfGG$deer.density <- z
 
-GG$id <- NULL
-#GG$FR <- GG$Agent
-GG$FR <- AFT$AFT
-GG$BT <- 0
-GG$Agent <- NULL
-colnames(GG)[1:2] <- c("x","y")
-#GG <- GG[,-c(27:35)]
-
-GG$FR
-GG$FR <- str_replace_all(GG$FR, "[[.]]", "")
-
-
-write.csv(GG, paste0(dirOut,"/worlds/Scotland/Green_Gold/Green_Gold_capitals.csv"), row.names = F)
-
-GG <- GG[-c(27:28)]
+yrList <- seq(2015,2095,by=5)
 
 for (yr in yrList){
   
-  write.csv(GG, paste0(dirOut,"/worlds/Scotland/Green_Gold/Green_Gold_",yr,".csv"), row.names = F)
+  #yr <- yrList[1]
+  
+  GG <- filter(dfGG, year == yr)
+  
+  if (yr == 2015){
+    
+    GG$FR <- AFT$AFT
+    GG$FR <- str_replace_all(GG$FR, "[[.]]", "")
+    GG$year <- NULL
+    write.csv(GG, paste0(dirOut,"/worlds/Scotland_natural/Green_Gold/Green_Gold_capitals.csv"), row.names = F)
+    
+    
+  }else{
+    
+    GG$year <- NULL
+    write.csv(GG, paste0(dirOut,"/worlds/Scotland_natural/Green_Gold/Green_Gold_",yr,".csv"), row.names = F)
+    
+  }
   
 }
 
