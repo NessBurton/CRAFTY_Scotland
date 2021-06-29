@@ -7,6 +7,7 @@
 
 library(tidyverse)
 library(ggplot2)
+library(viridis)
 
 ### directories ----------------------------------------------------------------
 
@@ -1057,44 +1058,62 @@ NN$n.broad.consv[which(NN$n.broad.consv > 0 & NN$connect >= 0.5)] <- NN$n.broad.
 
 NN$mixed.yc[which(NN$mixed.yc > 0 & NN$connect >= 0.5)] <- NN$mixed.yc[which(NN$mixed.yc > 0 & NN$connect >= 0.5)] * 1.5
 
+dfNN <- baseline
+dfNN$year <- 2015
+head(dfNN)
+
 head(NN)
 # for cell updater specs
-NN$FR<-NULL
-NN$BT<-NULL
+NN$id<-NULL
+NN$Agent<-NULL
 NN$X <- NULL
+NN$connect <- NULL
 
-summary(NN)
-NN <- data.frame(NN[,c(1:5,29)], lapply(NN[6:28], normalise))
-summary(NN)
-NN[is.na(NN)] <- 0
-NN$crop.productivity[which(NN$agri.filter==1)]<-0 # remove cap where not suitable for crops
+for (yr in yrList[-1]){
+  
+  NN$year <- yr
+  dfNN <- rbind(dfNN,NN)
+  
+}
+
+summary(dfNN);unique(dfNN$year)
+
+dfNN$crop.productivity[which(dfNN$agri.filter==1)]<-0 # remove cap where not suitable for crops
+head(dfNN)
+dfNN <- data.frame(dfNN[,c(1:3,27:28)], lapply(dfNN[4:26], normalise))
+summary(dfNN)
+dfNN[is.na(dfNN)] <- 0
+
 #remove filter column
-NN$agri.filter <- NULL
+dfNN$agri.filter <- NULL
 
 # invert deer density
-invert <- NN$deer.density - 1
+invert <- dfNN$deer.density - 1
 z <- abs(invert)
-NN$deer.density <- z
+dfNN$deer.density <- z
 
-NN$id <- NULL
-NN$X <- NULL
-#WW$FR <- WW$Agent
-NN$FR <- AFT$AFT
-NN$BT <- 0
-NN$Agent <- NULL
-colnames(NN)[1:2] <- c("x","y")
-#WW <- WW[,-c(27:35)]
-
-NN$FR
-NN$FR <- str_replace_all(NN$FR, "[[.]]", "")
-
-write.csv(NN, paste0(dirOut,"/worlds/Scotland/Native_Networks/Native_Networks_capitals.csv"), row.names = F)
-
-NN <- NN[-c(27:28)]
+yrList <- seq(2015,2095,by=5)
 
 for (yr in yrList){
   
-  write.csv(NN, paste0(dirOut,"/worlds/Scotland/Native_Networks/Native_Networks_",yr,".csv"), row.names = F)
+  #yr <- yrList[1]
+  
+  NN <- filter(dfNN, year == yr)
+  
+  if (yr == 2015){
+    
+    NN$FR <- AFT$AFT
+    NN$FR <- str_replace_all(NN$FR, "[[.]]", "")
+    NN$year <- NULL
+    write.csv(NN, paste0(dirOut,"/worlds/Scotland_natural/Native_Networks/Native_Networks_capitals.csv"), row.names = F)
+    
+    
+  }else{
+    
+    NN$year <- NULL
+    write.csv(NN, paste0(dirOut,"/worlds/Scotland_natural/Native_Networks/Native_Networks_",yr,".csv"), row.names = F)
+    
+  }
   
 }
 
