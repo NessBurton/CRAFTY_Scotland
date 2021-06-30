@@ -133,7 +133,7 @@ getCSV <- function(filename_in, location = "Dropbox") {
 }
 
 
-default_df <- getCSV(getFname("Scotland_financial","V2_June21","Green_Gold","2015"))
+default_df <- getCSV(getFname("Scotland_natural","V2_June21","Green_Gold","2015"))
 
 ### create spatial data frame --------------------------------------------------
 

@@ -16,7 +16,7 @@ library(wesanderson)
 ### directories ----------------------------------------------------------------
 
 wd <- "D:/"
-dirResults <- paste0(wd,"CRAFTY_Scotland/output/V2_June21/")
+dirResults <- paste0(wd,"CRAFTY_Scotland/output/Scotland_natural/V2_June21/")
 dirMetrics <- paste0(wd,"CRAFTY_Scotland/vision_metrics")
 
 ### palettes -------------------------------------------------------------------
@@ -53,7 +53,7 @@ lu.colours<-c("mixed.estate" = "#C2A5CF",
               "marginal" ="lightgrey")
 
 
-dateRun <- "14June"
+dateRun <- "29June"
 
 ### Visions --------------------------------------------------------------------
 
