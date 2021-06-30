@@ -13,7 +13,7 @@ library(ggplot2)
 wd <- "~/eclipse-workspace/CRAFTY_Scotland/"
 dirData <- paste0(wd,"data_raw")
 dirOut <- paste0(wd,"data_Scotland/")
-dataDisk <- "D:/CRAFTY_Scotland/output/V2_June21/"
+dataDisk <- "D:/CRAFTY_Scotland/output/Scotland_natural/V2_June21/"
 
 ### inital demand (supply after 1 yr, baseline run)
 
