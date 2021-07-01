@@ -1,0 +1,3 @@
+<updater class="org.volante.abm.update.CSVCapitalUpdater" X_COL="x" Y_COL="y" yearInFilename="true" reapplyPreviousFile="true"> -->
+  		<csvFile year="2015">worlds/Scotland_natural/Spin-up/Spin-up_capitals.csv</csvFile>
+</updater>

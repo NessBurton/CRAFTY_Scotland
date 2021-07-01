@@ -48,6 +48,7 @@ crop.service<-rep(cr,length(Year))
 employment<-rep(e,length(Year))
 bdemand<-data.frame(Year,softwood.timber,hardwood.timber,biodiversity,carbon,flood.regulation,recreation,livestock,crop.service,employment)
 write.csv(bdemand, paste0(dirOut,"worlds/Scotland_natural/Baseline/Demand_Baseline.csv"))
+write.csv(bdemand, paste0(dirOut,"worlds/Scotland_natural/Spin-up/Demand_Spin-up.csv"))
 
 #1 increase 100%
 #2 increase 90%

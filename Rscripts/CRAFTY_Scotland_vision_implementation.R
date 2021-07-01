@@ -63,6 +63,13 @@ for (yr in yrList){
   
 }
 
+### spin-up test capitals
+
+head(baseline)
+spin_up <- baseline
+spin_up$FR <- NA
+
+write.csv(spin_up,paste0(dirOut,"/worlds/Scotland_natural/Spin-up/Spin-up_capitals.csv"),row.names = F)
 
 ### raw capitals & normalise function ------------------------------------------
 
