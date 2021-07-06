@@ -13,11 +13,27 @@ library(ggplot2)
 wd <- "~/eclipse-workspace/CRAFTY_Scotland/"
 dirData <- paste0(wd,"data_raw")
 dirOut <- paste0(wd,"data_Scotland/")
-dataDisk <- "D:/CRAFTY_Scotland/output/Scotland_natural/V2_June21/"
+dataDisk <- "D:/CRAFTY_Scotland/output/"
 
+### constant demand - to get initial demand
+
+Year <- 2015
+softwood.timber<-100
+hardwood.timber<-100
+biodiversity<-100
+carbon<-100
+flood.regulation<-100
+recreation<-100
+livestock<-100
+crop.service<-100
+employment<-100
+idemand<-data.frame(Year,softwood.timber,hardwood.timber,biodiversity,carbon,flood.regulation,recreation,livestock,crop.service,employment)
+write.csv(idemand, paste0(dirOut,"worlds/Scotland_natural/Baseline/Demand_Baseline.csv"))
+
+# run baseline scenario for a vew years to get initial supply
 ### inital demand (supply after 1 yr, baseline run)
 
-demandInitial <- read.csv(paste0(dataDisk,"Baseline/Baseline-0-99-Scotland_natural-AggregateServiceDemand.csv"))
+demandInitial <- read.csv(paste0(dataDisk,"Thesis/Baseline/Baseline-0-99-Scotland_natural-AggregateServiceDemand.csv"))
 
 ### calc service curves (inital supply over 1000?)
 
@@ -47,8 +63,8 @@ livestock<-rep(l,length(Year))
 crop.service<-rep(cr,length(Year))
 employment<-rep(e,length(Year))
 bdemand<-data.frame(Year,softwood.timber,hardwood.timber,biodiversity,carbon,flood.regulation,recreation,livestock,crop.service,employment)
-write.csv(bdemand, paste0(dirOut,"worlds/Scotland_natural/Baseline/Demand_Baseline.csv"))
-write.csv(bdemand, paste0(dirOut,"worlds/Scotland_natural/Spin-up/Demand_Spin-up.csv"))
+write.csv(bdemand, paste0(dirOut,"worlds/Scotland_natural/Baseline/Demand_Baseline.csv"),row.names = F)
+write.csv(bdemand, paste0(dirOut,"worlds/Scotland_natural/Spin-up/Demand_Spin-up.csv"),row.names = F)
 
 #1 increase 100%
 #2 increase 90%

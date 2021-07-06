@@ -20,10 +20,10 @@ dirWorking<- "~/eclipse-workspace/CRAFTY_Scotland"
 dataDisk <- "D:/CRAFTY_Scotland"
 
 dirCRAFTYInput <- path.expand(paste0(dirWorking, "/data_Scotland/"))
-dirCRAFTYOutput <- path.expand(paste0(dirWorking, "/output"))
+dirCRAFTYOutput <- path.expand(paste0(dataDisk, "/output"))
 #dirCRAFTYOutput <- path.expand(paste0(dataDisk, "/output"))
 
-dirFigs <- path.expand(paste0(dirWorking, "/figures"))
+#dirFigs <- path.expand(paste0(dirWorking, "/figures"))
 
 setwd(dirWorking)
 
@@ -235,9 +235,9 @@ if (!exists(x = "CRAFTY_jobj")) {   # not to create CRAFTY_jobj multiple times
 
 for (scenario in scenario.filenames){
   
-  scenario <- scenario.filenames[2]
+  scenario <- scenario.filenames[1]
   scenario.filename <- scenario
-  scenario.split <- paste0(strsplit(scenario, "[_]")[[1]][2],"_",strsplit(scenario, "[_]")[[1]][3])
+  scenario.split <- paste0(strsplit(scenario, "[_]")[[1]][2])#,"_",strsplit(scenario, "[_]")[[1]][3])
   
   print(paste0("============CRAFTY JAVA-R API: Running for scenario = ", scenario.split))
   
