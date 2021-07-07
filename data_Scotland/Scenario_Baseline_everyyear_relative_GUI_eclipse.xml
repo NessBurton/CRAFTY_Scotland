@@ -1,5 +1,5 @@
-<scenario startTick="2015" endTick="2100" world="Scotland_financial"
- version="V2_June21" 
+<scenario startTick="2015" endTick="2100" world="Scotland_natural"
+ version="BehaviouralBaseline" 
   scenario="Baseline">
   <capitals class="org.volante.abm.serialization.CSVCapitalLoader" file="csv/Capitals.csv" indexed="true"/>
   <services class="org.volante.abm.serialization.CSVServiceLoader" file="csv/Services.csv" indexed="true"/>

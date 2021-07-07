@@ -106,7 +106,7 @@ if (parallelize) {
 
 foreach(s.idx = 1:n.scenario, .errorhandling = "stop",.packages = c("doSNOW"), .verbose = T) %dopar% {
   
-  s.idx <- 1
+  #s.idx <- 1
   scenario <- scenarios[s.idx]
   
   # must change to the output folder for getting the output files correctly
@@ -136,7 +136,7 @@ foreach(s.idx = 1:n.scenario, .errorhandling = "stop",.packages = c("doSNOW"), .
   # Two parameter sets
   foreach(p.idx = 1:n.paramset, .errorhandling = "stop", .verbose = T) %do% { 
     
-    p.idx <- 1
+    #p.idx <- 1
     paramset <-  paramsets[p.idx]
     scenario.filename <- paste0(scenario.filenames[s.idx], "_", paramset, ".xml") 
   
