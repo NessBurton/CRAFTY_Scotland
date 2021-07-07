@@ -30,10 +30,10 @@ employment<-100
 idemand<-data.frame(Year,softwood.timber,hardwood.timber,biodiversity,carbon,flood.regulation,recreation,livestock,crop.service,employment)
 write.csv(idemand, paste0(dirOut,"worlds/Scotland_natural/Baseline/Demand_Baseline.csv"))
 
-# run baseline scenario for a vew years to get initial supply
+# run baseline scenario for a few years to get initial supply
 ### inital demand (supply after 1 yr, baseline run)
 
-demandInitial <- read.csv(paste0(dataDisk,"Thesis/Baseline/Baseline-0-99-Scotland_natural-AggregateServiceDemand.csv"))
+demandInitial <- read.csv(paste0(dataDisk,"BehaviouralBaseline/Baseline/Baseline-0-99-Scotland_natural-AggregateServiceDemand.csv"))
 
 ### calc service curves (inital supply over 1000?)
 
@@ -73,7 +73,7 @@ write.csv(bdemand, paste0(dirOut,"worlds/Scotland_natural/Spin-up/Demand_Spin-up
 #5 increase 60%
 
 
-# V2 increase in 2020 and keep at same level -----------------------------------
+# increase in 2020 and keep at same level -----------------------------------
 
 # Green Gold demand
 Year<-c(2015:2100)

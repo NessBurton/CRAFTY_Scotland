@@ -1,29 +1,29 @@
 <competition class="org.volante.abm.example.NormalisedCurveCompetitivenessModel" removeNegative = 'true'>
 		<curve service="softwood.timber">
-			<curve class="com.moseph.modelutils.curve.LinearFunction" a="0.0" b="0.0005775783" />
+			<curve class="com.moseph.modelutils.curve.LinearFunction" a="0.0" b="0.001083272" />
 		</curve>
 		<curve service="hardwood.timber">
-			<curve class="com.moseph.modelutils.curve.LinearFunction" a="0.0" b="0.009977053" />
+			<curve class="com.moseph.modelutils.curve.LinearFunction" a="0.0" b="0.006480503" />
 		</curve>
 		<curve service="biodiversity">
-			<curve class="com.moseph.modelutils.curve.LinearFunction" a="0.0" b="0.00002622478" />
+			<curve class="com.moseph.modelutils.curve.LinearFunction" a="0.0" b="0.00007301401" />
 		</curve>
 		<curve service="carbon">
-			<curve class="com.moseph.modelutils.curve.LinearFunction" a="0.0" b="0.00004507469" />
+			<curve class="com.moseph.modelutils.curve.LinearFunction" a="0.0" b="0.00008086158" />
 		</curve>
 		<curve service="flood.regulation">
-			<curve class="com.moseph.modelutils.curve.LinearFunction" a="0.0" b="0.0001557077" />
+			<curve class="com.moseph.modelutils.curve.LinearFunction" a="0.0" b="0.0002592943" />
 		</curve>
 		<curve service="recreation">
-			<curve class="com.moseph.modelutils.curve.LinearFunction" a="0.0" b="0.000103335" />
+			<curve class="com.moseph.modelutils.curve.LinearFunction" a="0.0" b="0.0003390934" />
 		</curve>
 		<curve service="livestock">
-			<curve class="com.moseph.modelutils.curve.LinearFunction" a="0.0" b="0.001076762" />
+			<curve class="com.moseph.modelutils.curve.LinearFunction" a="0.0" b="0.0002604399" />
 		</curve>
 		<curve service="crop.service">
-			<curve class="com.moseph.modelutils.curve.LinearFunction" a="0.0" b="0.0006312187" />
+			<curve class="com.moseph.modelutils.curve.LinearFunction" a="0.0" b="0.0004887273" />
 		</curve>
 		<curve service="employment">
-			<curve class="com.moseph.modelutils.curve.LinearFunction" a="0.0" b="0.0001501414" />
+			<curve class="com.moseph.modelutils.curve.LinearFunction" a="0.0" b="0.0003669473" />
 		</curve>
 	</competition>
