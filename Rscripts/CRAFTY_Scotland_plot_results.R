@@ -9,14 +9,15 @@ library(vroom)
 library(tidyverse)
 library(ggplot2)
 library(reshape2)
-library(ggplot2)
 library(spatstat)
 library(wesanderson)
+library(foreach)
+library(doSNOW)
 
 ### directories ----------------------------------------------------------------
 
 wd <- "D:/"
-dirResults <- paste0(wd,"CRAFTY_Scotland/output/Scotland_natural/V2_June21/")
+dirResults <- paste0(wd,"CRAFTY_Scotland/output/V2_June21/")
 dirMetrics <- paste0(wd,"CRAFTY_Scotland/vision_metrics")
 
 ### palettes -------------------------------------------------------------------
@@ -32,7 +33,7 @@ aftColours <- c("prodnnconifer" = "#005A32",
                 "multinnb" = "#41AB5D",
                 "consvnative" = "#1B9E77",
                 "agroforestry" = "#D8B70A",
-                "intarable" = "darkkhaki",#9C964A", 
+                "intarable" = "darkkhaki", #9C964A", 
                 "extarable" = "khaki4", #C3B091", 
                 "intpastoral" = "#A2A475", 
                 "extpastoral" = "#A6DBA0", #"grey65", 
@@ -53,21 +54,34 @@ lu.colours<-c("mixed.estate" = "#C2A5CF",
               "marginal" ="lightgrey")
 
 
-dateRun <- "29June"
+dateRun <- "07July"
 
 ### Visions --------------------------------------------------------------------
 
 lstVisions <- c("Baseline","Green_Gold","Multiple_Benefits","Native_Networks","Wild_Woodlands","Woodland_Culture")
 
-for (vision in lstVisions){
+n.scenario <- length(lstVisions)
+
+parallelize <- TRUE # VM has 8 cores and 32GB dynamic RAM
+if (parallelize) { 
+  # 6 cores - 1 per scenario
+  n_thread <- 6 # detectCores() # the current version uses 5 GB per process, therefore max 5-6 threads if 32 GB memory, 3 if 16 GB memory, and no parallelisation recommended if 8 GB. 
+  cl <- makeCluster(n_thread)
+  registerDoSNOW(cl)
+  
+}
+
+foreach(s.idx = 1:n.scenario, .errorhandling = "stop",.packages = c("doSNOW", "tidyverse"), .verbose = T) %dopar% {
+#for (vision in lstVisions){
   
   #vision <- lstVisions[6]
+  vision <- lstVisions[s.idx]
   
   dfVision <-
     list.files(path = paste0(dirResults,vision,"/"),
                pattern = "*.csv", 
                full.names = T) %>% 
-    grep("financial-Cell-", value=TRUE, .) %>% 
+    grep("natural-Cell-", value=TRUE, .) %>% 
     #map_df(~read_csv(., col_types = cols(.default = "c")))
     map_df(~read.csv(.))
   
@@ -92,6 +106,14 @@ for (vision in lstVisions){
   dfVision$Capital.region[which(dfVision$Capital.region==5)]<-"Highlands"
   dfVision$Capital.region[which(dfVision$Capital.region==6)]<-"Islands"
   dfVision$Capital.region <- factor(dfVision$Capital.region)
+  
+  # use baseline to mask out urban areas & waterbodies
+  baseline <- read.csv(paste0(dirResults,"Baseline/Baseline-0-99-Scotland_natural-Cell-2015.csv"))
+  mask <- baseline$Agent
+  mask <- rep(mask, 86)
+  
+  dfVision$mask <- mask
+  dfVision$Agent[which(dfVision$mask == "waterurban")] <- "waterurban"
   
   # reclassify agent types to produce simplified land use categories
   dfVision$reclass <- NA
@@ -320,6 +342,7 @@ for (vision in lstVisions){
   rm(dfVision)
   
 }
+stopCluster(cl)   
 
 
 ### plots ----------------------------------------------------------------------
@@ -375,25 +398,29 @@ dfAll %>%
 
 head(dfAll)
 
+filter(dfAll, year_id == 2032) # 21% target
+filter(dfAll, year_id == 2050) # 25% target
+
 dfAll %>% 
-  filter(reclass!='urban.&.waterbodies') %>% 
-  group_by(vision, Tick, reclass) %>% 
-  summarise(count = n()) %>% 
+  #filter(reclass!='urban.&.waterbodies') %>% 
+  pivot_longer(native.wood.ext:ext.agri.ext, names_to = "Land.use", values_to = "Percentage") %>% 
+  #group_by(vision, year_id, reclass) %>% 
+  #summarise(count = n()) %>% 
   ggplot()+
-  geom_point(mapping = aes(x=Tick, y=count, col=reclass))+
+  geom_point(mapping = aes(x=year_id, y=Percentage, col=Land.use))+
   theme_bw()+
   facet_wrap(~vision)+
-  scale_fill_manual(name = "Land Management Type", values=lu.colours,
-                    labels = c("mixed.estate" = "Mixed estate",
-                               "traditional.sporting.management" = "Sporting estate",
-                               "conservation.management" = "Conservation",
-                               "extensive.agriculture" = "Extensive agriculture",
-                               "intensive.agriculture" = "Intensive agriculture", 
-                               "mixed.woodland" = "Mixed woodland",
-                               "native.woodland" = "Native woodland",
-                               "non.native.woodland" = "Non-native woodland",
-                               "marginal" = "Marginal"))+
-  labs( x = "Year", y = "Extent (square km)")+
+  # scale_fill_manual(name = "Land Management Type", values=lu.colours,
+  #                   labels = c("mixed.estate" = "Mixed estate",
+  #                              "traditional.sporting.management" = "Sporting estate",
+  #                              "conservation.management" = "Conservation",
+  #                              "extensive.agriculture" = "Extensive agriculture",
+  #                              "intensive.agriculture" = "Intensive agriculture", 
+  #                              "mixed.woodland" = "Mixed woodland",
+  #                              "native.woodland" = "Native woodland",
+  #                              "non.native.woodland" = "Non-native woodland",
+  #                              "marginal" = "Marginal"))+
+  labs( x = "Year", y = "Extent (%)")+
   theme(axis.title.x = element_text(family = "Avenir", size=10),
         axis.title.y = element_text(family = "Avenir", size = 10),
         axis.text.x = element_text(family = "Avenir",color="black", size=7),
