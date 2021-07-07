@@ -16,7 +16,7 @@ library(tictoc)
 
 ### directories/ file paths ----------------------------------------------------
 
-dirWorking<- "~/eclipse-workspace/CRAFTY_Scotland"
+dirWorking <- "~/eclipse-workspace/CRAFTY_Scotland"
 dataDisk <- "D:/CRAFTY_Scotland"
 
 dirCRAFTYInput <- path.expand(paste0(dirWorking, "/data_Scotland/"))
@@ -89,7 +89,8 @@ n.scenario <- length(scenarios)
 #scenario.filenames <- paste0("Scenario_", scenarios, "_noGUI")
 scenario.filenames <- paste0("Scenario_", scenarios, "_everyyear_relative_GUI")
 
-n.paramset <- 1
+paramsets <- c("BehaviouralBaseline","Thresholds")
+n.paramset <- length(paramsets)
 
 parallelize <- TRUE # VM has 8 cores and 32GB dynamic RAM
 if (parallelize) { 
@@ -105,7 +106,7 @@ if (parallelize) {
 
 foreach(s.idx = 1:n.scenario, .errorhandling = "stop",.packages = c("doSNOW"), .verbose = T) %dopar% {
   
-  #s.idx <- 1
+  s.idx <- 1
   scenario <- scenarios[s.idx]
   
   # must change to the output folder for getting the output files correctly
@@ -132,15 +133,16 @@ foreach(s.idx = 1:n.scenario, .errorhandling = "stop",.packages = c("doSNOW"), .
   
   print(  .jcall( 'java/lang/System', 'S', 'getProperty', 'user.dir' ))
   
-  # Only one parameter set for the moment
-  #foreach(p.idx = 1:n.paramset, .errorhandling = "stop", .verbose = T) %do% { 
+  # Two parameter sets
+  foreach(p.idx = 1:n.paramset, .errorhandling = "stop", .verbose = T) %do% { 
     
-    #paramset =  paste0("Paramset", p.idx)
-    #scenario.filename <- paste0(scenario.filenames[s.idx], "_", paramset, ".xml") 
+    p.idx <- 1
+    paramset <-  paramsets[p.idx]
+    scenario.filename <- paste0(scenario.filenames[s.idx], "_", paramset, ".xml") 
   
-    scenario.filename <- paste0(scenario.filenames[s.idx], ".xml") 
+    #scenario.filename <- paste0(scenario.filenames[s.idx], ".xml") 
     
-    #}
+    }
 
     # Read the scenario file
     scenario.xml <- xml2::read_xml(paste0(dirCRAFTYInput, scenario.filename))
