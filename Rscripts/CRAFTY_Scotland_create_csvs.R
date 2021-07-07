@@ -34,93 +34,86 @@ dirOut <- paste0(wd,"data_Scotland")
 
 ### behavioural parameters -----------------------------------------------------
 
-# V1 (now Thresholds)
+# Thesis version
 # woodland agents, marginal, water&urban, estates stubborn/don't give in once established
-aftParamId <- 0
-givingInDistributionMean <- 1 # woodland agents don't give in once established
-givingInDistributionSD <- 0
-givingUpDistributionMean <- 0
-givingUpDistributionSD <- 0
-serviceLevelNoiseMin <- 1
-serviceLevelNoiseMax <- 1
-givingUpProb <- 0
+# aftParamId <- 0
+# givingInDistributionMean <- 1 # woodland agents don't give in once established
+# givingInDistributionSD <- 0
+# givingUpDistributionMean <- 0
+# givingUpDistributionSD <- 0
+# serviceLevelNoiseMin <- 1
+# serviceLevelNoiseMax <- 1
+# givingUpProb <- 0
+# 
+# stubbornAgents <- c("prodnnconifer","prodnconifer","prodnnbroad","prodnbroad",
+#                     "multinnc","multinc","multinnb","multinb","multimixed",
+#                     "consvnative", 
+#                     "waterurban","marginal",
+#                     "estateconsv","estatemulti","estatesport")
+# 
+# for (i in stubbornAgents){
+#   
+#   productionCsvFile <- paste0(".//production/%v/%s/",i,".csv")
+#   params <- tibble(aftParamId,givingInDistributionMean,givingInDistributionSD,givingUpDistributionMean,givingUpDistributionSD,
+#                    serviceLevelNoiseMin,serviceLevelNoiseMax,givingUpProb,productionCsvFile)
+#   write.csv(params, paste0(dirOut,"/agents/V1/AftParams_",i,".csv"), row.names=F)
+#   
+# }
+# 
+# # agroforestry semi-stubborn
+# givingInDistributionMean <- 0.5 
+# productionCsvFile <- paste0(".//production/%v/%s/agroforestry.csv")
+# params <- tibble(aftParamId,givingInDistributionMean,givingInDistributionSD,givingUpDistributionMean,givingUpDistributionSD,
+#                  serviceLevelNoiseMin,serviceLevelNoiseMax,givingUpProb,productionCsvFile)
+# write.csv(params, paste0(dirOut,"/agents/V1/AftParams_agroforestry.csv"), row.names=F)
+# 
+# # rest, no thresholds in V1
+# givingInDistributionMean <- 0
+# otherAgents <- c("intarable","extarable","intpastoral","extpastoral")
+# for (i in otherAgents){
+#   
+#   productionCsvFile <- paste0(".//production/%v/%s/",i,".csv")
+#   params <- tibble(aftParamId,givingInDistributionMean,givingInDistributionSD,givingUpDistributionMean,givingUpDistributionSD,
+#                    serviceLevelNoiseMin,serviceLevelNoiseMax,givingUpProb,productionCsvFile)
+#   write.csv(params, paste0(dirOut,"/agents/V1/AftParams_",i,".csv"), row.names=F)
+#   
+# }
 
-stubbornAgents <- c("prodnnconifer","prodnconifer","prodnnbroad","prodnbroad",
-                    "multinnc","multinc","multinnb","multinb","multimixed",
-                    "consvnative", 
-                    "waterurban","marginal",
-                    "estateconsv","estatemulti","estatesport")
+# Two behavioural models
 
-for (i in stubbornAgents){
+dfBehaviour <- read.csv(paste0(dirData,"/BehaviourMaster.csv"))
+colnames(dfBehaviour)[1] <- "Agent"
+dfBehaviour <- dfBehaviour %>% mutate(productionCsvFile = paste0(".//production/",Agent,".csv"))
+#dfBehaviour$Agent <- NULL
+dfBehaviour$aftParamId <- 0
+dfBehaviour <- dfBehaviour[,c(1:2,11,3:10)]
+
+# Behavioural baseline
+dfBaseline <- dfBehaviour %>% filter(Paramset == "BehaviouralBaseline")
+
+for (i in 1:nrow(dfBaseline)){
   
-  productionCsvFile <- paste0(".//production/%v/%s/",i,".csv")
-  params <- tibble(aftParamId,givingInDistributionMean,givingInDistributionSD,givingUpDistributionMean,givingUpDistributionSD,
-                   serviceLevelNoiseMin,serviceLevelNoiseMax,givingUpProb,productionCsvFile)
-  write.csv(params, paste0(dirOut,"/agents/V1/AftParams_",i,".csv"), row.names=F)
-  
+  #i <- 1
+  r1 <- dfBaseline[i,]
+  r1$Paramset <- NULL
+  Agent <- r1$Agent
+  r1$Agent <- NULL
+  write.csv(r1, paste0(dirOut,"/agents/BehaviouralBaseline/AftParams_",Agent,".csv"),row.names = FALSE)
+    
 }
 
-# agroforestry semi-stubborn
-givingInDistributionMean <- 0.5 
-productionCsvFile <- paste0(".//production/%v/%s/agroforestry.csv")
-params <- tibble(aftParamId,givingInDistributionMean,givingInDistributionSD,givingUpDistributionMean,givingUpDistributionSD,
-                 serviceLevelNoiseMin,serviceLevelNoiseMax,givingUpProb,productionCsvFile)
-write.csv(params, paste0(dirOut,"/agents/V1/AftParams_agroforestry.csv"), row.names=F)
 
-# rest, no thresholds in V1
-givingInDistributionMean <- 0
-otherAgents <- c("intarable","extarable","intpastoral","extpastoral")
-for (i in otherAgents){
+# Thresholds
+dfThresholds <- dfBehaviour %>% filter(Paramset == "Thresholds")
+
+for (i in 1:nrow(dfThresholds)){
   
-  productionCsvFile <- paste0(".//production/%v/%s/",i,".csv")
-  params <- tibble(aftParamId,givingInDistributionMean,givingInDistributionSD,givingUpDistributionMean,givingUpDistributionSD,
-                   serviceLevelNoiseMin,serviceLevelNoiseMax,givingUpProb,productionCsvFile)
-  write.csv(params, paste0(dirOut,"/agents/V1/AftParams_",i,".csv"), row.names=F)
-  
-}
-
-# Take away giving-in threshold from estates (not yet implemented)
-
-aftParamId <- 0
-givingInDistributionMean <- 1 # woodland agents don't give in once established
-givingInDistributionSD <- 0
-givingUpDistributionMean <- 0
-givingUpDistributionSD <- 0
-serviceLevelNoiseMin <- 1
-serviceLevelNoiseMax <- 1
-givingUpProb <- 0
-
-stubbornAgents <- c("prodnnconifer","prodnconifer","prodnnbroad","prodnbroad",
-                    "multinnc","multinc","multinnb","multinb","multimixed",
-                    "consvnative", 
-                    "waterurban","marginal")
-
-for (i in stubbornAgents){
-  
-  productionCsvFile <- paste0(".//production/%v/%s/",i,".csv")
-  params <- tibble(aftParamId,givingInDistributionMean,givingInDistributionSD,givingUpDistributionMean,givingUpDistributionSD,
-                   serviceLevelNoiseMin,serviceLevelNoiseMax,givingUpProb,productionCsvFile)
-  write.csv(params, paste0(dirOut,"/agents/V2/AftParams_",i,".csv"), row.names=F)
-  
-}
-
-# agroforestry semi-stubborn
-givingInDistributionMean <- 0.5 
-productionCsvFile <- paste0(".//production/%v/%s/agroforestry.csv")
-params <- tibble(aftParamId,givingInDistributionMean,givingInDistributionSD,givingUpDistributionMean,givingUpDistributionSD,
-                 serviceLevelNoiseMin,serviceLevelNoiseMax,givingUpProb,productionCsvFile)
-write.csv(params, paste0(dirOut,"/agents/V2/AftParams_agroforestry.csv"), row.names=F)
-
-# rest, no thresholds in V1
-givingInDistributionMean <- 0
-otherAgents <- c("intarable","extarable","intpastoral","extpastoral",
-                 "estateconsv","estatemulti","estatesport")
-for (i in otherAgents){
-  
-  productionCsvFile <- paste0(".//production/%v/%s/",i,".csv")
-  params <- tibble(aftParamId,givingInDistributionMean,givingInDistributionSD,givingUpDistributionMean,givingUpDistributionSD,
-                   serviceLevelNoiseMin,serviceLevelNoiseMax,givingUpProb,productionCsvFile)
-  write.csv(params, paste0(dirOut,"/agents/V2/AftParams_",i,".csv"), row.names=F)
+  #i <- 1
+  r1 <- dfThresholds[i,]
+  r1$Paramset <- NULL
+  Agent <- r1$Agent
+  r1$Agent <- NULL
+  write.csv(r1, paste0(dirOut,"/agents/Thresholds/AftParams_",Agent,".csv"),row.names = FALSE)
   
 }
 

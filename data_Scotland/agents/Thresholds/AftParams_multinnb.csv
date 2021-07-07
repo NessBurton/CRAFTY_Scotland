@@ -1,0 +1,2 @@
+"aftParamId","givingInDistributionMean","givinginDistributionSD","givingUpDistributionMean","givingUpDistributionSD","serviceLevelNoiseMin","serviceLevelNoiseMax","givingUpProb","productionCsvFile"
+0,0.02,0,0.001,0,1,1,0.05,".//production/multinnb.csv"
