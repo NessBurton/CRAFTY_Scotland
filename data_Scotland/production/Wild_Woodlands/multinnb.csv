@@ -1,0 +1,10 @@
+Service,region,nn.conifer.yc,nn.broad.yc,n.conifer.yc,n.broad.yc,n.broad.consv,agro.yc,mixed.yc,crop.productivity,grassland,water.runoff,human,social,manufactured,financial,moreNW,lessNW,moreF,lessF,moreNAT,lessNAT,deep.peat,deer.density,wild.land,Production
+softwood.timber,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+hardwood.timber,0,0,1,0,0,0,0,0,0,0,0,0.01,0.01,0.02,0.02,0.8,0.8,0.8,0.8,0,0,1,0,0,0.5
+biodiversity,0,0,1,0,0,0,0,0,0,0,0,0.01,0.01,0.02,0.02,0.8,0.8,0.8,0.8,0,0,1,0,0,0.7
+carbon,0,0,1,0,0,0,0,0,0,0,0,0.01,0.01,0.02,0.02,0.8,0.8,0.8,0.8,0,0,1,0,0,0.7
+flood.regulation,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0.7
+recreation,0,0,1,0,0,0,0,0,0,0,0,0.01,0.01,0.02,0.02,0.8,0.8,0.8,0.8,0,0,1,0,0,0.1
+livestock,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+crop.service,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+employment,0,0,1,0,0,0,0,0,0,0,0,0.01,0.01,0.02,0.02,0.8,0.8,0.8,0.8,0,0,1,0,0,0.24
