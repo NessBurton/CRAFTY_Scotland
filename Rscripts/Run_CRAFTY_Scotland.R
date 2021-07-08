@@ -134,15 +134,15 @@ foreach(s.idx = 1:n.scenario, .errorhandling = "stop",.packages = c("doSNOW"), .
   print(  .jcall( 'java/lang/System', 'S', 'getProperty', 'user.dir' ))
   
   # Two parameter sets
-  foreach(p.idx = 1:n.paramset, .errorhandling = "stop", .verbose = T) %do% { 
+  #foreach(p.idx = 1:n.paramset, .errorhandling = "stop", .verbose = T) %do% { 
     
-    #p.idx <- 1
+    p.idx <- 1
     paramset <-  paramsets[p.idx]
     scenario.filename <- paste0(scenario.filenames[s.idx], "_", paramset, ".xml") 
   
     #scenario.filename <- paste0(scenario.filenames[s.idx], ".xml") 
     
-    }
+    #}
 
     # Read the scenario file
     scenario.xml <- xml2::read_xml(paste0(dirCRAFTYInput, scenario.filename))

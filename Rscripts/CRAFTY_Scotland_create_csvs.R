@@ -84,7 +84,7 @@ dirOut <- paste0(wd,"data_Scotland")
 dfBehaviour <- read.csv(paste0(dirData,"/BehaviourMaster.csv"))
 colnames(dfBehaviour)[1] <- "Agent"
 colnames(dfBehaviour)[4] <- "givingInDistributionSD"
-dfBehaviour <- dfBehaviour %>% mutate(productionCsvFile = paste0(".//production/",Agent,".csv"))
+dfBehaviour <- dfBehaviour %>% mutate(productionCsvFile = paste0(".//production/%s/",Agent,".csv"))
 #dfBehaviour$Agent <- NULL
 dfBehaviour$aftParamId <- 0
 dfBehaviour <- dfBehaviour[,c(1:2,11,3:10)]
