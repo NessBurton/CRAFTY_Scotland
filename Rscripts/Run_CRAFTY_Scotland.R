@@ -88,6 +88,7 @@ scenarios <- c( "Baseline", "Green_Gold", "Multiple_Benefits", "Native_Networks"
 n.scenario <- length(scenarios)
 #scenario.filenames <- paste0("Scenario_", scenarios, "_noGUI")
 scenario.filenames <- paste0("Scenario_", scenarios, "_everyyear_relative_GUI")
+#scenario.filenames <- paste0("Scenario_", scenarios, "_financial_GUI")
 
 paramsets <- c("BehaviouralBaseline","Thresholds")
 n.paramset <- length(paramsets)
@@ -134,15 +135,15 @@ foreach(s.idx = 1:n.scenario, .errorhandling = "stop",.packages = c("doSNOW"), .
   print(  .jcall( 'java/lang/System', 'S', 'getProperty', 'user.dir' ))
   
   # Two parameter sets
-  #foreach(p.idx = 1:n.paramset, .errorhandling = "stop", .verbose = T) %do% { 
+  foreach(p.idx = 1:n.paramset, .errorhandling = "stop", .verbose = T) %do% { 
     
-    p.idx <- 1
+    #p.idx <- 1
     paramset <-  paramsets[p.idx]
     scenario.filename <- paste0(scenario.filenames[s.idx], "_", paramset, ".xml") 
   
     #scenario.filename <- paste0(scenario.filenames[s.idx], ".xml") 
     
-    #}
+    }
 
     # Read the scenario file
     scenario.xml <- xml2::read_xml(paste0(dirCRAFTYInput, scenario.filename))
