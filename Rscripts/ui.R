@@ -37,9 +37,9 @@ navbarPage("CRAFTY interactive web-interface", windowTitle =  "CRAFTY interactiv
                                    fluidPage(br(), h4("Scenario customisation"))
                                    , selectInput("world", "World",
                                                world_shortnames, selected = world_shortnames[1]
-                                   ),selectInput("production", label = "Production",
-                                                choices = production_names, selected = production_names[1]
-                                   ),
+                                   ),#selectInput("production", label = "Production",
+                                                #choices = production_names, selected = production_names[1]
+                                   #),
                                    selectInput("scenario", "Vision",
                                                scenario_names[], selected = scenario_names[1]
                                    )
@@ -147,16 +147,16 @@ navbarPage("CRAFTY interactive web-interface", windowTitle =  "CRAFTY interactiv
                                      , selectInput("world_from", "World",
                                                    world_shortnames, selected = world_shortnames[1]
                                      )
-                                     ,selectInput("production_from", label = "Production",
-                                                   choices = production_names, selected = production_names[1]
-                                     )
+                                     #,selectInput("production_from", label = "Production",
+                                                   #choices = production_names, selected = production_names[1]
+                                     #)
                                      , sliderInput("year_from",
                                                    "Year",
                                                    min = start_year,
                                                    max = end_year, sep = "",
                                                    value = start_year, step=10),
  
-                                     selectInput("scenario_from", "Climate and socio-economic scenario",
+                                     selectInput("scenario_from", "Vision",
                                                  scenario_names[], selected = scenario_names[1]
                                                  
                                      )
@@ -165,9 +165,9 @@ navbarPage("CRAFTY interactive web-interface", windowTitle =  "CRAFTY interactiv
                                      , selectInput("world", "World",
                                                    world_shortnames, selected = world_shortnames[1]
                                      )
-                                     ,selectInput("production", label = "Production",
-                                                   choices = production_names, selected = production_names[1]
-                                     )
+                                     #,selectInput("production", label = "Production",
+                                                   #choices = production_names, selected = production_names[1]
+                                     #)
                                      ,  sliderInput("year_to",
                                                     "Year",
                                                     min = start_year,

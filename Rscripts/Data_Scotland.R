@@ -64,10 +64,10 @@ default_year = 2015
  
 
 ## versions 
-production_names <- c("V2_June21")#"V1", "Thesis", "V2_June21")
+#production_names <- c("V2_June21")#"V1", "Thesis", "V2_June21")
 
-world_shortnames <- c("Natural")#"Financial", "Natural")
-world_names <- c("Scotland_natural")#"Scotland_financial", "Scotland_natural")
+world_shortnames <- c("BehaviouralBaseline","Thresholds")#c("Natural")#"Financial", "Natural")
+world_names <- c("BehaviouralBaseline","Thresholds")#c("Scotland_natural")#"Scotland_financial", "Scotland_natural")
  
 version_suffix <- "natural" 
 
@@ -81,13 +81,15 @@ path_shinywd <- "~/shiny_tmp_dev"
 path_filecache <- paste0(path_shinywd, "/filetmp/")
 path_rastercache <- paste0(path_shinywd, "/rastertmp/")
 
-
-getFname <- function(world_name, production_name, scenario, year ) { 
+getFname <- function(world_name, scenario, year ) { 
+#getFname <- function(world_name, production_name, scenario, year ) { 
   
-  fs::path_expand(paste0(world_name, "/", production_name, "/", scenario, "/", scenario, "-", runid, "-99-Scotland_", version_suffix,"-Cell-", year, ".csv"))
+  fs::path_expand(paste0(world_name, "/", scenario, "/", scenario, "-", runid, "-99-Scotland_", version_suffix,"-Cell-", year, ".csv"))
+  #fs::path_expand(paste0(world_name, "/", production_name, "/", scenario, "/", scenario, "-", runid, "-99-Scotland_", version_suffix,"-Cell-", year, ".csv"))
    
 }
-# getFname("Scotland_natural","V2_June21","Green_Gold","2015")  
+
+#getFname("BehaviouralBaseline","Green_Gold","2015")  
 
  
 
