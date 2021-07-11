@@ -16,9 +16,12 @@ library(doSNOW)
 
 ### directories ----------------------------------------------------------------
 
-wd <- "D:/"
-dirResults <- paste0(wd,"CRAFTY_Scotland/output/")
-dirMetrics <- paste0(wd,"CRAFTY_Scotland/vision_metrics")
+wd <- "~/Documents/Dropbox/"
+#wd <- "D:/"
+dirResults <- paste0(wd,"Thresholds/")
+#dirResults <- paste0(wd,"CRAFTY_Scotland/output/")
+dirMetrics <- paste0(wd,"vision_metrics")
+#dirMetrics <- paste0(wd,"CRAFTY_Scotland/vision_metrics")
 
 ### palettes -------------------------------------------------------------------
 
