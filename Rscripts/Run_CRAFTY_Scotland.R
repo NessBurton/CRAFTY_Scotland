@@ -135,15 +135,15 @@ foreach(s.idx = 1:n.scenario, .errorhandling = "stop",.packages = c("doSNOW"), .
   print(  .jcall( 'java/lang/System', 'S', 'getProperty', 'user.dir' ))
   
   # Two parameter sets
-  foreach(p.idx = 1:n.paramset, .errorhandling = "stop", .verbose = T) %do% { 
+  #foreach(p.idx = 1:n.paramset, .errorhandling = "stop", .verbose = T) %do% { 
     
-    #p.idx <- 1
+    p.idx <- 1
     paramset <-  paramsets[p.idx]
     scenario.filename <- paste0(scenario.filenames[s.idx], "_", paramset, ".xml") 
   
     #scenario.filename <- paste0(scenario.filenames[s.idx], ".xml") 
     
-    }
+    #}
 
     # Read the scenario file
     scenario.xml <- xml2::read_xml(paste0(dirCRAFTYInput, scenario.filename))
@@ -204,92 +204,92 @@ stopCluster(cl)
 
 # if getting random Java errors, restart Rstudio
 # initialise Java only once
-if (!rJava::.jniInitialized) { 
-  
-  .jinit(parameters="-Dlog4j.configuration=log4j2020_normal.properties")
-  .jinit(parameters = "-Dfile.encoding=UTF-8", silent = FALSE, force.init = FALSE)
-  .jinit( parameters=paste0("-Xms", java.ms, " -Xmx", java.mx)) # The .jinit returns 0 if the JVM got initialized and a negative integer if it did not. A positive integer is returned if the JVM got initialized partially. Before initializing the JVM, the rJava library must be loaded.
-
-}
-
-# add java classpath
-.jclassPath() # print out the current class path settings.
-for (i in 1:length(crafty_jclasspath)) { 
-  .jaddClassPath(crafty_jclasspath[i])
-}
-
-# run for each scenario 
-scenario.filenames <- c("Scenario_Baseline_everyyear_relative_GUI.xml",
-                        "Scenario_Green_Gold_everyyear_relative_GUI.xml",
-                        "Scenario_Multiple_Benefits_everyyear_relative_GUI.xml",
-                        "Scenario_Native_Networks_everyyear_relative_GUI.xml",
-                        "Scenario_Wild_Woodlands_everyyear_relative_GUI.xml",
-                        "Scenario_Woodland_Culture_everyyear_relative_GUI.xml") 
-
-version <- "V2_June21"
-
-# set up CRAFTY job
-if (!exists(x = "CRAFTY_jobj")) {   # not to create CRAFTY_jobj multiple times
-  # Create a new instance (to call non-static methods)
-  CRAFTY_jobj <- new(J(CRAFTY_main_name)) 
-}
-
-# loop through all scenarios
-
-for (scenario in scenario.filenames){
-  
-  scenario <- scenario.filenames[1]
-  scenario.filename <- scenario
-  scenario.split <- paste0(strsplit(scenario, "[_]")[[1]][2])#,"_",strsplit(scenario, "[_]")[[1]][3])
-  
-  print(paste0("============CRAFTY JAVA-R API: Running for scenario = ", scenario.split))
-  
-  # scenario file
-  CRAFTY_sargs <- c("-d", dirCRAFTYInput, "-f", scenario.filename, "-o", random_seed_crafty, "-r", "1",  "-n", "1", "-sr", "0", "-e", "2100") 
-  
-  
-  # prepares a run and returns run information 
-  CRAFTY_RunInfo_jobj <- CRAFTY_jobj$EXTprepareRrun(CRAFTY_sargs)
-  
-  # set the schedule
-  CRAFTY_loader_jobj <- CRAFTY_jobj$EXTsetSchedule(as.integer(start_year_idx), as.integer(end_year_idx))
-  
-  timesteps <- start_year_idx:end_year_idx
-  
-  ### pre-process CRAFTY Java object
-  # region <- CRAFTY_loader_jobj$getRegions()$getAllRegions()$iterator()$'next'()
-  
-  # change wd to a scenario folder to store output files
-  dirCRAFTYscenario <- paste0(dirCRAFTYOutput,"/",version,"/",scenario.split)
-  
-  # set the batch run folder (dirCRAFTYOutput)
-  .jcall( 'java/lang/System', 'S', 'setProperty', 'user.dir',  dirCRAFTYOutput)
-  
-  # assertion
-  stopifnot(dirCRAFTYOutput == .jcall( 'java/lang/System', 'S', 'getProperty', 'user.dir' ))
-  
-  for (CRAFTY_tick in timesteps) {
-    
-    print(paste0("============CRAFTY JAVA-R API: Running CRAFTY tick = ", CRAFTY_tick))
-    
-    CRAFTY_nextTick = CRAFTY_jobj$EXTtick()
-    
-    stopifnot(CRAFTY_nextTick == (CRAFTY_tick + 1 )) 
-    
-    print(paste0("============CRAFTY JAVA-R API: CRAFTY run complete = ", CRAFTY_tick))
-    
-    if (CRAFTY_nextTick <= end_year_idx) {
-      (paste0("============CRAFTY JAVA-R API: NextTick=", CRAFTY_nextTick))
-    } else {
-      print(paste0("============CRAFTY JAVA-R API: Simulation done (tick=", CRAFTY_tick, ")"))
-    }
-  }
-  
-  CRAFTY_jobj$EXTcloseRrun()
-  print(paste0("============CRAFTY JAVA-R API: Finished for scenario = ", scenario.split))
-  
-}
-
-# delete java objects
-rm( CRAFTY_jobj, CRAFTY_RunInfo_jobj, CRAFTY_loader_jobj)
-
+# if (!rJava::.jniInitialized) { 
+#   
+#   .jinit(parameters="-Dlog4j.configuration=log4j2020_normal.properties")
+#   .jinit(parameters = "-Dfile.encoding=UTF-8", silent = FALSE, force.init = FALSE)
+#   .jinit( parameters=paste0("-Xms", java.ms, " -Xmx", java.mx)) # The .jinit returns 0 if the JVM got initialized and a negative integer if it did not. A positive integer is returned if the JVM got initialized partially. Before initializing the JVM, the rJava library must be loaded.
+# 
+# }
+# 
+# # add java classpath
+# .jclassPath() # print out the current class path settings.
+# for (i in 1:length(crafty_jclasspath)) { 
+#   .jaddClassPath(crafty_jclasspath[i])
+# }
+# 
+# # run for each scenario 
+# scenario.filenames <- c("Scenario_Baseline_everyyear_relative_GUI.xml",
+#                         "Scenario_Green_Gold_everyyear_relative_GUI.xml",
+#                         "Scenario_Multiple_Benefits_everyyear_relative_GUI.xml",
+#                         "Scenario_Native_Networks_everyyear_relative_GUI.xml",
+#                         "Scenario_Wild_Woodlands_everyyear_relative_GUI.xml",
+#                         "Scenario_Woodland_Culture_everyyear_relative_GUI.xml") 
+# 
+# version <- "V2_June21"
+# 
+# # set up CRAFTY job
+# if (!exists(x = "CRAFTY_jobj")) {   # not to create CRAFTY_jobj multiple times
+#   # Create a new instance (to call non-static methods)
+#   CRAFTY_jobj <- new(J(CRAFTY_main_name)) 
+# }
+# 
+# # loop through all scenarios
+# 
+# for (scenario in scenario.filenames){
+#   
+#   scenario <- scenario.filenames[1]
+#   scenario.filename <- scenario
+#   scenario.split <- paste0(strsplit(scenario, "[_]")[[1]][2])#,"_",strsplit(scenario, "[_]")[[1]][3])
+#   
+#   print(paste0("============CRAFTY JAVA-R API: Running for scenario = ", scenario.split))
+#   
+#   # scenario file
+#   CRAFTY_sargs <- c("-d", dirCRAFTYInput, "-f", scenario.filename, "-o", random_seed_crafty, "-r", "1",  "-n", "1", "-sr", "0", "-e", "2100") 
+#   
+#   
+#   # prepares a run and returns run information 
+#   CRAFTY_RunInfo_jobj <- CRAFTY_jobj$EXTprepareRrun(CRAFTY_sargs)
+#   
+#   # set the schedule
+#   CRAFTY_loader_jobj <- CRAFTY_jobj$EXTsetSchedule(as.integer(start_year_idx), as.integer(end_year_idx))
+#   
+#   timesteps <- start_year_idx:end_year_idx
+#   
+#   ### pre-process CRAFTY Java object
+#   # region <- CRAFTY_loader_jobj$getRegions()$getAllRegions()$iterator()$'next'()
+#   
+#   # change wd to a scenario folder to store output files
+#   dirCRAFTYscenario <- paste0(dirCRAFTYOutput,"/",version,"/",scenario.split)
+#   
+#   # set the batch run folder (dirCRAFTYOutput)
+#   .jcall( 'java/lang/System', 'S', 'setProperty', 'user.dir',  dirCRAFTYOutput)
+#   
+#   # assertion
+#   stopifnot(dirCRAFTYOutput == .jcall( 'java/lang/System', 'S', 'getProperty', 'user.dir' ))
+#   
+#   for (CRAFTY_tick in timesteps) {
+#     
+#     print(paste0("============CRAFTY JAVA-R API: Running CRAFTY tick = ", CRAFTY_tick))
+#     
+#     CRAFTY_nextTick = CRAFTY_jobj$EXTtick()
+#     
+#     stopifnot(CRAFTY_nextTick == (CRAFTY_tick + 1 )) 
+#     
+#     print(paste0("============CRAFTY JAVA-R API: CRAFTY run complete = ", CRAFTY_tick))
+#     
+#     if (CRAFTY_nextTick <= end_year_idx) {
+#       (paste0("============CRAFTY JAVA-R API: NextTick=", CRAFTY_nextTick))
+#     } else {
+#       print(paste0("============CRAFTY JAVA-R API: Simulation done (tick=", CRAFTY_tick, ")"))
+#     }
+#   }
+#   
+#   CRAFTY_jobj$EXTcloseRrun()
+#   print(paste0("============CRAFTY JAVA-R API: Finished for scenario = ", scenario.split))
+#   
+# }
+# 
+# # delete java objects
+# rm( CRAFTY_jobj, CRAFTY_RunInfo_jobj, CRAFTY_loader_jobj)
+# 
