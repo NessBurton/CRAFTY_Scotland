@@ -289,16 +289,16 @@ ggplot(WW2)+
 ggplot(WW2)+
   geom_raster(mapping=aes(x=x,y=y,fill=grassland))
 
-nrows <- length(WW2[,1])
-
-for (i in c(1:nrows)) {
-  if (WW2$status[i] == "Severely Disadvantaged") {
-    WW2$grassland[i]<-WW2$grassland[i] - (WW2$grassland[i]/4)
-  }
-  if (WW2$status[i] == "Disadvantaged") {
-    WW2$grassland[i]<-WW2$grassland[i] - (WW2$grassland[i]/4)
-  }
-}
+# nrows <- length(WW2[,1])
+# 
+# for (i in c(1:nrows)) {
+#   if (WW2$status[i] == "Severely Disadvantaged") {
+#     WW2$grassland[i]<-WW2$grassland[i] - (WW2$grassland[i]/4)
+#   }
+#   if (WW2$status[i] == "Disadvantaged") {
+#     WW2$grassland[i]<-WW2$grassland[i] - (WW2$grassland[i]/4)
+#   }
+# }
 
 head(WW2)
 # for cell updater specs
@@ -350,23 +350,23 @@ WW4$moreNAT <- landreform2$moreNAT
 WW4$lessNAT <- landreform2$lessNAT
 
 # reduce grassland capital in LFA areas
-WW4 <- merge(WW4, lfa, by = 'id', all.x = TRUE)
-
-ggplot(WW4)+
-  geom_raster(mapping=aes(x=x,y=y,fill=status))
-ggplot(WW4)+
-  geom_raster(mapping=aes(x=x,y=y,fill=grassland))
-
-nrows <- length(WW4[,1])
-
-for (i in c(1:nrows)) {
-  if (WW4$status[i] == "Severely Disadvantaged") {
-    WW4$grassland[i]<-WW4$grassland[i] - (WW4$grassland[i]/2)
-  }
-  if (WW4$status[i] == "Disadvantaged") {
-    WW4$grassland[i]<-WW4$grassland[i] - (WW4$grassland[i]/2)
-  }
-}
+# WW4 <- merge(WW4, lfa, by = 'id', all.x = TRUE)
+# 
+# ggplot(WW4)+
+#   geom_raster(mapping=aes(x=x,y=y,fill=status))
+# ggplot(WW4)+
+#   geom_raster(mapping=aes(x=x,y=y,fill=grassland))
+# 
+# nrows <- length(WW4[,1])
+# 
+# for (i in c(1:nrows)) {
+#   if (WW4$status[i] == "Severely Disadvantaged") {
+#     WW4$grassland[i]<-WW4$grassland[i] - (WW4$grassland[i]/2)
+#   }
+#   if (WW4$status[i] == "Disadvantaged") {
+#     WW4$grassland[i]<-WW4$grassland[i] - (WW4$grassland[i]/2)
+#   }
+# }
 
 
 # deer density
@@ -420,23 +420,23 @@ WW6$moreNAT <- landreform3$moreNAT
 WW6$lessNAT <- landreform3$lessNAT
 
 # reduce grassland capital in LFA areas
-WW6 <- merge(WW6, lfa, by = 'id', all.x = TRUE)
-
-ggplot(WW6)+
-  geom_raster(mapping=aes(x=x,y=y,fill=status))
-ggplot(WW6)+
-  geom_raster(mapping=aes(x=x,y=y,fill=grassland))
-
-nrows <- length(WW6[,1])
-
-for (i in c(1:nrows)) {
-  if (WW6$status[i] == "Severely Disadvantaged") {
-    WW6$grassland[i]<-WW6$grassland[i] - (WW6$grassland[i]/2)
-  }
-  if (WW6$status[i] == "Disadvantaged") {
-    WW6$grassland[i]<-WW6$grassland[i] - (WW6$grassland[i]/2)
-  }
-}
+# WW6 <- merge(WW6, lfa, by = 'id', all.x = TRUE)
+# 
+# ggplot(WW6)+
+#   geom_raster(mapping=aes(x=x,y=y,fill=status))
+# ggplot(WW6)+
+#   geom_raster(mapping=aes(x=x,y=y,fill=grassland))
+# 
+# nrows <- length(WW6[,1])
+# 
+# for (i in c(1:nrows)) {
+#   if (WW6$status[i] == "Severely Disadvantaged") {
+#     WW6$grassland[i]<-WW6$grassland[i] - (WW6$grassland[i]/2)
+#   }
+#   if (WW6$status[i] == "Disadvantaged") {
+#     WW6$grassland[i]<-WW6$grassland[i] - (WW6$grassland[i]/2)
+#   }
+# }
 
 
 # deer density
@@ -606,7 +606,7 @@ for (yr in yrList){
 
 GG <- capitalsRAW
 
-# increase productive woodland capitals in WEAG areas
+# increase financial capital where productive woodland capital are high in WEAG areas
 GG<-merge(GG,weag,by='id')
 ggplot(GG)+
   geom_tile(aes(x,y,fill=phase3))+
@@ -628,23 +628,23 @@ summary(GG$nn.broad.yc)
 GG$financial[which(GG$nn.broad.yc >= 4 & GG$phase3 == 1)] <- GG$financial[which(GG$nn.broad.yc >= 4 & GG$phase3 == 1)] * 1.2
 
 # reduce grassland capital in LFA by half
-GG <- merge(GG, lfa, by = 'id', all.x = TRUE)
-
-ggplot(GG)+
-  geom_raster(mapping=aes(x=x,y=y,fill=status))
-ggplot(GG)+
-  geom_raster(mapping=aes(x=x,y=y,fill=grassland))
-
-nrows <- length(GG[,1])
-
-for (i in c(1:nrows)) {
-  if (GG$status[i] == "Severely Disadvantaged") {
-    GG$grassland[i]<-GG$grassland[i] - (GG$grassland[i]/2)
-  }
-  if (GG$status[i] == "Disadvantaged") {
-    GG$grassland[i]<-GG$grassland[i] - (GG$grassland[i]/2)
-  }
-}
+# GG <- merge(GG, lfa, by = 'id', all.x = TRUE)
+# 
+# ggplot(GG)+
+#   geom_raster(mapping=aes(x=x,y=y,fill=status))
+# ggplot(GG)+
+#   geom_raster(mapping=aes(x=x,y=y,fill=grassland))
+# 
+# nrows <- length(GG[,1])
+# 
+# for (i in c(1:nrows)) {
+#   if (GG$status[i] == "Severely Disadvantaged") {
+#     GG$grassland[i]<-GG$grassland[i] - (GG$grassland[i]/2)
+#   }
+#   if (GG$status[i] == "Disadvantaged") {
+#     GG$grassland[i]<-GG$grassland[i] - (GG$grassland[i]/2)
+#   }
+# }
 
 dfGG <- baseline
 dfGG$year <- 2015
@@ -734,25 +734,25 @@ for (i in c(1:nrows)) {
   }}
 
 # reduce grassland capital in LFA by 1/4
-WC <- merge(WC, lfa, by = 'id', all.x = TRUE)
-
-ggplot(WC)+
-  geom_raster(mapping=aes(x=x,y=y,fill=status))
-ggplot(WC)+
-  geom_raster(mapping=aes(x=x,y=y,fill=grassland))
-
+# WC <- merge(WC, lfa, by = 'id', all.x = TRUE)
+# 
+# ggplot(WC)+
+#   geom_raster(mapping=aes(x=x,y=y,fill=status))
+# ggplot(WC)+
+#   geom_raster(mapping=aes(x=x,y=y,fill=grassland))
+# 
 WC1 <- WC
-
-nrows <- length(WC1[,1])
-
-for (i in c(1:nrows)) {
-  if (WC1$status[i] == "Severely Disadvantaged") {
-    WC1$grassland[i]<-WC1$grassland[i] - (WC1$grassland[i]/4)
-  }
-  if (WC1$status[i] == "Disadvantaged") {
-    WC1$grassland[i]<-WC1$grassland[i] - (WC1$grassland[i]/4)
-  }
-}
+# 
+# nrows <- length(WC1[,1])
+# 
+# for (i in c(1:nrows)) {
+#   if (WC1$status[i] == "Severely Disadvantaged") {
+#     WC1$grassland[i]<-WC1$grassland[i] - (WC1$grassland[i]/4)
+#   }
+#   if (WC1$status[i] == "Disadvantaged") {
+#     WC1$grassland[i]<-WC1$grassland[i] - (WC1$grassland[i]/4)
+#   }
+# }
 
 head(WC1)
 # for cell updater specs
@@ -785,14 +785,14 @@ WC2$lessF <- landreform$lessF
 WC2$moreNAT <- landreform$moreNAT
 WC2$lessNAT <- landreform$lessNAT
 
-for (i in c(1:nrows)) {
-  if (WC2$status[i] == "Severely Disadvantaged") {
-    WC2$grassland[i]<-WC2$grassland[i] - (WC2$grassland[i]/4)
-  }
-  if (WC2$status[i] == "Disadvantaged") {
-    WC2$grassland[i]<-WC2$grassland[i] - (WC2$grassland[i]/4)
-  }
-}
+# for (i in c(1:nrows)) {
+#   if (WC2$status[i] == "Severely Disadvantaged") {
+#     WC2$grassland[i]<-WC2$grassland[i] - (WC2$grassland[i]/4)
+#   }
+#   if (WC2$status[i] == "Disadvantaged") {
+#     WC2$grassland[i]<-WC2$grassland[i] - (WC2$grassland[i]/4)
+#   }
+# }
 
 head(WC2)
 
@@ -812,15 +812,15 @@ for (yr in c(2035,2040)){
 
 # reduce grassland capital by 1/2
 WC3 <- WC
-
-for (i in c(1:nrows)) {
-  if (WC3$status[i] == "Severely Disadvantaged") {
-    WC3$grassland[i]<-WC3$grassland[i] - (WC3$grassland[i]/2)
-  }
-  if (WC3$status[i] == "Disadvantaged") {
-    WC3$grassland[i]<-WC3$grassland[i] - (WC3$grassland[i]/2)
-  }
-}
+# 
+# for (i in c(1:nrows)) {
+#   if (WC3$status[i] == "Severely Disadvantaged") {
+#     WC3$grassland[i]<-WC3$grassland[i] - (WC3$grassland[i]/2)
+#   }
+#   if (WC3$status[i] == "Disadvantaged") {
+#     WC3$grassland[i]<-WC3$grassland[i] - (WC3$grassland[i]/2)
+#   }
+# }
 
 WC3$moreNW <- landreform$moreNW
 WC3$lessNW <- landreform$lessNW
@@ -854,14 +854,14 @@ WC4$lessF <- landreform2$lessF
 WC4$moreNAT <- landreform2$moreNAT
 WC4$lessNAT <- landreform2$lessNAT
 
-for (i in c(1:nrows)) {
-  if (WC4$status[i] == "Severely Disadvantaged") {
-    WC4$grassland[i]<-WC4$grassland[i] - (WC4$grassland[i]/2)
-  }
-  if (WC4$status[i] == "Disadvantaged") {
-    WC4$grassland[i]<-WC4$grassland[i] - (WC4$grassland[i]/2)
-  }
-}
+# for (i in c(1:nrows)) {
+#   if (WC4$status[i] == "Severely Disadvantaged") {
+#     WC4$grassland[i]<-WC4$grassland[i] - (WC4$grassland[i]/2)
+#   }
+#   if (WC4$status[i] == "Disadvantaged") {
+#     WC4$grassland[i]<-WC4$grassland[i] - (WC4$grassland[i]/2)
+#   }
+# }
 
 head(WC4)
 # for cell updater specs
@@ -888,14 +888,14 @@ WC5$lessF <- landreform2$lessF
 WC5$moreNAT <- landreform2$moreNAT
 WC5$lessNAT <- landreform2$lessNAT
 
-for (i in c(1:nrows)) {
-  if (WC5$status[i] == "Severely Disadvantaged") {
-    WC5$grassland[i]<-WC5$grassland[i] - (WC5$grassland[i]/100*75)
-  }
-  if (WC5$status[i] == "Disadvantaged") {
-    WC5$grassland[i]<-WC5$grassland[i] - (WC5$grassland[i]/100*75)
-  }
-}
+# for (i in c(1:nrows)) {
+#   if (WC5$status[i] == "Severely Disadvantaged") {
+#     WC5$grassland[i]<-WC5$grassland[i] - (WC5$grassland[i]/100*75)
+#   }
+#   if (WC5$status[i] == "Disadvantaged") {
+#     WC5$grassland[i]<-WC5$grassland[i] - (WC5$grassland[i]/100*75)
+#   }
+# }
 
 head(WC5)
 # for cell updater specs
@@ -921,14 +921,14 @@ WC6$lessF <- landreform3$lessF
 WC6$moreNAT <- landreform3$moreNAT
 WC6$lessNAT <- landreform3$lessNAT
 
-for (i in c(1:nrows)) {
-  if (WC6$status[i] == "Severely Disadvantaged") {
-    WC6$grassland[i]<-WC6$grassland[i] - (WC6$grassland[i]/100*75)
-  }
-  if (WC6$status[i] == "Disadvantaged") {
-    WC6$grassland[i]<-WC6$grassland[i] - (WC6$grassland[i]/100*75)
-  }
-}
+# for (i in c(1:nrows)) {
+#   if (WC6$status[i] == "Severely Disadvantaged") {
+#     WC6$grassland[i]<-WC6$grassland[i] - (WC6$grassland[i]/100*75)
+#   }
+#   if (WC6$status[i] == "Disadvantaged") {
+#     WC6$grassland[i]<-WC6$grassland[i] - (WC6$grassland[i]/100*75)
+#   }
+# }
 
 head(WC6)
 # for cell updater specs
