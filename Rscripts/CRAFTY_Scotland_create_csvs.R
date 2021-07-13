@@ -32,6 +32,97 @@ dirOut <- paste0(wd,"data_Scotland")
   
 #}
 
+dfProduction <- read.csv(paste0(dirData,"/AgentMaster.csv"))
+head(dfProduction)
+names(dfProduction)[1] <- "Agent"
+
+# lower sensitivity to attitude capitals for woodland agents
+dfProduction[,19:24]
+dfProduction$moreNW[which(dfProduction$moreNW == 0.8)] <- 0.05
+dfProduction$lessNW[which(dfProduction$lessNW == 0.8)] <- 0.05
+dfProduction$moreF[which(dfProduction$moreF == 0.8)] <- 0.05
+dfProduction$lessF[which(dfProduction$lessF == 0.8)] <- 0.05
+dfProduction$moreNAT[which(dfProduction$moreNAT == 0.8)] <- 0.05
+dfProduction$lessNAT[which(dfProduction$lessNAT == 0.8)] <- 0.05
+
+lstAgents <- unique(dfProduction$Agent)
+#lstAgents <- str_remove(lstAgents,"[.]")
+#lstAgents <- str_remove(lstAgents,"[.]")
+
+lstVisions <- c( "Baseline", "Green_Gold", "Multiple_Benefits", "Native_Networks", "Wild_Woodlands", "Woodland_Culture")
+
+for (AFT in lstAgents){
+  
+  #AFT <- lstAgents[2]
+  dfAFT <- filter(dfProduction, Agent == AFT)
+  dfAFT$Agent <- NULL
+  
+  print(AFT)
+  
+  for (vision in lstVisions){
+    
+    #vision <- lstVisions[6]
+    
+    # per vision, increase sensitivity of key agents to financial capital (PES)
+    
+    if (vision == "Green_Gold" & AFT %in% c("prod.n.broad","prod.n.conifer","prod.nn.broad","prod.nn.conifer")){
+      
+      dfAFT$financial[which(dfAFT$financial > 0)] <- 0.08
+      
+      print(paste0(AFT,"  altered for vision ", vision))
+      
+    }
+    if (vision == "Multiple_Benefits" & AFT %in% c("agroforestry", "multi.mixed", "multi.nb", "multi.nc", "multi.nnc", "multi.nnb")){
+      
+      dfAFT$financial[which(dfAFT$financial==0.02)] <- 0.05
+      dfAFT$financial[which(dfAFT$financial==0.05)] <- 0.08
+      
+      print(paste0(AFT,"  altered for vision ", vision))
+      
+      
+    } 
+    if (vision == "Native_Networks" & AFT %in% c("consv.native","multi.nc","multi.nb")){
+      
+      dfAFT$financial[which(dfAFT$financial > 0)] <- 0.05
+      
+      print(paste0(AFT,"  altered for vision ", vision))
+      
+      
+    }
+    if (vision == "Wild_Woodlands" & AFT %in% c("consv.native","multi.nc")){
+      
+      dfAFT$financial[which(dfAFT$financial == 0.02)] <- 0.05
+      dfAFT$financial[which(dfAFT$financial == 0.05)] <- 0.08
+      
+      print(paste0(AFT,"  altered for vision ", vision))
+      
+    }
+    if (vision == "Woodland_Culture" & AFT %in% c("prod.n.broad","prod.n.conifer","prod.nn.broad","prod.nn.conifer",
+                                                  "agroforestry", "multi.mixed", "multi.nb", "multi.nc", "multi.nnc", "multi.nnb",
+                                                  "consv.native")){
+      
+      dfAFT$financial[which(dfAFT$financial == 0.02)] <- 0.05
+      dfAFT$financial[which(dfAFT$financial == 0.05)] <- 0.08
+      dfAFT$human[which(dfAFT$human > 0)] <- dfAFT$human[which(dfAFT$human > 0)] + 0.01
+      dfAFT$social[which(dfAFT$social > 0)] <- dfAFT$social[which(dfAFT$social > 0)] + 0.01
+      dfAFT$manufactured[which(dfAFT$manufactured > 0)] <- dfAFT$manufactured[which(dfAFT$manufactured > 0)] + 0.01
+      
+      print(paste0(AFT,"  altered for vision ", vision))
+      
+    }
+  
+    print(dfAFT)
+    AFT_nodot <- str_remove(AFT,"[.]") %>% str_remove(., "[.]")
+    print(AFT_nodot)
+    write.csv(dfAFT, paste0(dirOut,"/production/",vision,"/",AFT_nodot,".csv"), row.names = F)
+      
+  }
+  
+}
+
+
+
+
 ### behavioural parameters -----------------------------------------------------
 
 # Thesis version
@@ -80,6 +171,7 @@ dirOut <- paste0(wd,"data_Scotland")
 # }
 
 # Two behavioural models
+options(scipen = 999)
 
 dfBehaviour <- read.csv(paste0(dirData,"/BehaviourMaster.csv"))
 colnames(dfBehaviour)[1] <- "Agent"
