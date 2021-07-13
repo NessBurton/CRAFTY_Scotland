@@ -69,7 +69,7 @@ default_year = 2015
 world_shortnames <- c("BehaviouralBaseline","Thresholds")#c("Natural")#"Financial", "Natural")
 world_names <- c("BehaviouralBaseline","Thresholds")#c("Scotland_natural")#"Scotland_financial", "Scotland_natural")
  
-version_suffix <- "natural" 
+version_suffix <- "financial" 
 
 # absolute path (for local)
 path_data_local <- paste0(path_localstorage)
