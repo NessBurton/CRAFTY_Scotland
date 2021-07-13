@@ -145,7 +145,7 @@ livestock<- c(rep(l,5),rep(l/2,81)) #seq(l,(l/2),length.out = 86) # reduce by ha
 crop.service<-rep(cr,length(Year))
 employment<- c(rep(e,5),rep(e*1.6,81)) #seq(e,(e*1.6),length.out = 86) # joint no.5 priority 
 wwdemand<-data.frame(Year,softwood.timber,hardwood.timber,biodiversity,carbon,flood.regulation,recreation,livestock,crop.service,employment)
-write.csv(wwdemand, paste0(dirOut,"/worlds/Scotland_",world,"Wild_Woodlands/Demand_Wild_Woodlands.csv"),row.names = F)
+write.csv(wwdemand, paste0(dirOut,"/worlds/Scotland_",world,"/Wild_Woodlands/Demand_Wild_Woodlands.csv"),row.names = F)
 
 
 # V1 increase gradually through time -------------------------------------------
