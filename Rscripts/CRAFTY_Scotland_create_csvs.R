@@ -45,7 +45,7 @@ dfProduction$lessF[which(dfProduction$lessF == 0.8)] <- 0.05
 dfProduction$moreNAT[which(dfProduction$moreNAT == 0.8)] <- 0.05
 dfProduction$lessNAT[which(dfProduction$lessNAT == 0.8)] <- 0.05
 
-lstAgents <- unique(dfProduction$Agent)
+lstAgents <- unique(dfProduction$Agent) # remove to remove water.urban from list!
 #lstAgents <- str_remove(lstAgents,"[.]")
 #lstAgents <- str_remove(lstAgents,"[.]")
 
@@ -171,10 +171,12 @@ for (AFT in lstAgents){
 # }
 
 # Two behavioural models
-options(scipen = 999)
+#options(scipen = 999)
 
 dfBehaviour <- read.csv(paste0(dirData,"/BehaviourMaster.csv"))
 colnames(dfBehaviour)[1] <- "Agent"
+dfBehaviour <- dfBehaviour %>%  filter(Agent != "waterurban")
+
 #colnames(dfBehaviour)[4] <- "givingInDistributionSD"
 dfBehaviour <- dfBehaviour %>% mutate(productionCsvFile = paste0(".//production/%s/",Agent,".csv"))
 #dfBehaviour$Agent <- NULL
