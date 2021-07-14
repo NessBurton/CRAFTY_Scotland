@@ -991,6 +991,49 @@ for (yr in yrList){
   
 }
 
+
+### remove water/urban agents from the model -----------------------------------
+
+lstVisions <- c("Baseline","Green_Gold","Multiple_Benefits","Native_Networks","Wild_Woodlands","Woodland_Culture")
+
+for (vision in lstVisions){
+  
+  #vision <- "Baseline"
+  
+  dfCaps <- read.csv(paste0(dirOut,"/worlds/Scotland_financial/",vision,"/",vision,"_capitals.csv"))
+  
+  unique(dfCaps$FR)
+  
+  dfCaps <- dfCaps %>% filter(FR != "waterurban")
+  
+  write.csv(dfCaps, paste0(dirOut,"/worlds/Scotland_financial/",vision,"/",vision,"_capitals.csv"),row.names = F)
+  
+}
+
+for (vision in lstVisions){
+  
+  #vision <- "Baseline"
+  
+  for (yr in yrList){
+    
+    #yr <- 2020
+    
+    dfCaps <- read.csv(paste0(dirOut,"/worlds/Scotland_financial/",vision,"/",vision,"_",yr,".csv"))
+    
+    # temp join AFT allocation
+    dfCaps$FR <- AFT$AFT
+    
+    dfCaps <- dfCaps %>% filter(FR != "water.urban")
+    
+    dfCaps$FR <- NULL
+    
+    write.csv(dfCaps, paste0(dirOut,"/worlds/Scotland_financial/",vision,"/",vision,"_",yr,".csv"),row.names = F)
+    
+  }
+  
+  
+}
+
 ### SCOTLAND_NATURAL world - changes directly to natural capitals ---------------------------------
 
 # Multiple Benefits ----
