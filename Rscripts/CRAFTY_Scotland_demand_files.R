@@ -37,10 +37,11 @@ write.csv(idemand, paste0(dirOut,"worlds/Scotland_",world,"/Baseline/Demand_Base
 
 demandInitial <- read.csv(paste0(dataDisk,"BehaviouralBaseline/Baseline/Baseline-0-99-Scotland_",world,"-AggregateServiceDemand.csv"))
 
-### calc service curves (inital supply over 1000?)
-
 servicesInitial <- demandInitial[2,c(1:9)]
-serviceCurves <- 1/servicesInitial
+
+### calc service curves (1/initial supply)
+#serviceCurves <- 1/servicesInitial
+# this isn't needed in latest version of CRAFTY - normalisation is done in Competition_linear_xml
 
 st<-servicesInitial[[1]]
 ht<-servicesInitial[[2]]
