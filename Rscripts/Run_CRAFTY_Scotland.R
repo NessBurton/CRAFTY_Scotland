@@ -52,7 +52,14 @@ aft_names_fromzero <- c("agroforestry",
                         "prodnbroad",
                         "prodnconifer",
                         "prodnnbroad",
-                        "prodnnconifer")
+                        "prodnnconifer",
+                        "Lazy FR")
+
+# check agent colors
+# AFTcols <- read.csv(paste0(dirCRAFTYInput,"csv/AgentColors.csv"))
+# names(AFTcols)[1] <- "Name"
+# AFTcols$Name <- aft_names_fromzero
+# write.csv(AFTcols, paste0(dirCRAFTYInput,"csv/AgentColors.csv"),row.names=FALSE)
 
 # location of the CRAFTY Jar file
 path_crafty_jar <- path.expand(paste0(dirWorking, "/lib/CRAFTY_KIT_engine_2021_JDK15.jar"))
