@@ -456,7 +456,7 @@
 	</fRole>
 	
 	
-	<fRole class="org.volante.abm.comi.fr.ComiVariantProductionFR" label="waterurban" serialID="19"
+	<!--<fRole class="org.volante.abm.comi.fr.ComiVariantProductionFR" label="waterurban" serialID="19"
 		givingUpMean="${@(agents/%v/AftParams_waterurban.csv, givingUpDistributionMean)}"
 		givingInMean="${@(agents/%v/AftParams_waterurban.csv, givingInDistributionMean)}"
 		givingUpProbability = "${@(agents/%v/AftParams_waterurban.csv, givingUpProb)}">
@@ -477,7 +477,7 @@
  		
 		<production class="org.volante.abm.example.SimpleProductionModel"
 			csvFile="${@(agents/%v/AftParams_waterurban.csv, productionCsvFile)}" multiplyProductionNoise="true"/>
-	</fRole>
+	</fRole> -->
 
 
 </functionalRoles>
