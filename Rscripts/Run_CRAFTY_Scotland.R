@@ -52,8 +52,7 @@ aft_names_fromzero <- c("agroforestry",
                         "prodnbroad",
                         "prodnconifer",
                         "prodnnbroad",
-                        "prodnnconifer",
-                        "waterurban")
+                        "prodnnconifer")
 
 # location of the CRAFTY Jar file
 path_crafty_jar <- path.expand(paste0(dirWorking, "/lib/CRAFTY_KIT_engine_2021_JDK15.jar"))
@@ -135,16 +134,14 @@ foreach(s.idx = 1:n.scenario, .errorhandling = "stop",.packages = c("doSNOW"), .
   print(  .jcall( 'java/lang/System', 'S', 'getProperty', 'user.dir' ))
   
   # Two parameter sets
-  #foreach(p.idx = 1:n.paramset, .errorhandling = "stop", .verbose = T) %do% { 
+  foreach(p.idx = 1:n.paramset, .errorhandling = "stop", .verbose = T) %do% { 
     
-    p.idx <- 1
+    #p.idx <- 1
     paramset <-  paramsets[p.idx]
     scenario.filename <- paste0(scenario.filenames[s.idx], "_", paramset, ".xml") 
   
     #scenario.filename <- paste0(scenario.filenames[s.idx], ".xml") 
     
-    #}
-
     # Read the scenario file
     scenario.xml <- xml2::read_xml(paste0(dirCRAFTYInput, scenario.filename))
     # str(scenario.xml)
@@ -189,11 +186,13 @@ foreach(s.idx = 1:n.scenario, .errorhandling = "stop",.packages = c("doSNOW"), .
         print(paste0("============CRAFTY JAVA-R API: Simulation done (tick=", tick, ")"))
         
       }
-    
+      
     }  
     
     CRAFTY_jobj$EXTcloseRrun()
     #print(paste0("============CRAFTY JAVA-R API: Finished for scenario = ", scenario.split))
+    
+    }
     
 }
 stopCluster(cl)   
