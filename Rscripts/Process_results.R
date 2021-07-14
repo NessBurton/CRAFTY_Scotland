@@ -1,5 +1,10 @@
 
-wd <- "~/Documents/Dropbox/"
+library(tidyverse)
+library(ggplot2)
+
+#wd <- "~/Documents/Dropbox/"
+wd <- "D:/CRAFTY_Scotland/output/"
+
 dirResults <- paste0(wd) # will add output folder name here
 dirMetrics <- paste0(wd,"vision_metrics")
 
@@ -12,7 +17,7 @@ seedid <- "99"
 # behavioural parameters
 paramsets <- c("BehaviouralBaseline","Thresholds")
 # version names
-version_suffix <- "natural" 
+version_suffix <- "financial" 
 
 ### functions ----
 
@@ -55,78 +60,139 @@ getSPDF_Scot <- function(tmp_in_name) {
 
 # pre loop
 
+lstParams <- c("Thresholds","BehaviouralBaseline")
+
+lstVisions <- c( "Baseline", "Green_Gold", "Multiple_Benefits", "Native_Networks", "Wild_Woodlands", "Woodland_Culture")
+
+lstYrs <- 2015:2100
+
 lstWoodlandAgents <- c("prodnconifer","prodnbroad","prodnnconifer","prodnnbroad",
                        "multimixed","multinb","multinc","multinnc","multinnb",
                        "consvnative")
 
+dfMetrics <- tibble()
+colnames(dfMetrics) <- c("Year","Wood.cover","tES.div","tLU.div")
+dfPercCover <- tibble()
+
 # to put in loop
 
-df_test <- getCSV(getFname("Thresholds","Wild_Woodlands",2015))
+for (paramset in lstParams){
+  
+  #paramset <- lstParams[1]
+  print(paramset)
+  
+  for (vision in lstVisions){
+    
+    #vision <- lstVisions[2]
+    print(vision)
+    
+    for (yr in lstYrs){
+      
+      #yr <- lstYrs[50]
+      year <- round(yr,0)
+      print(year)
+      
+      df_test <- getCSV(getFname(paramset,vision,year))
+      
+      # read in baseline here for urban mask!
+      baseline <- getCSV(getFname("BehaviouralBaseline","Baseline",2015))
+      df_test$urban.water <- baseline$Agent
+      df_test$Agent[which(df_test$urban.water == "urbanwater")] <- "urbanwater"
+      
+      # region
+      df_test$Capital.region[which(df_test$Capital.region==0)]<-NA
+      df_test$Capital.region[which(df_test$Capital.region==1)]<-"South Scotland"
+      df_test$Capital.region[which(df_test$Capital.region==2)]<-"Central"
+      df_test$Capital.region[which(df_test$Capital.region==3)]<-"Perth & Argyll"
+      df_test$Capital.region[which(df_test$Capital.region==4)]<-"Grampian"
+      df_test$Capital.region[which(df_test$Capital.region==5)]<-"Highlands"
+      df_test$Capital.region[which(df_test$Capital.region==6)]<-"Islands"
+      df_test$Capital.region <- factor(df_test$Capital.region)
+      
+      df_test <- filter(df_test, !is.na(Capital.region))
+      
+      # reclassify agent types to produce simplified land use categories
+      df_test$reclass <- NA
+      df_test$reclass[which(df_test$Agent=="prodnconifer"|
+                              df_test$Agent=="prodnbroad"|
+                              df_test$Agent=="prodnnconifer"|
+                              df_test$Agent=="prodnnbroad")] <-'Production woodland'
+      df_test$reclass[which(df_test$Agent=="multimixed"|
+                              df_test$Agent=="multinb"|
+                              df_test$Agent=="multinc"|
+                              df_test$Agent=="multinnc"|
+                              df_test$Agent=="multinnb")] <- "Multifunctional woodland"
+      df_test$reclass[which(df_test$Agent=="consvnative")] <- "Conservation woodland"
+      df_test$reclass[which(df_test$Agent=="agroforestry")] <- "Agroforestry"
+      df_test$reclass[which(df_test$Agent=="intarable"|
+                              df_test$Agent=="intpastoral")] <- "Intensive agriculture"
+      df_test$reclass[which(df_test$Agent=="extarable"|
+                              df_test$Agent=="extpastoral")] <- "Extensive agriculture"
+      df_test$reclass[which(df_test$Agent=="estatemulti")] <- 'Multifunctional Estate'
+      df_test$reclass[which(df_test$Agent=="estatesport")] <- "Sporting Estate"
+      df_test$reclass[which(df_test$Agent=="estateconsv")] <- "Conservation Estate"
+      df_test$reclass[which(df_test$Agent=="marginal")] <- "Marginal"
+      df_test$reclass[which(df_test$Agent=="waterurban")] <- "Urban or Waterbody"
+      df_test$reclass[which(df_test$Agent=="Lazy FR")] <- "Unmanaged"
+      
+      # calulate woodland cover
+      wood.cover <- df_test %>% 
+        count(Agent) %>% 
+        mutate(perc_cover = n/nrow(df_test)*100) %>% 
+        summarise(wood_cover = sum(perc_cover[which(Agent %in% lstWoodlandAgents)])) %>% 
+        .[[1]]
+      
+      # service provision
+      tES.div <- df_test %>% pivot_longer(Service.softwood.timber:Service.employment,
+                               names_to = "Service",
+                               values_to = "Provision") %>% 
+        group_by(Service) %>% 
+        summarise(service_tot = sum(Provision)) %>% 
+        mutate(total_prov = sum(service_tot),
+               service_div = (service_tot/total_prov)^2,
+               tES_div = 1-(sum(service_div))) %>% 
+        summarise(tES_div = mean(tES_div)) %>% 
+        .[[1]]
+      
+      # land use diversity
+      tLU.div <- df_test %>% 
+        count(Agent) %>% 
+        mutate(total = sum(n),
+               land_div = (n/total)^2,
+               tLU_div = 1-(sum(land_div))) %>% 
+        summarise(tLU_div = mean(tLU_div)) %>% 
+        .[[1]]
+      
+      metrics <- c(paramset, vision, year, wood.cover, tES.div, tLU.div)
+      dfMetrics <- rbind(dfMetrics, metrics)
+      colnames(dfMetrics) <- c("Paramset","Vision","Year","Wood.cover","tES.div","tLU.div")
 
-# region
-df_test$Capital.region[which(df_test$Capital.region==0)]<-NA
-df_test$Capital.region[which(df_test$Capital.region==1)]<-"South Scotland"
-df_test$Capital.region[which(df_test$Capital.region==2)]<-"Central"
-df_test$Capital.region[which(df_test$Capital.region==3)]<-"Perth & Argyll"
-df_test$Capital.region[which(df_test$Capital.region==4)]<-"Grampian"
-df_test$Capital.region[which(df_test$Capital.region==5)]<-"Highlands"
-df_test$Capital.region[which(df_test$Capital.region==6)]<-"Islands"
-df_test$Capital.region <- factor(df_test$Capital.region)
+      
+      # reclass extents
+      LU_summary <- df_test %>% 
+        count(reclass) %>% 
+        mutate(perc_cover = n/nrow(df_test)*100)
+      
+    colnames(LU_summary) <- c("Land.use.type","n","Percentage")
+    LU_summary$Year <- year
+    LU_summary$Paramset <- paramset
+    LU_summary$Vision <- vision
+    
+    dfPercCover <- rbind(dfPercCover,LU_summary)
+      
+    }
+    
+    
+  }
+  
+}
 
-df_test <- filter(df_test, !is.na(Capital.region))
+dfMetrics %>% 
+  pivot_longer(Wood.cover:tLU.div, names_to = "Metric", values_to = "Value") %>%
+  ggplot()+
+  geom_line(aes(x=as.numeric(Year),y=as.numeric(Value),colour=Vision))+
+  facet_grid(Paramset~Metric, scales = "free")
 
-# reclassify agent types to produce simplified land use categories
-df_test$reclass <- NA
-df_test$reclass[which(df_test$Agent=="prodnconifer"|
-                         df_test$Agent=="prodnbroad"|
-                         df_test$Agent=="prodnnconifer"|
-                         df_test$Agent=="prodnnbroad")] <-'Production woodland'
-df_test$reclass[which(df_test$Agent=="multimixed"|
-                         df_test$Agent=="multinb"|
-                         df_test$Agent=="multinc"|
-                         df_test$Agent=="multinnc"|
-                         df_test$Agent=="multinnb")] <- "Multifunctional woodland"
-df_test$reclass[which(df_test$Agent=="consvnative")] <- "Conservation woodland"
-df_test$reclass[which(df_test$Agent=="agroforestry")] <- "Agroforestry"
-df_test$reclass[which(df_test$Agent=="intarable"|
-                         df_test$Agent=="intpastoral")] <- "Intensive agriculture"
-df_test$reclass[which(df_test$Agent=="extarable"|
-                         df_test$Agent=="extpastoral")] <- "Extensive agriculture"
-df_test$reclass[which(df_test$Agent=="estatemulti")] <- 'Multifunctional Estate'
-df_test$reclass[which(df_test$Agent=="estatesport")] <- "Sporting Estate"
-df_test$reclass[which(df_test$Agent=="estateconsv")] <- "Conservation Estate"
-df_test$reclass[which(df_test$Agent=="marginal")] <- "Unmanaged"
-df_test$reclass[which(df_test$Agent=="waterurban")] <- "Urban or Waterbody"
-
-# calulate woodland cover
-df_test %>% 
-  count(Agent) %>% 
-  mutate(perc_cover = n/nrow(df_test)*100) %>% 
-  summarise(wood_cover = sum(perc_cover[which(Agent %in% lstWoodlandAgents)]))
-
-# service provision
-df_test %>% pivot_longer(Service.softwood.timber:Service.employment,
-                         names_to = "Service",
-                         values_to = "Provision") %>% 
-  group_by(Service) %>% 
-  summarise(service_tot = sum(Provision)) %>% 
-  mutate(total_prov = sum(service_tot),
-         service_div = (service_tot/total_prov)^2,
-         tES_div = 1-(sum(service_div))) %>% 
-  summarise(tES_div = mean(tES_div))
-
-# land use diversity
-df_test %>% 
-  count(Agent) %>% 
-  mutate(total = sum(n),
-         land_div = (n/total)^2,
-         tLU_div = 1-(sum(land_div))) %>% 
-  summarise(tLU_div = mean(tLU_div))
-
-# reclass extents
-df_test %>% 
-  count(reclass) %>% 
-  mutate(perc_cover = n/nrow(df_test)*100)
 
 # supply demand gap
 vision <- "Wild_Woodlands"
