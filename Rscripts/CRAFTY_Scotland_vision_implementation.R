@@ -996,17 +996,19 @@ for (yr in yrList){
 
 lstVisions <- c("Baseline","Green_Gold","Multiple_Benefits","Native_Networks","Wild_Woodlands","Woodland_Culture")
 
+world <- "natural"
+
 for (vision in lstVisions){
   
   #vision <- "Baseline"
   
-  dfCaps <- read.csv(paste0(dirOut,"/worlds/Scotland_financial/",vision,"/",vision,"_capitals.csv"))
+  dfCaps <- read.csv(paste0(dirOut,"/worlds/Scotland_",world,"/",vision,"/",vision,"_capitals.csv"))
   
   unique(dfCaps$FR)
   
   dfCaps <- dfCaps %>% filter(FR != "waterurban")
   
-  write.csv(dfCaps, paste0(dirOut,"/worlds/Scotland_financial/",vision,"/",vision,"_capitals.csv"),row.names = F)
+  write.csv(dfCaps, paste0(dirOut,"/worlds/Scotland_",world,"/",vision,"/",vision,"_capitals.csv"),row.names = F)
   
 }
 
@@ -1018,7 +1020,7 @@ for (vision in lstVisions){
     
     #yr <- 2020
     
-    dfCaps <- read.csv(paste0(dirOut,"/worlds/Scotland_financial/",vision,"/",vision,"_",yr,".csv"))
+    dfCaps <- read.csv(paste0(dirOut,"/worlds/Scotland_",world,"/",vision,"/",vision,"_",yr,".csv"))
     
     # temp join AFT allocation
     dfCaps$FR <- AFT$AFT
@@ -1027,7 +1029,7 @@ for (vision in lstVisions){
     
     dfCaps$FR <- NULL
     
-    write.csv(dfCaps, paste0(dirOut,"/worlds/Scotland_financial/",vision,"/",vision,"_",yr,".csv"),row.names = F)
+    write.csv(dfCaps, paste0(dirOut,"/worlds/Scotland_",world,"/",vision,"/",vision,"_",yr,".csv"),row.names = F)
     
   }
   

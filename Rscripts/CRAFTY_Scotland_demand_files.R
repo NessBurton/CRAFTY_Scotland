@@ -18,7 +18,7 @@ dataDisk <- "D:/CRAFTY_Scotland/output/"
 world <- "natural" #"financial" 
 
 ### constant demand - to get initial demand
-# 
+
 # Year <- 2015
 # softwood.timber<-100
 # hardwood.timber<-100
