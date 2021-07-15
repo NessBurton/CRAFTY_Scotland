@@ -18,26 +18,28 @@ dataDisk <- "D:/CRAFTY_Scotland/output/"
 world <- "financial" #natural
 
 ### constant demand - to get initial demand
-
-Year <- 2015
-softwood.timber<-100
-hardwood.timber<-100
-biodiversity<-100
-carbon<-100
-flood.regulation<-100
-recreation<-100
-livestock<-100
-crop.service<-100
-employment<-100
-idemand<-data.frame(Year,softwood.timber,hardwood.timber,biodiversity,carbon,flood.regulation,recreation,livestock,crop.service,employment)
-write.csv(idemand, paste0(dirOut,"worlds/Scotland_",world,"/Baseline/Demand_Baseline.csv"))
+# 
+# Year <- 2015
+# softwood.timber<-100
+# hardwood.timber<-100
+# biodiversity<-100
+# carbon<-100
+# flood.regulation<-100
+# recreation<-100
+# livestock<-100
+# crop.service<-100
+# employment<-100
+# idemand<-data.frame(Year,softwood.timber,hardwood.timber,biodiversity,carbon,flood.regulation,recreation,livestock,crop.service,employment)
+# write.csv(idemand, paste0(dirOut,"worlds/Scotland_",world,"/Baseline/Demand_Baseline.csv"))
 
 # run baseline scenario for a few years to get initial supply
 ### inital demand (supply after 1 yr, baseline run)
 
-demandInitial <- read.csv(paste0(dataDisk,"BehaviouralBaseline/Baseline/Baseline-0-99-Scotland_",world,"-AggregateServiceDemand.csv"))
+demandInitial1 <- read.csv(paste0(dataDisk,"BehaviouralBaseline/Baseline/Baseline-0-99-Scotland_",world,"-AggregateServiceDemand.csv"))
+demandInitial2 <- read.csv(paste0(dataDisk,"Thresholds/Baseline/Baseline-0-99-Scotland_",world,"-AggregateServiceDemand.csv"))
 
-servicesInitial <- demandInitial[2,c(1:9)]
+servicesInitial1 <- demandInitial1[2,c(1:9)]
+servicesInitial2 <- demandInitial2[2,c(1:9)]
 
 ### calc service curves (1/initial supply)
 #serviceCurves <- 1/servicesInitial
