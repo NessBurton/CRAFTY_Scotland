@@ -15,7 +15,7 @@ dirData <- paste0(wd,"data_raw")
 dirOut <- paste0(wd,"data_Scotland/")
 dataDisk <- "D:/CRAFTY_Scotland/output/"
 
-world <- "financial" #natural
+world <- "natural" #"financial" 
 
 ### constant demand - to get initial demand
 # 
@@ -36,10 +36,10 @@ world <- "financial" #natural
 ### inital demand (supply after 1 yr, baseline run)
 
 demandInitial1 <- read.csv(paste0(dataDisk,"BehaviouralBaseline/Baseline/Baseline-0-99-Scotland_",world,"-AggregateServiceDemand.csv"))
-demandInitial2 <- read.csv(paste0(dataDisk,"Thresholds/Baseline/Baseline-0-99-Scotland_",world,"-AggregateServiceDemand.csv"))
+#demandInitial2 <- read.csv(paste0(dataDisk,"Thresholds/Baseline/Baseline-0-99-Scotland_",world,"-AggregateServiceDemand.csv"))
 
-servicesInitial1 <- demandInitial1[2,c(1:9)]
-servicesInitial2 <- demandInitial2[2,c(1:9)]
+servicesInitial <- demandInitial1[2,c(1:9)]
+#servicesInitial2 <- demandInitial2[2,c(1:9)]
 
 ### calc service curves (1/initial supply)
 #serviceCurves <- 1/servicesInitial
