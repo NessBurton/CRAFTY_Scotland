@@ -111,6 +111,7 @@ BNG_csv <- BNG_csv[, c("landcover.id", "landcover.X", "landcover.Y")]
 names(BNG_csv) <- c("id","long","lat")
 
 scot_coords <- read.csv(paste0(path_data_raw, "/output/capitals_normalised_Feb21.csv"))
+scot_coords <- scot_coords %>% filter(Agent != "water.urban")
 scot_coords <- scot_coords[, c("id","x","y")]
 
 scot_coords <- left_join(scot_coords,BNG_csv,by="id")
@@ -170,8 +171,7 @@ aftnames <- data.frame(rbind(c("agroforestry","agroforestry","Agroforestry"),
                              c("prodnbroad","prodnbroad","Productive native broadleaf"),
                              c("prodnconifer","prodnconifer","Productive native conifer"),
                              c("prodnnbroad","prodnnbroad","Productive non-native broadleaf"),
-                             c("prodnnconifer","prodnnconifer","Productive non-native conifer"),
-                             c("waterurban","waterurban","Waterbody or urban area")))
+                             c("prodnnconifer","prodnnconifer","Productive non-native conifer")))
 
 colnames(aftnames) <- c("AFT", "AFT_cb", "Description")
 
