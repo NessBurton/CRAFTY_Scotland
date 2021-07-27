@@ -192,7 +192,7 @@ shinyServer(function(input, output, session) {
      idx_dem_st = ((ncold/2)+1) : ncold
      idx_sup_st = 1:(ncold/2) 
      
-     shortfall_m = ((as.numeric(demand_m[idx_dem_st,]) - as.numeric(demand_m[idx_sup_st,])) / as.numeric(demand_m[idx_dem_st,]) ) * 100
+     shortfall_m = ((demand_m[idx_dem_st,] - demand_m[idx_sup_st,]) / demand_m[idx_dem_st,] ) * 100
      shortfall_m[!is.finite(shortfall_m)] <- NA
      
      par(mfrow=c(4,2), mar = c(5.1, 5.1, 2, 0)  + c(0,0,0,10), oma=c(0,0,0,0))
@@ -222,8 +222,8 @@ shinyServer(function(input, output, session) {
      
      # Supply and demand
      
-     supply_m_norm <- (as.numeric(demand_m[idx_sup_st,]) / as.numeric(demand_m[idx_sup_st,1]) - 1) * 100
-     demand_m_norm <- (as.numeric(demand_m[idx_dem_st,]) / as.numeric(demand_m[idx_dem_st,1])-1) * 100
+     supply_m_norm <- (demand_m[idx_sup_st,] / demand_m[idx_sup_st,1] - 1) * 100
+     demand_m_norm <- (demand_m[idx_dem_st,] / demand_m[idx_dem_st,1] - 1) * 100
      
      supdem_range <- range(cbind(supply_m_norm))
      print(supdem_range)
@@ -234,10 +234,10 @@ shinyServer(function(input, output, session) {
      # legend("topright", legend = serviceNames, fill=serviceColours, cex=LEGEND_CEX, bty="n", xpd = TRUE,  inset=c(LEGEND_MAR,0), border=NA)
      
      #test
-     demand_dt <- data.frame(demand_dt)
+     #demand_dt <- data.frame(demand_dt)
      
      plot(demand_dt$Tick, supply_m_norm[1,], type="l", col = serviceColours[1], ylim=y_lim_v, xlab="Year", ylab="Relative to 2015 supply (%)",  main = "Service Supply", las=1, xaxt="n" )
-     plot(demand_dt$Tick, supply_m_norm, type="l", col = serviceColours[1], ylim=y_lim_v, xlab="Year", ylab="Relative to 2015 supply (%)",  main = "Service Supply", las=1, xaxt="n" )
+     plot(demand_dt$Tick, supply_m_norm[1,], type="l", col = serviceColours[1], ylim=y_lim_v, xlab="Year", ylab="Relative to 2015 supply (%)",  main = "Service Supply", las=1, xaxt="n" )
      axis(side=1, at = target_years_other, labels = target_years_other)
      # axis(side=2, at = seq(floor(-shortfall_max), ceiling(shortfall_max), shortfall_intv))
      abline(h = 0, lty=2)
@@ -272,7 +272,7 @@ shinyServer(function(input, output, session) {
      
      # SDGAP
      
-     sdgap  = (as.numeric(demand_m[idx_dem_st,]) - as.numeric(demand_m[idx_sup_st,]))
+     sdgap  = (demand_m[idx_dem_st,] - demand_m[idx_sup_st,])
      # sdgap = (sdgap /demand_m[idx_sup_st,1]  ) * 100
      
      sdgap_range = range(sdgap, na.rm=T)
