@@ -129,13 +129,24 @@ scenarioname.default <- scenario_names[1]
 service_tb <- read.csv(paste0(path_base, "/csv/Services.csv")) %>% as.data.frame
 serviceNames <- service_tb$Name
 # adapt palette
-#serviceColours = c("Food.crops" = "coral1", "Fodder.crops" ="goldenrod1", "GF.redMeat" = "turquoise", "Fuel" = "tan4", "Softwood" = "black", "Hardwood" = "grey", "Biodiversity" = "dodgerblue2", "Carbon"="darkgreen", "Recreation" = "orange", "Flood.reg" = "lightblue", "Employment" = "purple", "Ldiversity" = "brown", "GF.milk" = "green", "Sus.Prod" = "pink")
+serviceColours = c("softwood.timber" = "coral1", 
+                   "hardwood.timber" ="goldenrod1", 
+                   "biodiversity" = "turquoise", 
+                   "carbon" = "tan4", 
+                   "flood.regulation" = "black", 
+                   "recreation" = "grey", 
+                   "livestock" = "dodgerblue2", 
+                   "crop.service"="darkgreen", 
+                   "employment" = "orange")
 
 
 capital_tb <- read.csv(paste0(path_base, "/csv/Capitals.csv")) %>% as.data.frame
 capitalNames <- capital_tb$Name
 # adapt palette
-#capital_colours <- (c("Ext_AF" = "yellowgreen", "IA"  = "yellow1", "Int_AF" =  "darkolivegreen1", "Int_Fa" = "lightgoldenrod1",  "IP" = "red1", "MF" =  "green3", "Min_man" = "lightyellow3",  "Mix_Fa" = "darkgoldenrod",  "Mix_For" = "green4",   "Mix_P" = "violetred",  "Multifun" = "blueviolet", "NNBroadleaf"="orange", "NBroadleaf" = "lightblue", "UMF" = "darkgreen", "Ur" = "black", "VEP" = "red4", "EP" = "red3")) # , "Lazy FR" = "black")
+# capital_colours <- (c("region" = "yellowgreen", 
+#                       "nn.conifer.yc"  = "yellow1", 
+#                       "nn.broad.yc" =  "darkolivegreen1", 
+#                       "n.confier.yc" = "lightgoldenrod1",  "IP" = "red1", "MF" =  "green3", "Min_man" = "lightyellow3",  "Mix_Fa" = "darkgoldenrod",  "Mix_For" = "green4",   "Mix_P" = "violetred",  "Multifun" = "blueviolet", "NNBroadleaf"="orange", "NBroadleaf" = "lightblue", "UMF" = "darkgreen", "Ur" = "black", "VEP" = "red4", "EP" = "red3")) # , "Lazy FR" = "black")
 
 
 indicator_names <- c(paste0("Service:", serviceNames), paste0("Capital:", capitalNames), "LandUseIndex") #, "Agent")
@@ -154,7 +165,7 @@ indicator_input_idxs = c(10:33)
 # AFTs
 
 aftnames <- data.frame(rbind(c("agroforestry","agroforestry","Agroforestry"),
-                             c("consvnative","consvnative","Conservationist native woodland"),
+                             c("consvnative","consvnative","Conservation woodland"),
                              c("estateconsv","estateconsv","Conservation estate"),
                              c("estatemulti","estatemulti","Traditional multifunctional"),
                              c("estatesport","estatesport","Sporting estate"),
@@ -223,13 +234,16 @@ aft_pal <- colorFactor(col2hex(as.character(aft_colors_fromzero)),  levels = as.
 
 # 
 # # reduced
-# aft_group_colors =  aft_colors_fromzero_17[ c(1:5, 7:9, 14:17)]
+aft_group_colors =  aft_colors_fromzero_17[ c(1:5, 6, 8, 10:11, 16)]
 # aft_group_colors[7] = "darkblue"
 # aft_group_colors[12] = "black"
 # 
-# aft_group_names = c( aft_names_fromzero)[ c(1:5, 7:9, 14:17)]
-# aft_group_names[5] = "Intensive Agriculture"
-# aft_group_names[7] = "Productive Woodland"
-# aft_group_shortnames = c( aft_shortnames_fromzero  )[ c(1:5, 7:9, 14:17)]
+aft_group_names = c( aft_names_fromzero)[ c(1:5, 6, 8, 10:11, 16)]
+aft_group_names[6] = "Extensive Agriculture"
+aft_group_names[7] = "Intensive Agriculture"
+aft_group_names[9] = "Multifunctional Woodland"
+aft_group_names[10] = "Productive Woodland"
+
+aft_group_shortnames = c( aft_shortnames_fromzero  )[ c(1:5, 6, 8, 10:11, 16)]
 # aft_group_shortnames[5] = "IA"
 # aft_group_shortnames[7] = "PW"
