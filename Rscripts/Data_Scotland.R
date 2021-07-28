@@ -129,15 +129,15 @@ scenarioname.default <- scenario_names[1]
 service_tb <- read.csv(paste0(path_base, "/csv/Services.csv")) %>% as.data.frame
 serviceNames <- service_tb$Name
 # adapt palette
-serviceColours = c("softwood.timber" = "coral1", 
-                   "hardwood.timber" ="goldenrod1", 
-                   "biodiversity" = "turquoise", 
-                   "carbon" = "tan4", 
-                   "flood.regulation" = "black", 
-                   "recreation" = "grey", 
-                   "livestock" = "dodgerblue2", 
-                   "crop.service"="darkgreen", 
-                   "employment" = "orange")
+serviceColours = c("softwood.timber" = "chocolate4", 
+                   "hardwood.timber" ="darkgoldenrod", 
+                   "biodiversity" = "chartreuse4", 
+                   "carbon" = "darkgreen", 
+                   "flood.regulation" = "cyan4", 
+                   "recreation" = "darkorchid3", 
+                   "livestock" = "darkslategrey", 
+                   "crop.service"="darkorange2", 
+                   "employment" = "azure4")
 
 
 capital_tb <- read.csv(paste0(path_base, "/csv/Capitals.csv")) %>% as.data.frame
