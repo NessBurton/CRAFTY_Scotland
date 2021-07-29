@@ -169,15 +169,9 @@ shinyServer(function(input, output, session) {
      aftcomp_dt_org = aftcomp_dt
      
      aftcomp_m <- t(as.matrix(sapply(aftcomp_dt[, -c(1,2)] , FUN = function(x) as.numeric(as.character(x)))))
-     #test
-     #aftcomp_m <- t(as.matrix(aftcomp_dt[, -c(1,2)]))
-     
      
      # process csv files
      demand_m <- t(as.matrix(sapply(demand_dt[, -c(ncol(demand_dt) - 1:0)] , FUN = function(x) as.numeric(as.character(x)))))
-     #test
-     #demand_m <- t(as.matrix(demand_dt[, -c(ncol(demand_dt) - 1:0)]))
-     
      
      str(demand_m)
      ncold = nrow(demand_m)
@@ -207,7 +201,7 @@ shinyServer(function(input, output, session) {
      axis(side=1, at = target_years_other, labels = target_years_other)
      
      for (a.idx in 2:nrow(aftcomp_perc_m)) {
-       lines(aftcomp_dt$Tick, aftcomp_perc_m[a.idx,], col = aft_group_colors[a.idx], lty=aft_lty_ts[a.idx])
+       lines(aftcomp_dt$Tick, aftcomp_perc_m[a.idx,], col = aft_group_colors[a.idx])#, lty=aft_lty_ts[a.idx])
      }
      
      legend("topright", aft_group_shortnames, col = aft_group_colors, lty=aft_lty_ts, cex=LEGEND_CEX, bty="n", xpd = TRUE, inset=c(LEGEND_MAR,0), lwd=1.5)
@@ -228,7 +222,6 @@ shinyServer(function(input, output, session) {
      #test
      #demand_dt <- data.frame(demand_dt)
      
-     plot(demand_dt$Tick, supply_m_norm[1,], type="l", col = serviceColours[1], ylim=y_lim_v, xlab="Year", ylab="Relative to 2015 supply (%)",  main = "Service Supply", las=1, xaxt="n" )
      plot(demand_dt$Tick, supply_m_norm[1,], type="l", col = serviceColours[1], ylim=y_lim_v, xlab="Year", ylab="Relative to 2015 supply (%)",  main = "Service Supply", las=1, xaxt="n" )
      axis(side=1, at = target_years_other, labels = target_years_other)
      # axis(side=2, at = seq(floor(-shortfall_max), ceiling(shortfall_max), shortfall_intv))
@@ -362,24 +355,25 @@ shinyServer(function(input, output, session) {
     aft_old = csv_from$LandUseIndex
     aft_new = csv_to$LandUseIndex
     
-    # deal with -1 (not needed for Scot)
-    # aft_old[aft_old==-1] = 16
-    # aft_new[aft_new==-1] = 16
+    # deal with -1 
+    aft_old[aft_old==-1] = 19
+    aft_new[aft_new==-1] = 19
 
     # deal with zero
     aft_old = aft_old + 1
     aft_new = aft_new + 1
     
-    aft_names <- csv_from$Agent
+    aft_names <- csv_to$Agent
     csv_from$LandUseIndex <- csv_from$LandUseIndex + 1
     unique(csv_from[,c(37:38)])
-
+    unique(csv_to[,c(37:38)])
+    
     # reclassify
-    aft_old[aft_old==6] = 5
-    aft_old[aft_old %in% c(8, 10:13)] = 8
-
-    aft_new[aft_new==6] = 5
-    aft_new[aft_new %in% c(8, 10:13)] = 8
+    # aft_old[aft_old==6] = 5
+    # aft_old[aft_old %in% c(8, 10:13)] = 8
+    # 
+    # aft_new[aft_new==6] = 5
+    # aft_new[aft_new %in% c(8, 10:13)] = 8
 
 
     aft_tr.df = cbind(aft_old, aft_new)
@@ -391,8 +385,8 @@ shinyServer(function(input, output, session) {
     # Create the transition matrix that
     # is the basis for the transition plot
 
-    aft_old_f = factor(aft_old)#, levels = c(1:5, 7:9, 14:17))
-    aft_new_f = factor(aft_new)#, levels = c(1:5, 7:9, 14:17))
+    aft_old_f = factor(aft_old, levels = c(1:20))
+    aft_new_f = factor(aft_new, levels = c(1:20))
 
     aft_tb_oldandnew = table(aft_old_f, aft_new_f)
 

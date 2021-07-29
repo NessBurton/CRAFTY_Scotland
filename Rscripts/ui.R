@@ -154,7 +154,7 @@ navbarPage("CRAFTY interactive web-interface", windowTitle =  "CRAFTY interactiv
                                                    "Year",
                                                    min = start_year,
                                                    max = end_year, sep = "",
-                                                   value = start_year, step=10),
+                                                   value = start_year, step=5),
  
                                      selectInput("scenario_from", "Vision",
                                                  scenario_names[], selected = scenario_names[1]
@@ -172,7 +172,7 @@ navbarPage("CRAFTY interactive web-interface", windowTitle =  "CRAFTY interactiv
                                                     "Year",
                                                     min = start_year,
                                                     max = end_year, sep = "",
-                                                    value = end_year, step=10),
+                                                    value = end_year, step=5),
                            
                                      selectInput("scenario_to", "Vision",
                                                  scenario_names[], selected = scenario_names[2]
