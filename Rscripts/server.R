@@ -125,7 +125,7 @@ shinyServer(function(input, output, session) {
      print("draw timeseries pane")
      
      
-     scenario_tmp = "Baseline"
+     #scenario_tmp = "Baseline"
      # scenario_tmp = "RCP4_5-SSP4"
      # scenario_tmp = "Baseline"
      #production_tmp = "V2_June21"
@@ -138,34 +138,25 @@ shinyServer(function(input, output, session) {
      #aft_csvname_changed_v <- fs::path_expand(paste0(version_suffix[match(input$world, world_names)], "/", scenario_tmp, "/",  scenario_tmp, "-", runid, "-99-Scotland_", version_suffix, "-AggregateAFTComposition.csv"))
      aft_csvname_changed_v <- fs::path_expand(paste0(input$world,"/",scenario_tmp, "/",  scenario_tmp, "-", runid, "-99-Scotland_", version_suffix, "-AggregateAFTComposition.csv"))
      #test
-     #aft_csvname_changed_v <- fs::path_expand(paste0("BehaviouralBaseline/Green_Gold/Green_Gold-",runid, "-99-Scotland_", version_suffix, "-AggregateAFTComposition.csv"))
+     #aft_csvname_changed_v <- fs::path_expand(paste0("Thresholds/Green_Gold/Green_Gold-",runid, "-99-Scotland_", version_suffix, "-AggregateAFTComposition.csv"))
      
      aftcomp_dt_l <- lapply(aft_csvname_changed_v, FUN = function(x) getCSV(x, location = location_UK))
-     #test
-     #aftcomp_dt_l <- getCSV(aft_csvname_changed_v, location = location_UK)
-     
+
      aftcomp_dt <- cbind(aftcomp_dt_l[[1]][,c("Tick", "Region")],  Reduce("+", lapply(aftcomp_dt_l, FUN = function(x) x[,-c(1:2)])))
-     #test
-     #aftcomp_dt <- cbind(aftcomp_dt_l[,c("Tick", "Region")],  Reduce("+", aftcomp_dt_l[,-c(1:2)]))
      
      # supply and demand files
      #demand_csvname_changed_v = fs::path_expand(paste0(version_suffix[match(input$world, world_names)], "/", production_tmp, "/", scenario_tmp, "/", scenario_tmp, "-", runid, "-99-", version_suffix, "-AggregateServiceDemand.csv"))
      #demand_csvname_changed_v = fs::path_expand(paste0(version_suffix[match(input$world, world_names)], "/", scenario_tmp, "/", scenario_tmp, "-", runid, "-99-Scotland_", version_suffix, "-AggregateServiceDemand.csv"))
      demand_csvname_changed_v = fs::path_expand(paste0(input$world,"/",scenario_tmp, "/", scenario_tmp, "-", runid, "-99-Scotland_", version_suffix, "-AggregateServiceDemand.csv"))
      #test
-     #demand_csvname_changed_v = fs::path_expand(paste0("BehaviouralBaseline/Green_Gold/Green_Gold-",runid, "-99-Scotland_", version_suffix, "-AggregateServiceDemand.csv"))
+     #demand_csvname_changed_v = fs::path_expand(paste0("Thresholds/Green_Gold/Green_Gold-",runid, "-99-Scotland_", version_suffix, "-AggregateServiceDemand.csv"))
      
      demand_dt_l = lapply(demand_csvname_changed_v, FUN = function(x) getCSV(x, location = location_UK))
-     #test
-     #demand_dt_l <- getCSV(demand_csvname_changed_v, location = location_UK)
      
      rem_col_idx = match(c("Tick", "Region"), colnames(demand_dt_l[[1]]))
-     #test
-     #rem_col_idx = match(c("Tick", "Region"), colnames(demand_dt_l))
      
      demand_dt = cbind( Reduce("+", lapply(demand_dt_l, FUN = function(x) x[,-rem_col_idx ])), Region= "UK", Tick = demand_dt_l[[1]][,c("Tick")])
-     #test
-     #demand_dt = cbind( Reduce("+", demand_dt_l[,-rem_col_idx ]), Region= "UK", Tick = demand_dt_l[,c("Tick")])
+     
      
      #}
      
