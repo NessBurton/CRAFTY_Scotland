@@ -182,12 +182,13 @@ aftnames <- data.frame(rbind(c("agroforestry","agroforestry","Agroforestry"),
                              c("prodnbroad","prodnbroad","Productive native broadleaf"),
                              c("prodnconifer","prodnconifer","Productive native conifer"),
                              c("prodnnbroad","prodnnbroad","Productive non-native broadleaf"),
-                             c("prodnnconifer","prodnnconifer","Productive non-native conifer")))
+                             c("prodnnconifer","prodnnconifer","Productive non-native conifer"),
+                             c("Lazy FR", "Lazy FR", "Unmanaged")))
 
 colnames(aftnames) <- c("AFT", "AFT_cb", "Description")
 
 aft_shortnames_fromzero <- as.character(aftnames$AFT)
-#aft_shortnames_fromzero[20] = "Unmanaged"
+aft_shortnames_fromzero[20] = "Unmanaged"
 
 aft_names_fromzero <-  as.character(aftnames$Description)
 
@@ -197,7 +198,7 @@ capital_names <- data.frame(Capital = capitalNames)
 
 aft_tb <- read.csv(paste0(path_base, "/csv/AgentColors.csv"), strip.white = T, stringsAsFactors = F) %>% as.data.frame
 #aft_tb <- aft_tb[-21,]
-#aft_tb[aft_tb$Name == "Lazy FR", ]$Name = "Unmanaged"
+aft_tb[aft_tb$Name == "Lazy FR", ]$Name = "Unmanaged"
 
 aft_colors_alpha <- aft_tb$Color[match(aft_shortnames_fromzero, aft_tb$Name)]
 
@@ -224,11 +225,11 @@ target_years_other <-  seq(2015, 2100, 5)
 
 aft_colors_fromzero_ts <- aft_colors_fromzero
 #aft_colors_fromzero_ts[17] <- "black" 
-aft_lty_ts <- c(rep(1, 11), 2)
+aft_lty_ts <- c(rep(1, 10), 2)
 
 n_cell_total <- nrow(scot_coords)
 
-aft_pal <- colorFactor(col2hex(as.character(aft_colors_fromzero)),  levels = as.character(c(0:20, -1)), na.color = "transparent")
+aft_pal <- colorFactor(col2hex(as.character(aft_colors_fromzero)),  levels = as.character(c(0:19, -1)), na.color = "transparent")
 
 # aft.pal(6)
 
@@ -245,5 +246,7 @@ aft_group_names[9] = "Multifunctional Woodland"
 aft_group_names[10] = "Productive Woodland"
 
 aft_group_shortnames = c( aft_shortnames_fromzero  )[ c(1:5, 6, 8, 10:11, 16)]
-# aft_group_shortnames[5] = "IA"
-# aft_group_shortnames[7] = "PW"
+aft_group_shortnames[6] = "extagri"
+aft_group_shortnames[7] = "intagri"
+aft_group_shortnames[9] = "multiwoodland"
+aft_group_shortnames[10] = "prodwoodland"
