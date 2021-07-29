@@ -83,21 +83,22 @@ shinyServer(function(input, output, session) {
   # 
   # 
   # ### Behavioural table -----
-  # output$Tab1_BehaviouralTablePane <- renderDataTable({
-  #   
-  #   print("draw behavioural pane")
-  #   
-  #   foldername_tmp <- paste0("Tables/agents/")
-  #   
-  #   aftparams_df <- sapply(aft_shortnames_fromzero[-length(aft_shortnames_fromzero)], FUN = function(x) read.csv(paste0(foldername_tmp, "/AftParams_", x, ".csv"))) %>% t
-  #   
-  #   aftparams_df <- data.frame(aftparams_df)
-  #   
-  #   aftparams_df$productionCsvFile <- NULL
-  #   
-  #   DT::datatable(aftparams_df, options= list(paging = FALSE),  editable = F) 
-  #   
-  # })
+  output$Tab1_BehaviouralTablePane <- renderDataTable({
+
+    print("draw behavioural pane")
+
+    foldername_tmp <- paste0(path_data_raw, "BehaviourMaster.csv")
+
+    #aftparams_df <- sapply(aft_shortnames_fromzero[-length(aft_shortnames_fromzero)], FUN = function(x) read.csv(paste0(foldername_tmp, "/AftParams_", x, ".csv"))) %>% t
+
+    #aftparams_df <- data.frame(aftparams_df)
+    aftparams_df <- read.csv(foldername_tmp)
+    
+    aftparams_df$productionCsvFile <- NULL
+
+    DT::datatable(aftparams_df, options= list(paging = FALSE),  editable = F)
+
+  })
   
   ### Production table -----
    # output$Tab1_ProductionTablePane <- renderDataTable({
