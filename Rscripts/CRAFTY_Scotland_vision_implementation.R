@@ -25,7 +25,7 @@ yrList <- seq(2020,2095,by=5)
 ### baseline capitals ----------------------------------------------------------
 
 #baseline <- read.csv(paste0(dirData,"/templateBasic_csv/TestRegion_edit.csv"))
-baseline <- read.csv((paste0(dirData,"/output/capitals_normalised_Feb21.csv")))
+baseline <- read.csv((paste0(dirData,"/output/capitals_normalised_Aug21.csv")))
 head(baseline)
 summary(baseline)
 
@@ -43,7 +43,7 @@ baseline$FR
 baseline$FR <- str_replace_all(baseline$FR, "[[.]]", "")
 
 
-write.csv(baseline, paste0(dirOut,"/worlds/Scotland_financial/Baseline/Baseline_capitals.csv"), row.names = F)
+write.csv(baseline, paste0(dirOut,"/worlds/Scotland_natural/Baseline/Baseline_capitals.csv"), row.names = F)
 # write.csv(baseline, paste0(dirOut,"/worlds/Scotland_natural/Multiple_Benefits/Multiple_Benefits_capitals.csv"), row.names = F)
 # write.csv(baseline, paste0(dirOut,"/worlds/Scotland_natural/Green_Gold/Green_Gold_capitals.csv"), row.names = F)
 # write.csv(baseline, paste0(dirOut,"/worlds/Scotland_natural/Native_Networks/Native_Networks_capitals.csv"), row.names = F)
@@ -59,7 +59,7 @@ updater <- baseline[,-c(27:28)]
 
 for (yr in yrList){
   
-  write.csv(updater,paste0(dirOut,"/worlds/Scotland_financial/Baseline/Baseline_",yr,".csv"),row.names = F)
+  write.csv(updater,paste0(dirOut,"/worlds/Scotland_natural/Baseline/Baseline_",yr,".csv"),row.names = F)
   
 }
 
@@ -73,7 +73,7 @@ write.csv(spin_up,paste0(dirOut,"/worlds/Scotland_natural/Spin-up/Spin-up_capita
 
 ### raw capitals & normalise function ------------------------------------------
 
-capitalsRAW <- read.csv(paste0(dirData,"/output/capitals_raw_Feb21.csv"))
+capitalsRAW <- read.csv(paste0(dirData,"/output/capitals_raw_Aug21.csv"))
 
 normalise <- function(x) {
   return ((x - min(x, na.rm = T)) / (max(x, na.rm = T) - min(x, na.rm = T)))
@@ -992,49 +992,6 @@ for (yr in yrList){
 }
 
 
-### remove water/urban agents from the model -----------------------------------
-
-lstVisions <- c("Baseline","Green_Gold","Multiple_Benefits","Native_Networks","Wild_Woodlands","Woodland_Culture")
-
-world <- "natural"
-
-for (vision in lstVisions){
-  
-  #vision <- "Baseline"
-  
-  dfCaps <- read.csv(paste0(dirOut,"/worlds/Scotland_",world,"/",vision,"/",vision,"_capitals.csv"))
-  
-  unique(dfCaps$FR)
-  
-  dfCaps <- dfCaps %>% filter(FR != "waterurban")
-  
-  write.csv(dfCaps, paste0(dirOut,"/worlds/Scotland_",world,"/",vision,"/",vision,"_capitals.csv"),row.names = F)
-  
-}
-
-for (vision in lstVisions){
-  
-  #vision <- "Baseline"
-  
-  for (yr in yrList){
-    
-    #yr <- 2020
-    
-    dfCaps <- read.csv(paste0(dirOut,"/worlds/Scotland_",world,"/",vision,"/",vision,"_",yr,".csv"))
-    
-    # temp join AFT allocation
-    dfCaps$FR <- AFT$AFT
-    
-    dfCaps <- dfCaps %>% filter(FR != "water.urban")
-    
-    dfCaps$FR <- NULL
-    
-    write.csv(dfCaps, paste0(dirOut,"/worlds/Scotland_",world,"/",vision,"/",vision,"_",yr,".csv"),row.names = F)
-    
-  }
-  
-  
-}
 
 ### SCOTLAND_NATURAL world - changes directly to natural capitals ---------------------------------
 
@@ -1048,11 +1005,15 @@ ggplot(MB)+
   geom_tile(aes(x,y,fill=mixed.yc))
 ggplot(MB)+
   geom_tile(aes(x,y,fill=agro.yc))
+ggplot(MB)+
+  geom_tile(aes(x,y,fill=grassland))
 
 # increase actual natural capitals
-MB$mixed.yc <- MB$mixed.yc * 1.5
+summary(MB$mixed.yc)
+MB$mixed.yc[which(MB$mixed.yc>0)] <- MB$mixed.yc[which(MB$mixed.yc>0)] * 1.2 # increase by 20% if above 0
 # increase agroforestry capital
-MB$agro.yc <- MB$agro.yc * 1.5
+summary(MB$agro.yc)
+MB$agro.yc[which(MB$agro.yc>0)] <- MB$agro.yc[which(MB$agro.yc>0)] * 1.2
 
 head(MB)
 # for cell updater specs
@@ -1081,14 +1042,14 @@ for (yr in yrList){
 
 
 summary(dfMB)
-dfMB$crop.productivity[which(dfMB$agri.filter==1)]<-0 # remove cap where not suitable for crops
+#dfMB$crop.productivity[which(dfMB$agri.filter==1)]<-0 # remove cap where not suitable for crops
 head(dfMB)
-dfMB <- data.frame(dfMB[,c(1:3,27:28)], lapply(dfMB[4:26], normalise))
+dfMB <- data.frame(dfMB[,c(1:3,27)], lapply(dfMB[4:26], normalise))
 summary(dfMB)
 dfMB[is.na(dfMB)] <- 0
 
 #remove filter column
-dfMB$agri.filter <- NULL
+#dfMB$agri.filter <- NULL
 
 # invert deer density
 invert <- dfMB$deer.density - 1
@@ -1138,11 +1099,11 @@ ggplot(WW)+
   geom_tile(aes(x,y,fill=phase3))
 
 # increase n.broad.consv in WEAG phase 3 areas by 50%
-WW$n.broad.consv[which(WW$n.broad.consv > 0 & WW$phase3 > 0)] <- WW$n.broad.consv[which(WW$n.broad.consv > 0 & WW$phase3 > 0)] * 1.5
+WW$n.broad.consv[which(WW$n.broad.consv > 0 & WW$phase3 > 0)] <- WW$n.broad.consv[which(WW$n.broad.consv > 0 & WW$phase3 > 0)] * 1.2
 # increase mixed.yc in WEAG phase 3 areas by 50%
-WW$mixed.yc[which(WW$mixed.yc > 0 & WW$phase3 > 0)] <- WW$mixed.yc[which(WW$mixed.yc > 0 & WW$phase3 > 0)] * 1.5
+WW$mixed.yc[which(WW$mixed.yc > 0 & WW$phase3 > 0)] <- WW$mixed.yc[which(WW$mixed.yc > 0 & WW$phase3 > 0)] * 1.2
 # increase n.conifer.yc in WEAG phase 3 areas by 50%
-WW$n.conifer.yc[which(WW$n.conifer.yc > 0 & WW$phase3 > 0)] <- WW$n.conifer.yc[which(WW$n.conifer.yc > 0 & WW$phase3 > 0)] * 1.5
+WW$n.conifer.yc[which(WW$n.conifer.yc > 0 & WW$phase3 > 0)] <- WW$n.conifer.yc[which(WW$n.conifer.yc > 0 & WW$phase3 > 0)] * 1.2
 
 baseline$X <- NULL
 baseline$id <- NULL
@@ -1375,16 +1336,16 @@ unique(dfWW$year)
 summary(dfWW)
 
 # use agri-filter
-dfWW$crop.productivity[which(dfWW$agri.filter==1)]<-0 # remove cap where not suitable for crops
-head(dfWW)
+#dfWW$crop.productivity[which(dfWW$agri.filter==1)]<-0 # remove cap where not suitable for crops
+#head(dfWW)
 
 # normalise
-dfWW <- data.frame(dfWW[,c(1:3,27:28)], lapply(dfWW[4:26], normalise))
+dfWW <- data.frame(dfWW[,c(1:3,27)], lapply(dfWW[4:26], normalise))
 summary(dfWW)
 dfWW[is.na(dfWW)] <- 0
 
 #remove filter column
-dfWW$agri.filter <- NULL
+#dfWW$agri.filter <- NULL
 
 # invert deer density
 invert <- dfWW$deer.density - 1
@@ -1431,13 +1392,13 @@ ggplot(NN)+
   geom_raster(mapping = aes(x=x, y=y, fill = n.conifer.yc))
 
 # increase native woodland capitals in connectivity areas
-NN$n.conifer.yc[which(NN$n.conifer.yc > 0 & NN$connect >=0.5 )] <- NN$n.conifer.yc[which(NN$n.conifer.yc > 0 & NN$connect >= 0.5 )] * 1.5
+NN$n.conifer.yc[which(NN$n.conifer.yc > 0 & NN$connect >=0.5 )] <- NN$n.conifer.yc[which(NN$n.conifer.yc > 0 & NN$connect >= 0.5 )] * 1.2
 
-NN$n.broad.yc[which(NN$n.broad.yc > 0 & NN$connect >= 0.5)] <- NN$n.broad.yc[which(NN$n.broad.yc > 0 & NN$connect >= 0.5)] * 1.5
+NN$n.broad.yc[which(NN$n.broad.yc > 0 & NN$connect >= 0.5)] <- NN$n.broad.yc[which(NN$n.broad.yc > 0 & NN$connect >= 0.5)] * 1.2
 
-NN$n.broad.consv[which(NN$n.broad.consv > 0 & NN$connect >= 0.5)] <- NN$n.broad.consv[which(NN$n.broad.consv > 0 & NN$connect >= 0.5)] * 1.5
+NN$n.broad.consv[which(NN$n.broad.consv > 0 & NN$connect >= 0.5)] <- NN$n.broad.consv[which(NN$n.broad.consv > 0 & NN$connect >= 0.5)] * 1.2
 
-NN$mixed.yc[which(NN$mixed.yc > 0 & NN$connect >= 0.5)] <- NN$mixed.yc[which(NN$mixed.yc > 0 & NN$connect >= 0.5)] * 1.5
+NN$mixed.yc[which(NN$mixed.yc > 0 & NN$connect >= 0.5)] <- NN$mixed.yc[which(NN$mixed.yc > 0 & NN$connect >= 0.5)] * 1.2
 
 dfNN <- baseline
 dfNN$year <- 2015
@@ -1459,14 +1420,14 @@ for (yr in yrList[-1]){
 
 summary(dfNN);unique(dfNN$year)
 
-dfNN$crop.productivity[which(dfNN$agri.filter==1)]<-0 # remove cap where not suitable for crops
+#dfNN$crop.productivity[which(dfNN$agri.filter==1)]<-0 # remove cap where not suitable for crops
 head(dfNN)
-dfNN <- data.frame(dfNN[,c(1:3,27:28)], lapply(dfNN[4:26], normalise))
+dfNN <- data.frame(dfNN[,c(1:3,27)], lapply(dfNN[4:26], normalise))
 summary(dfNN)
 dfNN[is.na(dfNN)] <- 0
 
 #remove filter column
-dfNN$agri.filter <- NULL
+#dfNN$agri.filter <- NULL
 
 # invert deer density
 invert <- dfNN$deer.density - 1
@@ -1515,10 +1476,17 @@ ggplot(GG)+
   scale_fill_viridis()+
   theme_bw()
 
-GG$n.conifer.yc[which(GG$n.conifer.yc > 0 & GG$phase3 == 1)] <- GG$n.conifer.yc[which(GG$n.conifer.yc > 0 & GG$phase3 == 1)] * 1.5
-GG$nn.conifer.yc[which(GG$nn.conifer.yc > 0 & GG$phase3 == 1)] <- GG$nn.conifer.yc[which(GG$nn.conifer.yc > 0 & GG$phase3 == 1)] * 1.5
-GG$n.broad.yc[which(GG$n.broad.yc > 0 & GG$phase3 == 1)] <- GG$n.broad.yc[which(GG$n.broad.yc > 0 & GG$phase3 == 1)] * 1.5
-GG$nn.broad.yc[which(GG$nn.broad.yc > 0 & GG$phase3 == 1)] <- GG$nn.broad.yc[which(GG$nn.broad.yc > 0 & GG$phase3 == 1)] * 1.5
+GG %>% 
+  filter(n.conifer.yc>0 & phase3== 1) %>% 
+  ggplot()+
+  geom_tile(aes(x,y,fill=n.conifer.yc))+
+  scale_fill_viridis()+
+  theme_bw()
+
+GG$n.conifer.yc[which(GG$n.conifer.yc > 0 & GG$phase3 == 1)] <- GG$n.conifer.yc[which(GG$n.conifer.yc > 0 & GG$phase3 == 1)] * 1.2
+GG$nn.conifer.yc[which(GG$nn.conifer.yc > 0 & GG$phase3 == 1)] <- GG$nn.conifer.yc[which(GG$nn.conifer.yc > 0 & GG$phase3 == 1)] * 1.2
+GG$n.broad.yc[which(GG$n.broad.yc > 0 & GG$phase3 == 1)] <- GG$n.broad.yc[which(GG$n.broad.yc > 0 & GG$phase3 == 1)] * 1.2
+GG$nn.broad.yc[which(GG$nn.broad.yc > 0 & GG$phase3 == 1)] <- GG$nn.broad.yc[which(GG$nn.broad.yc > 0 & GG$phase3 == 1)] * 1.2
 
 # reduce grassland capital in LFA by half
 GG <- merge(GG, lfa, by = 'id', all.x = TRUE)
@@ -1560,14 +1528,14 @@ for (yr in yrList[-1]){
 
 summary(dfGG);unique(dfGG$year)
 
-dfGG$crop.productivity[which(dfGG$agri.filter==1)]<-0 # remove cap where not suitable for crops
+#dfGG$crop.productivity[which(dfGG$agri.filter==1)]<-0 # remove cap where not suitable for crops
 head(dfGG)
-dfGG <- data.frame(dfGG[,c(1:3,27:28)], lapply(dfGG[4:26], normalise))
+dfGG <- data.frame(dfGG[,c(1:3,27)], lapply(dfGG[4:26], normalise))
 summary(dfGG)
 dfGG[is.na(dfGG)] <- 0
 
 #remove filter column
-dfGG$agri.filter <- NULL
+#dfGG$agri.filter <- NULL
 
 # invert deer density
 invert <- dfGG$deer.density - 1
@@ -1608,21 +1576,21 @@ summary(WC$human) # take mean (if less than this)
 nrows <- length(WC[,1])
 for (i in c(1:nrows)) {
   if (WC$human[i] <= 0.63) {
-    WC$human[i]<-WC$human[i] * 1.5
+    WC$human[i]<-WC$human[i] * 1.2
   }
 }
 # increase social capital - new networks and relationships for communities
 summary(WC$social)
 for (i in c(1:nrows)) {
   if (WC$social[i] <= 0.60) {
-    WC$social[i]<-WC$social[i] * 1.5
+    WC$social[i]<-WC$social[i] * 1.2
   }
 }
 # even out finacial capital - productive power
 summary(WC$financial)
 for (i in c(1:nrows)) {
   if (WC$financial[i] <= 0.67) {
-    WC$financial[i]<-WC$financial[i] * 1.5
+    WC$financial[i]<-WC$financial[i] * 1.2
   }}
 
 # reduce grassland capital in LFA by 1/4
@@ -1785,10 +1753,10 @@ WC5$lessNAT <- landreform2$lessNAT
 
 for (i in c(1:nrows)) {
   if (WC5$status[i] == "Severely Disadvantaged") {
-    WC5$grassland[i]<-WC5$grassland[i] - (WC5$grassland[i]/100*75)
+    WC5$grassland[i]<-WC5$grassland[i] - (WC5$grassland[i]*.75)
   }
   if (WC5$status[i] == "Disadvantaged") {
-    WC5$grassland[i]<-WC5$grassland[i] - (WC5$grassland[i]/100*75)
+    WC5$grassland[i]<-WC5$grassland[i] - (WC5$grassland[i]*.75)
   }
 }
 
@@ -1818,10 +1786,10 @@ WC6$lessNAT <- landreform3$lessNAT
 
 for (i in c(1:nrows)) {
   if (WC6$status[i] == "Severely Disadvantaged") {
-    WC6$grassland[i]<-WC6$grassland[i] - (WC6$grassland[i]/100*75)
+    WC6$grassland[i]<-WC6$grassland[i] - (WC6$grassland[i]*.75)
   }
   if (WC6$status[i] == "Disadvantaged") {
-    WC6$grassland[i]<-WC6$grassland[i] - (WC6$grassland[i]/100*75)
+    WC6$grassland[i]<-WC6$grassland[i] - (WC6$grassland[i]*.75)
   }
 }
 
@@ -1843,16 +1811,16 @@ unique(dfWC$year)
 summary(dfWC)
 
 # use agri-filter
-dfWC$crop.productivity[which(dfWC$agri.filter==1)]<-0 # remove cap where not suitable for crops
-head(dfWC)
+#dfWC$crop.productivity[which(dfWC$agri.filter==1)]<-0 # remove cap where not suitable for crops
+#head(dfWC)
 
 # normalise
-dfWC <- data.frame(dfWC[,c(1:3,27:28)], lapply(dfWC[4:26], normalise))
+dfWC <- data.frame(dfWC[,c(1:3,27)], lapply(dfWC[4:26], normalise))
 summary(dfWC)
 dfWC[is.na(dfWC)] <- 0
 
 #remove filter column
-dfWC$agri.filter <- NULL
+#dfWC$agri.filter <- NULL
 
 # invert deer density
 invert <- dfWC$deer.density - 1
@@ -1883,5 +1851,54 @@ for (yr in yrList){
     write.csv(WC, paste0(dirOut,"/worlds/Scotland_natural/Woodland_Culture/Woodland_Culture_",yr,".csv"), row.names = F)
     
   }
+  
+}
+
+
+### remove water/urban agents from the model -----------------------------------
+
+lstVisions <- c("Baseline","Green_Gold","Multiple_Benefits","Native_Networks","Wild_Woodlands","Woodland_Culture")
+
+#AFT <- AFT %>% filter(AFT != "water.urban")
+
+world <- "natural"
+
+for (vision in lstVisions){
+  
+  #vision <- "Baseline"
+  
+  dfCaps <- read.csv(paste0(dirOut,"/worlds/Scotland_",world,"/",vision,"/",vision,"_capitals.csv"))
+  
+  unique(dfCaps$FR)
+  
+  dfCaps <- dfCaps %>% filter(FR != "waterurban")
+  
+  write.csv(dfCaps, paste0(dirOut,"/worlds/Scotland_",world,"/",vision,"/",vision,"_capitals.csv"),row.names = F)
+  
+}
+
+for (vision in lstVisions){
+  
+  vision <- "Wild_Woodlands"
+  print(vision)
+  
+  for (yr in yrList[-1]){
+    
+    #yr <- 2020
+    print(yr)
+    
+    dfCaps <- read.csv(paste0(dirOut,"/worlds/Scotland_",world,"/",vision,"/",vision,"_",yr,".csv"))
+    
+    # temp join AFT allocation
+    dfCaps$FR <- AFT$AFT
+    
+    dfCaps <- dfCaps %>% filter(FR != "water.urban")
+    
+    dfCaps$FR <- NULL
+    
+    write.csv(dfCaps, paste0(dirOut,"/worlds/Scotland_",world,"/",vision,"/",vision,"_",yr,".csv"),row.names = F)
+    
+  }
+  
   
 }
