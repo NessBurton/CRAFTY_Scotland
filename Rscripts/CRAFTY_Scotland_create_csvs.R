@@ -37,15 +37,16 @@ head(dfProduction)
 names(dfProduction)[1] <- "Agent"
 
 # lower sensitivity to attitude capitals for woodland agents
-dfProduction[,19:24]
-dfProduction$moreNW[which(dfProduction$moreNW == 0.8)] <- 0.05
-dfProduction$lessNW[which(dfProduction$lessNW == 0.8)] <- 0.05
-dfProduction$moreF[which(dfProduction$moreF == 0.8)] <- 0.05
-dfProduction$lessF[which(dfProduction$lessF == 0.8)] <- 0.05
-dfProduction$moreNAT[which(dfProduction$moreNAT == 0.8)] <- 0.05
-dfProduction$lessNAT[which(dfProduction$lessNAT == 0.8)] <- 0.05
+# dfProduction[,19:24]
+# dfProduction$moreNW[which(dfProduction$moreNW == 0.8)] <- 0.05
+# dfProduction$lessNW[which(dfProduction$lessNW == 0.8)] <- 0.05
+# dfProduction$moreF[which(dfProduction$moreF == 0.8)] <- 0.05
+# dfProduction$lessF[which(dfProduction$lessF == 0.8)] <- 0.05
+# dfProduction$moreNAT[which(dfProduction$moreNAT == 0.8)] <- 0.05
+# dfProduction$lessNAT[which(dfProduction$lessNAT == 0.8)] <- 0.05
 
 lstAgents <- unique(dfProduction$Agent) # remove to remove water.urban from list!
+lstAgents <- lstAgents[-20]
 #lstAgents <- str_remove(lstAgents,"[.]")
 #lstAgents <- str_remove(lstAgents,"[.]")
 
@@ -65,51 +66,51 @@ for (AFT in lstAgents){
     
     # per vision, increase sensitivity of key agents to financial capital (PES)
     
-    if (vision == "Green_Gold" & AFT %in% c("prod.n.broad","prod.n.conifer","prod.nn.broad","prod.nn.conifer")){
-      
-      dfAFT$financial[which(dfAFT$financial > 0)] <- 0.08
-      
-      print(paste0(AFT,"  altered for vision ", vision))
-      
-    }
-    if (vision == "Multiple_Benefits" & AFT %in% c("agroforestry", "multi.mixed", "multi.nb", "multi.nc", "multi.nnc", "multi.nnb")){
-      
-      dfAFT$financial[which(dfAFT$financial==0.02)] <- 0.05
-      dfAFT$financial[which(dfAFT$financial==0.05)] <- 0.08
-      
-      print(paste0(AFT,"  altered for vision ", vision))
-      
-      
-    } 
-    if (vision == "Native_Networks" & AFT %in% c("consv.native","multi.nc","multi.nb")){
-      
-      dfAFT$financial[which(dfAFT$financial > 0)] <- 0.05
-      
-      print(paste0(AFT,"  altered for vision ", vision))
-      
-      
-    }
-    if (vision == "Wild_Woodlands" & AFT %in% c("consv.native","multi.nc")){
-      
-      dfAFT$financial[which(dfAFT$financial == 0.02)] <- 0.05
-      dfAFT$financial[which(dfAFT$financial == 0.05)] <- 0.08
-      
-      print(paste0(AFT,"  altered for vision ", vision))
-      
-    }
-    if (vision == "Woodland_Culture" & AFT %in% c("prod.n.broad","prod.n.conifer","prod.nn.broad","prod.nn.conifer",
-                                                  "agroforestry", "multi.mixed", "multi.nb", "multi.nc", "multi.nnc", "multi.nnb",
-                                                  "consv.native")){
-      
-      dfAFT$financial[which(dfAFT$financial == 0.02)] <- 0.05
-      dfAFT$financial[which(dfAFT$financial == 0.05)] <- 0.08
-      dfAFT$human[which(dfAFT$human > 0)] <- dfAFT$human[which(dfAFT$human > 0)] + 0.01
-      dfAFT$social[which(dfAFT$social > 0)] <- dfAFT$social[which(dfAFT$social > 0)] + 0.01
-      dfAFT$manufactured[which(dfAFT$manufactured > 0)] <- dfAFT$manufactured[which(dfAFT$manufactured > 0)] + 0.01
-      
-      print(paste0(AFT,"  altered for vision ", vision))
-      
-    }
+    # if (vision == "Green_Gold" & AFT %in% c("prod.n.broad","prod.n.conifer","prod.nn.broad","prod.nn.conifer")){
+    #   
+    #   dfAFT$financial[which(dfAFT$financial > 0)] <- 0.08
+    #   
+    #   print(paste0(AFT,"  altered for vision ", vision))
+    #   
+    # }
+    # if (vision == "Multiple_Benefits" & AFT %in% c("agroforestry", "multi.mixed", "multi.nb", "multi.nc", "multi.nnc", "multi.nnb")){
+    #   
+    #   dfAFT$financial[which(dfAFT$financial==0.02)] <- 0.05
+    #   dfAFT$financial[which(dfAFT$financial==0.05)] <- 0.08
+    #   
+    #   print(paste0(AFT,"  altered for vision ", vision))
+    #   
+    #   
+    # } 
+    # if (vision == "Native_Networks" & AFT %in% c("consv.native","multi.nc","multi.nb")){
+    #   
+    #   dfAFT$financial[which(dfAFT$financial > 0)] <- 0.05
+    #   
+    #   print(paste0(AFT,"  altered for vision ", vision))
+    #   
+    #   
+    # }
+    # if (vision == "Wild_Woodlands" & AFT %in% c("consv.native","multi.nc")){
+    #   
+    #   dfAFT$financial[which(dfAFT$financial == 0.02)] <- 0.05
+    #   dfAFT$financial[which(dfAFT$financial == 0.05)] <- 0.08
+    #   
+    #   print(paste0(AFT,"  altered for vision ", vision))
+    #   
+    # }
+    # if (vision == "Woodland_Culture" & AFT %in% c("prod.n.broad","prod.n.conifer","prod.nn.broad","prod.nn.conifer",
+    #                                               "agroforestry", "multi.mixed", "multi.nb", "multi.nc", "multi.nnc", "multi.nnb",
+    #                                               "consv.native")){
+    #   
+    #   dfAFT$financial[which(dfAFT$financial == 0.02)] <- 0.05
+    #   dfAFT$financial[which(dfAFT$financial == 0.05)] <- 0.08
+    #   dfAFT$human[which(dfAFT$human > 0)] <- dfAFT$human[which(dfAFT$human > 0)] + 0.01
+    #   dfAFT$social[which(dfAFT$social > 0)] <- dfAFT$social[which(dfAFT$social > 0)] + 0.01
+    #   dfAFT$manufactured[which(dfAFT$manufactured > 0)] <- dfAFT$manufactured[which(dfAFT$manufactured > 0)] + 0.01
+    #   
+    #   print(paste0(AFT,"  altered for vision ", vision))
+    #   
+    # }
   
     print(dfAFT)
     AFT_nodot <- str_remove(AFT,"[.]") %>% str_remove(., "[.]")
@@ -225,32 +226,4 @@ services <- read.csv(paste0(dirData,"/templateBasic_csv/Services.csv"))
 services # ok as is
 write.csv(services, paste0(dirOut,"/csv/Services.csv"), row.names = F)
 
-
-### demand ---------------------------------------------------------------------
-
-demandInitial <- read.csv(paste0(dirData,"/templateBasic_csv/Demand_initial.csv"))
-Year<-c(2020:2100)
-softwood.timber<-rep(demandInitial$softwood.timber,length(Year)) 
-hardwood.timber<-rep(demandInitial$hardwood.timber,length(Year)) 
-biodiversity<-rep(demandInitial$biodiversity,length(Year)) 
-carbon<-rep(demandInitial$carbon,length(Year)) 
-flood.regulation<-rep(demandInitial$flood.regulation,length(Year)) 
-recreation<-rep(demandInitial$recreation,length(Year)) 
-livestock<-rep(demandInitial$livestock,length(Year)) 
-crop.service<-rep(demandInitial$crop.service,length(Year)) 
-employment<-rep(demandInitial$employment,length(Year)) 
-bdemand<-data.frame(Year,softwood.timber,hardwood.timber,biodiversity,carbon,flood.regulation,recreation,livestock,crop.service,employment)
-write.csv(bdemand, paste0(dirOut,"/worlds/Scotland/Baseline/Demand_Baseline.csv"),row.names = F)
-
-demandGG <- read.csv(paste0(dirData,"/templateBasic_csv/Demand_GG.csv"))
-demandMB <- read.csv(paste0(dirData,"/templateBasic_csv/Demand_MB.csv"))
-demandNN <- read.csv(paste0(dirData,"/templateBasic_csv/Demand_NN.csv"))
-demandWC <- read.csv(paste0(dirData,"/templateBasic_csv/Demand_WC.csv"))
-demandWW <- read.csv(paste0(dirData,"/templateBasic_csv/Demand_WW.csv"))
-
-write.csv(demandGG, paste0(dirOut,"/worlds/Scotland/Green_Gold/Demand_Green_Gold.csv"),row.names = F)
-write.csv(demandMB, paste0(dirOut,"/worlds/Scotland/Multiple_Benefits/Demand_Multiple_Benefits.csv"),row.names = F)
-write.csv(demandNN, paste0(dirOut,"/worlds/Scotland/Native_Networks/Demand_Native_Networks.csv"),row.names = F)
-write.csv(demandWC, paste0(dirOut,"/worlds/Scotland/Woodland_Culture/Demand_Woodland_Culture.csv"),row.names = F)
-write.csv(demandWW, paste0(dirOut,"/worlds/Scotland/Wild_Woodlands/Demand_Wild_Woodlands.csv"),row.names = F)
 
