@@ -15,20 +15,20 @@ dirData <- paste0(wd,"data_raw")
 dirOut <- paste0(wd,"data_Scotland/")
 dataDisk <- "D:/CRAFTY_Scotland/output/"
 
-world <- "financial" #"natural"
+world <- "natural" #"natural"
 
 ### constant demand - to get initial demand
 
-# Year <- 2015
-# softwood.timber<-100
-# hardwood.timber<-100
-# biodiversity<-100
-# carbon<-100
-# flood.regulation<-100
-# recreation<-100
-# livestock<-100
-# crop.service<-100
-# employment<-100
+# Year <- c(2015:2100)
+# softwood.timber<-rep(100,length(Year))
+# hardwood.timber<-rep(100,length(Year))
+# biodiversity<-rep(100,length(Year))
+# carbon<-rep(100,length(Year))
+# flood.regulation<-rep(100,length(Year))
+# recreation<-rep(100,length(Year))
+# livestock<-rep(100,length(Year))
+# crop.service<-rep(100,length(Year))
+# employment<-rep(100,length(Year))
 # idemand<-data.frame(Year,softwood.timber,hardwood.timber,biodiversity,carbon,flood.regulation,recreation,livestock,crop.service,employment)
 # write.csv(idemand, paste0(dirOut,"worlds/Scotland_",world,"/Baseline/Demand_Baseline.csv"))
 
