@@ -6,7 +6,8 @@ library(ggplot2)
 wd <- "D:/CRAFTY_Scotland/output/"
 
 dirResults <- paste0(wd) # will add output folder name here
-dirMetrics <- paste0(wd,"vision_metrics")
+dirMetrics <- "D:/CRAFTY_Scotland/vision_metrics/"
+dir.create(dirMetrics)
 
 ### data info -----
 
@@ -58,6 +59,12 @@ getSPDF_Scot <- function(tmp_in_name) {
 
 ### do stuff ----
 
+# check competitiveness
+
+dfComp <- read.csv(paste0(dirResults,"BehaviouralBaseline/Baseline/Baseline-0-99-Scotland_financial-AggregateAFTCompetitiveness.csv"))
+summary(dfComp)
+# why getting 0 for so many?
+
 # pre loop
 
 lstParams <- c("Thresholds","BehaviouralBaseline")
@@ -93,11 +100,6 @@ for (paramset in lstParams){
       print(year)
       
       df_test <- getCSV(getFname(paramset,vision,year))
-      
-      # read in baseline here for urban mask!
-      baseline <- getCSV(getFname("BehaviouralBaseline","Baseline",2015))
-      df_test$urban.water <- baseline$Agent
-      df_test$Agent[which(df_test$urban.water == "urbanwater")] <- "urbanwater"
       
       # region
       df_test$Capital.region[which(df_test$Capital.region==0)]<-NA
@@ -194,14 +196,14 @@ dfMetrics %>%
   facet_grid(Paramset~Metric, scales = "free")
 
 
-# supply demand gap
-vision <- "Wild_Woodlands"
-world <- "financial"
-dfDemand <-  read.csv(paste0(dirResults,paramsets[2],"/",vision, "/", vision, "-", runid, "-99-Scotland_",world, "-AggregateServiceDemand.csv"))
-
-dfDemand[,-19] %>% 
-  pivot_longer(cols = ServiceSupply.softwood.timber:ServiceSupply.employment, #starts_with("Service"), 
-               names_to="Supply", values_to="SupVal") %>%
-  .[,10:12]
-  pivot_longer(starts_with("Demand"), 
-               names_to="Demand", values_to="DemVal")
+# # supply demand gap
+# vision <- "Wild_Woodlands"
+# world <- "financial"
+# dfDemand <-  read.csv(paste0(dirResults,paramsets[2],"/",vision, "/", vision, "-", runid, "-99-Scotland_",world, "-AggregateServiceDemand.csv"))
+# 
+# dfDemand[,-19] %>% 
+#   pivot_longer(cols = ServiceSupply.softwood.timber:ServiceSupply.employment, #starts_with("Service"), 
+#                names_to="Supply", values_to="SupVal") %>%
+#   .[,10:12]
+#   pivot_longer(starts_with("Demand"), 
+#                names_to="Demand", values_to="DemVal")
