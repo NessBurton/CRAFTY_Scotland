@@ -37,13 +37,13 @@ head(dfProduction)
 names(dfProduction)[1] <- "Agent"
 
 # lower sensitivity to attitude capitals for woodland agents
-# dfProduction[,19:24]
-# dfProduction$moreNW[which(dfProduction$moreNW == 0.8)] <- 0.05
-# dfProduction$lessNW[which(dfProduction$lessNW == 0.8)] <- 0.05
-# dfProduction$moreF[which(dfProduction$moreF == 0.8)] <- 0.05
-# dfProduction$lessF[which(dfProduction$lessF == 0.8)] <- 0.05
-# dfProduction$moreNAT[which(dfProduction$moreNAT == 0.8)] <- 0.05
-# dfProduction$lessNAT[which(dfProduction$lessNAT == 0.8)] <- 0.05
+dfProduction[,19:24]
+dfProduction$moreNW[which(dfProduction$moreNW == 0.8)] <- 0.02
+dfProduction$lessNW[which(dfProduction$lessNW == 0.8)] <- 0.02
+dfProduction$moreF[which(dfProduction$moreF == 0.8)] <- 0.02
+dfProduction$lessF[which(dfProduction$lessF == 0.8)] <- 0.02
+dfProduction$moreNAT[which(dfProduction$moreNAT == 0.8)] <- 0.02
+dfProduction$lessNAT[which(dfProduction$lessNAT == 0.8)] <- 0.02
 
 lstAgents <- unique(dfProduction$Agent) # remove to remove water.urban from list!
 lstAgents <- lstAgents[-20]
