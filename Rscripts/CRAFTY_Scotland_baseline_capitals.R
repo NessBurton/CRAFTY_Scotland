@@ -107,12 +107,31 @@ normalise <- function(x) {
   return ((x - min(x, na.rm = T)) / (max(x, na.rm = T) - min(x, na.rm = T)))
 }
 
+normaliseMax <- function(x) {
+  return ((x) / (max(x, na.rm = T)))
+}
+
+capitalsRaw %>% 
+  pivot_longer(cols = nn.conifer.yc:wild.land,
+               names_to = "capital",
+               values_to = "value") %>% 
+  ggplot()+
+  geom_histogram(mapping = aes(x=value))+
+  facet_wrap(~capital, scales = "free")
+
 capitalsNRM <- capitalsRaw
 summary(capitalsNRM)
 capitalsNRM$X <- NULL
 
+capitalsNRM$deer.density[which(capitalsNRM$deer.density==1611)] <- 161
+capitalsNRM$deer.density[which(capitalsNRM$deer.density>750)] <- 750
+summary(capitalsNRM$deer.density)
+hist(capitalsNRM$deer.density)
+ggplot()+
+  geom_tile(capitalsNRM, mapping=aes(x,y,fill=deer.density))
+
 #capitalsNRM[,c(6:28)] <- normalise(capitalsNRM[,c(6:28)])
-capitalsNRM <- data.frame(capitalsNRM[,c(1:5)], lapply(capitalsNRM[6:28], normalise))
+capitalsNRM <- data.frame(capitalsNRM[,c(1:5)], lapply(capitalsNRM[6:15], normalise), lapply(capitalsNRM[16:19], normaliseMax), lapply(capitalsNRM[20:28], normalise))
 summary(capitalsNRM)
 capitalsNRM[is.na(capitalsNRM)] <- 0
 #capitalsNRM$crop.productivity[which(capitalsNRM$agri.filter==1)]<-0 # remove cap where not suitable for crops
