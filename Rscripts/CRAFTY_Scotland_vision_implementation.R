@@ -29,14 +29,14 @@ baseline <- read.csv((paste0(dirData,"/output/capitals_normalised_Aug21.csv")))
 head(baseline)
 summary(baseline)
 
-baseline[is.na(baseline)] <- 0
+#baseline[is.na(baseline)] <- 0
 
 baseline$id <- NULL
 #baseline$FR <- baseline$Agent
 baseline$FR <- AFT$AFT
 baseline$BT <- 0
 baseline$Agent <- NULL
-colnames(baseline)[1:2] <- c("x","y")
+#colnames(baseline)[1:2] <- c("x","y")
 #baseline <- baseline[,-c(27:35)]
 
 baseline$FR
@@ -79,6 +79,9 @@ normalise <- function(x) {
   return ((x - min(x, na.rm = T)) / (max(x, na.rm = T) - min(x, na.rm = T)))
 }
 
+normaliseMax <- function(x) {
+  return ((x) / (max(x, na.rm = T)))
+}
 
 ### datasets to be used for vision changes -------------------------------------
 
@@ -1044,7 +1047,7 @@ for (yr in yrList){
 summary(dfMB)
 #dfMB$crop.productivity[which(dfMB$agri.filter==1)]<-0 # remove cap where not suitable for crops
 head(dfMB)
-dfMB <- data.frame(dfMB[,c(1:3,27)], lapply(dfMB[4:26], normalise))
+dfMB <- data.frame(dfMB[,c(1:3,27)], lapply(dfMB[4:13], normalise), lapply(dfMB[14:17], normaliseMax), lapply(dfMB[18:26], normalise))
 summary(dfMB)
 dfMB[is.na(dfMB)] <- 0
 
@@ -1230,7 +1233,6 @@ for (i in c(1:nrows)) {
 # deer density
 WW4$deer.density <- WW4$deer.density - (WW4$deer.density/100*20)
 
-# normalise and write updaters
 head(WW4)
 # for cell updater specs
 WW4$id<-NULL
@@ -1340,7 +1342,8 @@ summary(dfWW)
 #head(dfWW)
 
 # normalise
-dfWW <- data.frame(dfWW[,c(1:3,27)], lapply(dfWW[4:26], normalise))
+#dfWW <- data.frame(dfWW[,c(1:3,27)], lapply(dfWW[4:26], normalise))
+dfWW <- data.frame(dfWW[,c(1:3,27)], lapply(dfWW[4:13], normalise), lapply(dfWW[14:17], normaliseMax), lapply(dfWW[18:26], normalise))
 summary(dfWW)
 dfWW[is.na(dfWW)] <- 0
 
@@ -1422,7 +1425,9 @@ summary(dfNN);unique(dfNN$year)
 
 #dfNN$crop.productivity[which(dfNN$agri.filter==1)]<-0 # remove cap where not suitable for crops
 head(dfNN)
-dfNN <- data.frame(dfNN[,c(1:3,27)], lapply(dfNN[4:26], normalise))
+#dfNN <- data.frame(dfNN[,c(1:3,27)], lapply(dfNN[4:26], normalise))
+dfNN <- data.frame(dfNN[,c(1:3,27)], lapply(dfNN[4:13], normalise), lapply(dfNN[14:17], normaliseMax), lapply(dfNN[18:26], normalise))
+
 summary(dfNN)
 dfNN[is.na(dfNN)] <- 0
 
@@ -1530,7 +1535,8 @@ summary(dfGG);unique(dfGG$year)
 
 #dfGG$crop.productivity[which(dfGG$agri.filter==1)]<-0 # remove cap where not suitable for crops
 head(dfGG)
-dfGG <- data.frame(dfGG[,c(1:3,27)], lapply(dfGG[4:26], normalise))
+#dfGG <- data.frame(dfGG[,c(1:3,27)], lapply(dfGG[4:26], normalise))
+dfGG <- data.frame(dfGG[,c(1:3,27)], lapply(dfGG[4:13], normalise), lapply(dfGG[14:17], normaliseMax), lapply(dfGG[18:26], normalise))
 summary(dfGG)
 dfGG[is.na(dfGG)] <- 0
 
@@ -1815,7 +1821,8 @@ summary(dfWC)
 #head(dfWC)
 
 # normalise
-dfWC <- data.frame(dfWC[,c(1:3,27)], lapply(dfWC[4:26], normalise))
+#dfWC <- data.frame(dfWC[,c(1:3,27)], lapply(dfWC[4:26], normalise))
+dfWC <- data.frame(dfWC[,c(1:3,27)], lapply(dfWC[4:13], normalise), lapply(dfWC[14:17], normaliseMax), lapply(dfWC[18:26], normalise))
 summary(dfWC)
 dfWC[is.na(dfWC)] <- 0
 
@@ -1879,7 +1886,7 @@ for (vision in lstVisions){
 
 for (vision in lstVisions){
   
-  vision <- "Wild_Woodlands"
+  #vision <- "Wild_Woodlands"
   print(vision)
   
   for (yr in yrList[-1]){

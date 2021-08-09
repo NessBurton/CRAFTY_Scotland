@@ -99,6 +99,9 @@ dfAgriCaps <- read.csv(paste0(dirData,'/output/agri_capitals.csv'))
 capitalsRaw$crop.productivity <- dfAgriCaps$crop.capital
 capitalsRaw$grassland <- dfAgriCaps$grass.capital
 
+capitalsRaw$deer.density[which(capitalsRaw$deer.density==1611)] <- 161
+capitalsRaw$deer.density[which(capitalsRaw$deer.density>750)] <- 750
+
 write.csv(capitalsRaw, paste0(dirData,"/output/capitals_raw_Aug21.csv"),row.names = F)
 
 ### normalise ------------------------------------------------------------------
