@@ -16,8 +16,10 @@ library(tictoc)
 
 ### directories/ file paths ----------------------------------------------------
 
-dirWorking <- "~/eclipse-workspace/CRAFTY_Scotland"
-dataDisk <- "D:/CRAFTY_Scotland"
+#dirWorking <- "~/eclipse-workspace/CRAFTY_Scotland"
+dirWorking <- "~/Documents/eclipse-workspace/CRAFTY_Scotland"
+#dataDisk <- "D:/CRAFTY_Scotland"
+dataDisk <- "~/Documents/Dropbox/CRAFTY_Scotland_2021"
 
 dirCRAFTYInput <- path.expand(paste0(dirWorking, "/data_Scotland/"))
 dirCRAFTYOutput <- path.expand(paste0(dataDisk, "/output"))
@@ -62,7 +64,8 @@ aft_names_fromzero <- c("agroforestry",
 # write.csv(AFTcols, paste0(dirCRAFTYInput,"csv/AgentColors.csv"),row.names=FALSE)
 
 # location of the CRAFTY Jar file
-path_crafty_jar <- path.expand(paste0(dirWorking, "/lib/CRAFTY_KIT_engine_2021_JDK15.jar"))
+path_crafty_jar <- path.expand(paste0(dirWorking, "/lib/CRAFTY_KIT_engine_Aug2021.jar"))
+#path_crafty_jar <- path.expand(paste0(dirWorking, "/lib/CRAFTY_KIT_engine_JDK15.jar"))
 
 # location of the CRAFTY lib files
 path_crafty_libs <- path.expand(paste0(dirWorking, "/lib/"))
@@ -86,7 +89,7 @@ end_year_idx <- 2100
 
 ### Run in parallel ------------------------------------------------------------
 
-path_crafty_batch_run <- "D:/CRAFTY_Scotland"
+path_crafty_batch_run <- dataDisk
 
 setwd(path_crafty_batch_run)
 
@@ -99,10 +102,10 @@ scenario.filenames <- paste0("Scenario_", scenarios, "_everyyear_relative_GUI")
 paramsets <- c("BehaviouralBaseline","Thresholds")
 n.paramset <- length(paramsets)
 
-parallelize <- TRUE # VM has 8 cores and 32GB dynamic RAM
+parallelize <- TRUE # VM has 8 cores and 32GB dynamic RAM # Mac has 4 cores
 if (parallelize) { 
   # 6 cores - 1 per scenario
-  n_thread <- 6 # detectCores() # the current version uses 5 GB per process, therefore max 5-6 threads if 32 GB memory, 3 if 16 GB memory, and no parallelisation recommended if 8 GB. 
+  n_thread <- 2 # detectCores() # the current version uses 5 GB per process, therefore max 5-6 threads if 32 GB memory, 3 if 16 GB memory, and no parallelisation recommended if 8 GB. 
   cl <- makeCluster(n_thread)
   registerDoSNOW(cl)
   
