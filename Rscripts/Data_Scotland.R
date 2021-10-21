@@ -16,15 +16,15 @@ proj4.LL <- CRS("+proj=longlat +datum=WGS84")
 
 if (Sys.getenv()["USER"] %in% c("alan", "seo-b")) { 
   # ABS
-  path_data_raw = "~/Nextcloud/CRAFTY/CRAFTY_Scotland_rawdata/"
-  path_base = "~/Nextcloud/CRAFTY/CRAFTY_Scotland/data_Scotland"
+  path_data_raw <- "~/Nextcloud/CRAFTY/CRAFTY_Scotland_rawdata/"
+  path_base <- "~/Nextcloud/CRAFTY/CRAFTY_Scotland/data_Scotland"
   path_localstorage <- "~/Nextcloud/CRAFTY/CRAFTY_Scotland_output/" #paste0("~/CRAFTY_WEB_UK_DATA/")
   
 } else { 
-  path_data_raw = "~/eclipse-workspace/CRAFTY_Scotland/data_raw/"
-  path_base = "~/eclipse-workspace/CRAFTY_Scotland/data_Scotland"
-  # local data archive (Sandbox data drive)
-  path_localstorage <- "D:/CRAFTY_Scotland/output/" #paste0("~/CRAFTY_WEB_UK_DATA/")
+  path_data_raw <- "~/Documents/eclipse-workspace/CRAFTY_Scotland/data_raw/"
+  path_base <- "~/Documents/eclipse-workspace/CRAFTY_Scotland/data_Scotland"
+  # local data archive (Dropbox)
+  path_localstorage <- "~/Documents/Dropbox/CRAFTY_Scotland_2021/output_Aug21/" #paste0("~/CRAFTY_WEB_UK_DATA/")
   
 }
 
@@ -36,7 +36,7 @@ runid <- "0"
 seedid <- "99"
 
 # number of threads to process raster
-n_thread <- 4
+n_thread <- 2
 
 location_UK <- "Local"
 
@@ -69,7 +69,7 @@ default_year = 2015
 world_shortnames <- c("BehaviouralBaseline","Thresholds")#c("Natural")#"Financial", "Natural")
 world_names <- c("BehaviouralBaseline","Thresholds")#c("Scotland_natural")#"Scotland_financial", "Scotland_natural")
  
-version_suffix <- "natural" 
+version_suffix <- "financial" 
 
 # absolute path (for local)
 path_data_local <- paste0(path_localstorage)
