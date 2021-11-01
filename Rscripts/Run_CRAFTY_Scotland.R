@@ -17,10 +17,10 @@ library(tictoc)
 
 ### directories/ file paths ----------------------------------------------------
 
-#dirWorking <- "~/eclipse-workspace/CRAFTY_Scotland"
-dirWorking <- "~/Documents/eclipse-workspace/CRAFTY_Scotland"
-#dataDisk <- "D:/CRAFTY_Scotland"
-dataDisk <- "~/Documents/Dropbox/CRAFTY_Scotland_2021"
+dirWorking <- "~/eclipse-workspace/CRAFTY_Scotland"
+#dirWorking <- "~/Documents/eclipse-workspace/CRAFTY_Scotland"
+dataDisk <- "D:/CRAFTY_Scotland"
+#dataDisk <- "~/Documents/Dropbox/CRAFTY_Scotland_2021"
 
 dirCRAFTYInput <- path.expand(paste0(dirWorking, "/data_Scotland/"))
 dirCRAFTYOutput <- path.expand(paste0(dataDisk, "/output"))
@@ -106,7 +106,7 @@ n.paramset <- length(paramsets)
 parallelize <- TRUE # VM has 8 cores and 32GB dynamic RAM # Mac has 4 cores
 if (parallelize) { 
   # 6 cores - 1 per scenario
-  n_thread <- 2 # detectCores() # the current version uses 5 GB per process, therefore max 5-6 threads if 32 GB memory, 3 if 16 GB memory, and no parallelisation recommended if 8 GB. 
+  n_thread <- 6 # detectCores() # the current version uses 5 GB per process, therefore max 5-6 threads if 32 GB memory, 3 if 16 GB memory, and no parallelisation recommended if 8 GB. 
   cl <- makeCluster(n_thread)
   registerDoSNOW(cl)
   
