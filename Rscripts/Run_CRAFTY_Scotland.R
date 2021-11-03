@@ -1,4 +1,6 @@
 
+options(java.parameters = "-Xmx8000m")
+
 library(tidyverse)
 library(sf)
 library(viridis)
@@ -6,7 +8,7 @@ library(ggplot2)
 # set java home
 #Sys.setenv(JAVA_HOME="C:\Program Files (x86)\Java\jre1.8.0_281\bin\javaw.exe")
 #Sys.setenv(JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk-16.0.1.jdk/Contents/Home")
-library(rJava)
+#library(rJava)
 library(jdx)
 library(xml2)
 library(foreach)
@@ -103,7 +105,7 @@ scenario.filenames <- paste0("Scenario_", scenarios, "_everyyear_relative_GUI")
 paramsets <- c("BehaviouralBaseline","Thresholds")
 n.paramset <- length(paramsets)
 
-parallelize <- TRUE # VM has 8 cores and 32GB dynamic RAM # Mac has 4 cores
+parallelize <- FALSE # VM has 8 cores and 32GB dynamic RAM # Mac has 4 cores
 if (parallelize) { 
   # 6 cores - 1 per scenario
   n_thread <- 6 # detectCores() # the current version uses 5 GB per process, therefore max 5-6 threads if 32 GB memory, 3 if 16 GB memory, and no parallelisation recommended if 8 GB. 
@@ -117,7 +119,7 @@ if (parallelize) {
 
 foreach(s.idx = 1:n.scenario, .errorhandling = "stop",.packages = c("doSNOW"), .verbose = T) %dopar% {
   
-  #s.idx <- 1
+  s.idx <- 3
   scenario <- scenarios[s.idx]
   
   # must change to the output folder for getting the output files correctly
@@ -126,6 +128,10 @@ foreach(s.idx = 1:n.scenario, .errorhandling = "stop",.packages = c("doSNOW"), .
   # initialise jvm in forked processes / not before parallelism is initiated
   # https://stackoverflow.com/questions/24337383/unloading-rjava-and-or-restarting-jvm
   # "There is a way to run expressions using rJava in parallel based on running the parallel processes to get and assemble all results BEFORE you load the rJava library in the main process. As the main R process has not initiated jvm then java is started in each single subprocess and this particular instance will die together with subprocess as well."
+  
+  gc()
+  # try increasing java heap space within foreach
+  #options(java.parameters = "-Xmx1024m")
   
   library(rJava)
   
@@ -147,7 +153,7 @@ foreach(s.idx = 1:n.scenario, .errorhandling = "stop",.packages = c("doSNOW"), .
   # Two parameter sets
   foreach(p.idx = 1:n.paramset, .errorhandling = "stop", .verbose = T) %do% { 
     
-    #p.idx <- 1
+    p.idx <- 2
     paramset <-  paramsets[p.idx]
     scenario.filename <- paste0(scenario.filenames[s.idx], "_", paramset, ".xml") 
   
